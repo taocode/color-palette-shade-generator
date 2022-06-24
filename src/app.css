@@ -1,0 +1,40 @@
+/** Base Styles */
+:root {
+  /**
+   * Colors
+   * --------------------------------------------------------------------- */
+  --c-primary: hsl(199, 80.3%, 41.8%);
+  --c-teal: hsl(187.4, 23.3%, 47.1%);
+  --c-brand-highlight: hsla(211, 55.8%, 71.4%, 0.5);
+  --c-brand-active: hsl(187.4, 60.3%, 31.8%);
+  --c-brand-dark: hsl(187.4, 58.3%, 11.8%);
+  --c-brand-light: hsl(187.4, 59.3%, 26.8%);
+  --c-bg: hsl(187.4, 66.1%, 22.7%);
+  --c-bg-semi: hsla(0, 0%, 100%, 0.8);
+  --c-bg2: hsl(187.4, 57.8%, 30.7%);
+  --c-scrollbar: theme('colors.gray.200');
+  --c-white: #fff;
+  --c-black: #000;
+}
+
+.btn {
+  @apply inline-block leading-6 text-center align-middle cursor-pointer border px-2 py-4 rounded;
+}
+.btn-primary {
+  @apply bg-primary;
+}
+.card {
+  @apply relative flex flex-col bg-white border-1 rounded;
+}
+.card-title {
+  @apply mb-2;
+}
+.form-text {
+  @apply text-sm text-gray-600 mt-1 mb-4;
+}
+.nav {
+  @apply flex flex-col list-none md:flex-row;
+}
+.nav-link {
+  @apply inline-block py-1 md:px-2;
+}
