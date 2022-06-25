@@ -11,5 +11,7 @@
 <Navbar />
 <Header text="Color Palette Shade Generator" />
 
-<slot />
+<div class="container mx-auto max-w-[100ch]">
+  <slot />
+</div>
 

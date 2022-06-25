@@ -1,5 +1,7 @@
 <script>
-  export let text;
+  export let text
+  export let color1 = 'red-500'
+  export let color2 = 'blue-500'
 </script>
 
 <div class="header">
@@ -8,10 +10,10 @@
 
 <style lang="postcss">
   .header {
-    height: 150px;
-    @apply flex w-full items-center bg-gradient-45;
+    @apply flex w-full h-20 items-center;
+    @apply text-white bg-gradient-to-r from-red-700 to-blue-800;
   }
-  .header > h1 {
-    @apply text-center w-full text-5xl font-sans font-semibold;
+  h1 {
+    @apply text-center w-full text-3xl font-sans font-semibold;
   }
 </style>
