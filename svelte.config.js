@@ -6,6 +6,9 @@ import WindiCSS from 'vite-plugin-windicss'
 const config = {
 	kit: {
 		adapter: adapter(),
+		prerender: {
+			default: true
+		},
 		vite: {
 			plugins: [
 				autoImport({ 
