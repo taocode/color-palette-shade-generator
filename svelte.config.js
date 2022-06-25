@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-auto'
+import adapter from '@sveltejs/adapter-static'
 import autoImport from 'sveltekit-autoimport'
 import WindiCSS from 'vite-plugin-windicss'
 
