@@ -1,5 +1,5 @@
 <script>
-import {darken} from 'color2k'
+import {darken, hasBadContrast} from 'color2k'
 
 export let color = 'hsla(3,66%,33%,1)'
 export let steps = 10
@@ -21,6 +21,9 @@ $: {
 darker = colorArray(color,steps,stepFactor)
 lighter = colorArray(color,steps,stepFactor,-1)
 }
+const fgFix = (bc) => {
+	return hasBadContrast('black',"aa",bc) ? 'white' : 'black';
+}
 </script>
 
 <div class="p-10 flex" style="color: {contrast}; background-color: {color};">
@@ -38,26 +41,27 @@ lighter = colorArray(color,steps,stepFactor,-1)
 		</label>
 		<label>
 			Step Factor (0..1)
-			<input class="text-red-700" bind:value={stepFactor}
+			<input class="text-red-700" 
+			bind:value={stepFactor}
 			type="number"
 			min={0}
 			max={1}
-			step="0.01"
+			step={0.01}
 			placeholder="">
 		</label>
 	</div>
 </div>
 
 <h2>Lighter</h2>
-<div class="flex text-center">
-	{#each lighter as c}
-	<div class="p-2 min-h-7 min-w-5" style="background-color: {c};">{c}</div>
+<div class="flex flex-wrap text-center">
+	{#each lighter as bc}
+	<div class="swatch" style="background-color: {bc}; color: {fgFix(bc)}">{bc}</div>
 	{/each}
 </div>
 <h2>Darker</h2>
-<div class="flex text-center">
-	{#each darker as c}
-	<div class="p-2 min-h-7 min-w-5" style="background-color: {c};">{c}</div>
+<div class="flex flex-wrap text-center">
+	{#each darker as bc}
+	<div class="swatch" style="background-color: {bc}; color: {fgFix(bc)}">{bc}</div>
 	{/each}
 </div>
 
@@ -65,6 +69,9 @@ lighter = colorArray(color,steps,stepFactor,-1)
 <style lang="postcss">
 	label {
 		@apply block;
-	}
 
+	}
+	.swatch {
+		@apply p-2 min-h-7 min-w-5 invert;
+	}
 </style>
