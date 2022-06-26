@@ -1,8 +1,11 @@
 <script>
-import {darken, hasBadContrast} from 'color2k'
+import {darken, readableColor} from 'color2k'
 
-export let color = 'hsla(3,66%,33%,1)'
-export let steps = 10
+export let h = 0
+export let s = '66.6%'
+export let l = '50%'
+export let a = 1
+export let steps = 5
 export let stepFactor = 0.05
 
 const colorArray = (color, steps, stepFactor, invert = 1) => {
@@ -16,13 +19,11 @@ const colorArray = (color, steps, stepFactor, invert = 1) => {
 let darker = []
 let lighter = []
 
+$: color = `hsla(${h},${s},${l},${a})`
 $: contrast = 'white'
 $: {
 darker = colorArray(color,steps,stepFactor)
 lighter = colorArray(color,steps,stepFactor,-1)
-}
-const fgFix = (bc) => {
-	return hasBadContrast('black',"aa",bc) ? 'white' : 'black';
 }
 </script>
 
@@ -52,16 +53,14 @@ const fgFix = (bc) => {
 	</div>
 </div>
 
-<h2>Lighter</h2>
 <div class="flex flex-wrap text-center">
 	{#each lighter as bc}
-	<div class="swatch" style="background-color: {bc}; color: {fgFix(bc)}">{bc}</div>
+	<div class="swatch" style="background-color: {bc}; color: {readableColor(bc)}">{bc.split(',')[2]}</div>
 	{/each}
 </div>
-<h2>Darker</h2>
 <div class="flex flex-wrap text-center">
 	{#each darker as bc}
-	<div class="swatch" style="background-color: {bc}; color: {fgFix(bc)}">{bc}</div>
+	<div class="swatch" style="background-color: {bc}; color: {readableColor(bc)}">{bc.split(',')[2]}</div>
 	{/each}
 </div>
 
@@ -72,6 +71,6 @@ const fgFix = (bc) => {
 
 	}
 	.swatch {
-		@apply p-2 min-h-7 min-w-5 invert;
+		@apply p-2 min-h-16 min-w-16 flex flex-grow items-center justify-center;
 	}
 </style>
