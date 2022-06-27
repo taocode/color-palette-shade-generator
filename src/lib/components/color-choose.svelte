@@ -1,14 +1,15 @@
 <script>
-import {darken, readableColor} from 'color2k'
+import {adjustHue, darken, readableColor} from 'color2k'
 
 export let h = 0
 export let s = 75
 export let l = 50
 export let a = 1
 export let steps = 10
-export let stepFactor = 0.05
+export let stepPercent = 5
+let stepFactor = stepPercent * 0.01
 
-const shades = (color, steps, stepFactor) => {
+const shades = (color) => {
 	let arr = [color]
 	for (let i = 1; i < steps; i++) {
 		if (i%2) {
@@ -20,22 +21,91 @@ const shades = (color, steps, stepFactor) => {
 	return arr
 }
 
-let color = "red"
-let contrast = "white"
+let color = `hsla(${h},${s}%,${l}%,${a})`
+let readable = readableColor("white")
 let complementary = "green"
 let primaryShades = []
 let complementaryShades = []
 let scheme = "Complementary"
+let schemes = [
+		{ id: 1, text: `Complementary`, f: () => {
+			return [{
+				name: 'primary',
+				shades: shades(color)
+			},{
+				name: 'complementary',
+				shades: shades(adjustHue(color,180))
+			}]
+		} },
+		{ id: 2, text: `Analogous`, f: () => {
+			return [{
+				name: 'primary',
+				shades: shades(color)
+			}, {
+				name: 'analogous-1',
+				shades: shades(adjustHue(color,30))
+			}, {
+				name: 'analogous-2',
+				shades: shades(adjustHue(color,60))
+			}]
+		} },
+		{ id: 3, text: `Split Complementary`, f: () => {
+			return [{
+				name: 'primary',
+				shades: shades(color)
+			}, {
+				name: 'split1',
+				shades: shades(adjustHue(color,150))
+			}, {
+				name: 'split2',
+				shades: shades(adjustHue(color,210))
+			}]
+		} },
+		{ id: 4, text: `Triadic`, f: () => {
+			return [{
+				name: 'primary',
+				shades: shades(color)
+			}, {
+				name: 'triad1',
+				shades: shades(adjustHue(color,120))
+			}, {
+				name: 'triad2',
+				shades: shades(adjustHue(color,240))
+			}]
+		} },
+		{ id: 5, text: `Tetradic`, f: () => {
+			return [{
+				name: 'primary',
+				shades: shades(color)
+			}, {
+				name: 'tetra1',
+				shades: shades(adjustHue(color,60))
+			}, {
+				name: 'tetra2',
+				shades: shades(adjustHue(color,180))
+			}, {
+				name: 'tetra3',
+				shades: shades(adjustHue(color,240))
+			}]
+		} },
+	]
+
+	const schemeChange = (event) => {
+		console.log('schemechange',event.target)
+	}
+
 $: {
+	stepFactor = stepPercent * 0.01
+	steps
 	color = `hsla(${h},${s}%,${l}%,${a})`
-	contrast = readableColor(color)
-	complementary = `hsla(${h+128},${s}%,${l}%,${a})`
-	primaryShades = shades(color,steps,stepFactor)
-	complementaryShades = shades(complementary,steps,stepFactor)
+	readable = readableColor(color)
+	complementary = adjustHue(color,180)
+	primaryShades = shades(color)
+	complementaryShades = shades(complementary)
 }
 </script>
 
-<div class="p-10 flex" style="color: {contrast}; background-color: {color};">
+<div class="p-10 flex" style="color: {readable}; background-color: {color};">
 	<div class="text-2xl font-bold">
 		hsla(
 			<input class="hsla" style="background-color: {color};" 
@@ -59,19 +129,24 @@ $: {
 		</label>
 		<label>
 			<input style="background-color: {color};"
-			bind:value={stepFactor}
+			bind:value={stepPercent}
 			type="number"
 			min={0}
-			max={1}
-			step={0.01}
+			max={100}
+			step={0.5}
 			placeholder="">
-			Step Factor (0..1)
+			% Step
 		</label>
 		<label>
-			<input style="background-color: {color};"
-			class="max-w-[12ch]"
-			bind:value={scheme}
-			placeholder="Monochromatic, Analagous, Complementary, Split-Complementary, Triad, Tetradic">
+			<select style="background-color: {color};"
+			bind:value={scheme} on:change={schemeChange}>
+				{#each schemes as s, i}
+					<option value={i}>
+						{s.text}
+					</option>
+				{/each}
+			</select>
+
 			Color Scheme
 		</label>
 	</div>
