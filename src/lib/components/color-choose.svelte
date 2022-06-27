@@ -13,7 +13,7 @@ let stepFactor = stepPercent * 0.01
 const shades = (color) => {
 	let arr = [color]
 	for (let i = 1; i < steps; i++) {
-		if (i%2) {
+		if (i % 2) {
 			arr.unshift(darken(color,(i+1)/2*stepFactor*-1))
 		} else {
 			arr.push(darken(color,i/2*stepFactor))
