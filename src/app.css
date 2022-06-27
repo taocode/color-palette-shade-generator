@@ -18,7 +18,7 @@
 }
 
 .btn {
-  @apply inline-block leading-6 text-center align-middle cursor-pointer border px-2 py-4 rounded;
+  @apply inline-block text-center align-middle cursor-pointer border p-2 rounded;
 }
 .btn-primary {
   @apply bg-primary;

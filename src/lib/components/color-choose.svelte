@@ -1,5 +1,6 @@
 <script>
 import {adjustHue, darken, readableColor} from 'color2k'
+import Swatch from './swatch.svelte'
 
 export let h = 0
 export let s = 75
@@ -24,10 +25,15 @@ const shades = (color) => {
 let color = `hsla(${h},${s}%,${l}%,${a})`
 let readable = readableColor("white")
 let complementary = "green"
-let primaryShades = []
-let complementaryShades = []
-let scheme = "Complementary"
+let allColors = []
+let scheme = 0
 let schemes = [
+		{ id: 1, text: `Monochrome`, f: () => {
+			return [{
+				name: 'primary',
+				shades: shades(color)
+			}]
+		} },
 		{ id: 1, text: `Complementary`, f: () => {
 			return [{
 				name: 'primary',
@@ -42,10 +48,10 @@ let schemes = [
 				name: 'primary',
 				shades: shades(color)
 			}, {
-				name: 'analogous-1',
+				name: 'analogous1',
 				shades: shades(adjustHue(color,30))
 			}, {
-				name: 'analogous-2',
+				name: 'analogous2',
 				shades: shades(adjustHue(color,60))
 			}]
 		} },
@@ -90,22 +96,21 @@ let schemes = [
 		} },
 	]
 
-	const schemeChange = (event) => {
-		console.log('schemechange',event.target)
-	}
-
 $: {
 	stepFactor = stepPercent * 0.01
 	steps
 	color = `hsla(${h},${s}%,${l}%,${a})`
 	readable = readableColor(color)
 	complementary = adjustHue(color,180)
-	primaryShades = shades(color)
-	complementaryShades = shades(complementary)
+	allColors = schemes[scheme].f()
 }
-</script>
+let lc = ''
 
-<div class="p-10 flex" style="color: {readable}; background-color: {color};">
+</script>
+<div class="wrap" style="color: {readable}; background-color: {color};">
+	<h1>Color Palette Shade Generator</h1>
+
+<div class="p-10 flex" >
 	<div class="text-2xl font-bold">
 		hsla(
 			<input class="hsla" style="background-color: {color};" 
@@ -138,8 +143,7 @@ $: {
 			% Step
 		</label>
 		<label>
-			<select style="background-color: {color};"
-			bind:value={scheme} on:change={schemeChange}>
+			<select style="background-color: {color};" bind:value={scheme}>
 				{#each schemes as s, i}
 					<option value={i}>
 						{s.text}
@@ -151,24 +155,29 @@ $: {
 		</label>
 	</div>
 </div>
+</div>
 
-<div class="shades">
-	{#each primaryShades as bc}
-	<div class="swatch" style="background-color: {bc}; color: {readableColor(bc)}">{bc.split(',')[2]}</div>
+{#each allColors as color}
+	<div class="name" style="
+	background: {lc = color.shades[color.shades.length-1]};
+	color: {readableColor(lc)}; 
+	background: linear-gradient(90deg, {lc} 10%, {color.shades[0]} 90%;">{color.name}</div>
+	<div class="shades">
+	{#each color.shades as c}
+		<Swatch color={c} />
 	{/each}
-</div>
-<div class="flex flex-wrap text-center">
-	{#each complementaryShades as bc}
-	<div class="swatch" style="background-color: {bc}; color: {readableColor(bc)}">{bc.split(',')[2]}</div>
-	{/each}
-</div>
+	</div>
+{/each}
 
 <style lang="postcss">
+	h1 {
+		@apply text-3xl text-center p-4 font-semibold;
+	}
 	label {
 		@apply block flex items-center;
 	}
-	.swatch {
-		@apply p-2 min-h-16 min-w-1/11 flex flex-grow items-center justify-center;
+	.name {
+		@apply px-4 py-2;
 	}
 	input {
 		@apply text-right  text-2xl border-transparent;
