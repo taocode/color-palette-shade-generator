@@ -1,18 +1,20 @@
 <script>
   import { readableColor, toRgba, toHex, toHsla } from 'color2k'
+  import { createEventDispatcher } from 'svelte';
   import { CopyIcon, Edit2Icon } from 'svelte-feather-icons'
   export let color = 'black'
 
-  /**
- * @param {String} HTML representing a single element
- * @return {Element}
- */
-function htmlToElement(html) {
+  const dispatch = createEventDispatcher()
+    /**
+   * @param {String} HTML representing a single element
+   * @return {Element}
+   */
+  function htmlToElement(html) {
     var template = document.createElement('template');
     html = html.trim(); // Never return a text node of whitespace as the result
     template.innerHTML = html;
     return template.content.firstChild;
-}
+  }
 
 
   function notice(text,addTo) {
@@ -49,6 +51,7 @@ function htmlToElement(html) {
       )
     }
   }
+  
 </script>
 <div class="swatch" style="background-color: {color}; color: {readableColor(color)}">
   {color.split(',')[2]}
@@ -56,7 +59,7 @@ function htmlToElement(html) {
     <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHsla(color)}</button>
     <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toRgba(color)}</button>
     <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHex(color)}</button>
-    <button class="btn my-2"><Edit2Icon class="mx-1 pointer-events-none" size="1x" />Make Primary</button>
+    <button class="btn my-2" on:click={() => dispatch('updateColor',toHsla(color))}><Edit2Icon class="mx-1 pointer-events-none" size="1x" />Make Primary</button>
   </div>
 </div>
 
@@ -65,7 +68,7 @@ function htmlToElement(html) {
     @apply whitespace-nowrap;
   }
   .info {
-    @apply absolute opacity-0 p-2 border-2 z-10 transition duration-200 shadow-lg;
+    @apply absolute opacity-0 p-2 border-2 z-10 transition duration-200 shadow-lg transform scale-75;
     .btn {
       @apply w-full;
     }

@@ -2,12 +2,12 @@
 import {adjustHue, darken, readableColor} from 'color2k'
 import Swatch from './swatch.svelte'
 
-export let h = 0
-export let s = 75
+export let h = 240
+export let s = 80
 export let l = 50
-export let a = 1
+export let a = 0.9
 export let steps = 10
-export let stepPercent = 5
+export let stepPercent = 7.5
 let stepFactor = stepPercent * 0.01
 
 const shades = (color) => {
@@ -26,7 +26,7 @@ let color = `hsla(${h},${s}%,${l}%,${a})`
 let readable = readableColor("white")
 let complementary = "green"
 let allColors = []
-let scheme = 0
+let scheme = 3
 let schemes = [
 		{ id: 1, text: `Monochrome`, f: () => {
 			return [{
@@ -105,12 +105,21 @@ $: {
 	allColors = schemes[scheme].f()
 }
 let lc = ''
-
+function updateColor(event) {
+	console.log('updateColor:',event.detail,{event})
+	const newHSLA = event.detail.substring(5)
+	const aHSLA = newHSLA.split(', ')
+	console.log({newHSLA, aHSLA})
+	h = aHSLA[0]
+	s = aHSLA[1].substring(0,aHSLA[1].length-1)
+	l = aHSLA[2].substring(0,aHSLA[2].length-1)
+	a = aHSLA[3].substring(0,aHSLA[3].length-1)
+}
 </script>
 <div class="wrap" style="color: {readable}; background-color: {color};">
 	<h1>Color Palette Shade Generator</h1>
 
-<div class="p-10 flex" >
+<div class="p-10 flex mx-auto max-w-max" >
 	<div class="text-2xl font-bold">
 		hsla(
 			<input class="hsla" style="background-color: {color};" 
@@ -127,20 +136,29 @@ let lc = ''
 	</div>
 	<div class="">
 		<label>
-			<input style="background-color: {color};" bind:value={steps}
+			<span class="flex-grow"> </span>
+			<input id="steps"
+			class="w-16"
+			style="background-color: {color};" 
+			bind:value={steps}
 			type="number"
+			min={3}
+			max={20}
 			placeholder="steps">
 			Steps
 		</label>
 		<label>
-			<input style="background-color: {color};"
+			<span class="flex-grow"></span>
+			<input id="step-percent"
+			class="w-16"
+			style="background-color: {color};"
 			bind:value={stepPercent}
 			type="number"
 			min={0}
 			max={100}
 			step={0.5}
 			placeholder="">
-			% Step
+				% Step
 		</label>
 		<label>
 			<select style="background-color: {color};" bind:value={scheme}>
@@ -164,7 +182,7 @@ let lc = ''
 	background: linear-gradient(90deg, {lc} 10%, {color.shades[0]} 90%;">{color.name}</div>
 	<div class="shades">
 	{#each color.shades as c}
-		<Swatch color={c} />
+		<Swatch color={c} on:updateColor={updateColor} />
 	{/each}
 	</div>
 {/each}
@@ -174,7 +192,7 @@ let lc = ''
 		@apply text-3xl text-center p-4 font-semibold;
 	}
 	label {
-		@apply block flex items-center;
+		@apply block flex items-center text-right w-full;
 	}
 	.name {
 		@apply px-4 py-2;
