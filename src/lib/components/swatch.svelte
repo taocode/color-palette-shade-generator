@@ -1,7 +1,7 @@
 <script>
   import { readableColor, toRgba, toHex, toHsla } from 'color2k'
   import { createEventDispatcher } from 'svelte';
-  import { CopyIcon, Edit2Icon } from 'svelte-feather-icons'
+  import { CopyIcon, Edit2Icon, XIcon } from 'svelte-feather-icons'
   export let color = 'black'
 
   const dispatch = createEventDispatcher()
@@ -51,15 +51,27 @@
       )
     }
   }
-  
+  let hidden = true
 </script>
 <div class="swatch" style="background-color: {color}; color: {readableColor(color)}">
-  {color.split(',')[2]}
-  <div class="info" style="background-color: {color}; color: {readableColor(color)}">
-    <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHsla(color)}</button>
-    <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toRgba(color)}</button>
-    <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHex(color)}</button>
-    <button class="btn my-2" on:click={() => dispatch('updateColor',toHsla(color))}><Edit2Icon class="mx-1 pointer-events-none" size="1x" />Make Primary</button>
+  <div class="ml-2">{color.split(',')[2]}</div>
+  <div>
+    <button class="border border-transparent hover:border-current rounded px-1 text-xs"
+    on:click={() => { hidden = false }}>
+      &bullet;&hairsp;&bullet;&hairsp;&bullet;
+    </button>
+  </div>
+  <div class="info flex" class:hidden style="background-color: {color}; color: {readableColor(color)}">
+    <button class="text-center block w-full px-1" on:click={() => { hidden=true }}><XIcon /></button>
+    <div>
+      <button class="text-center block w-full py-1" on:click={() => { hidden=true }}><XIcon /></button>
+      <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHsla(color)}</button>
+      <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toRgba(color)}</button>
+      <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHex(color)}</button>
+      <button class="btn my-2" on:click={() => dispatch('updateColor',toHsla(color))}><Edit2Icon class="mx-1 pointer-events-none" size="1x" />Make Primary</button>
+      <button class="text-center block w-full py-1" on:click={() => { hidden=true }}><XIcon /></button>
+    </div>
+    <button class="text-center block w-full px-1" on:click={() => { hidden=true }}><XIcon /></button>
   </div>
 </div>
 
@@ -68,23 +80,12 @@
     @apply whitespace-nowrap;
   }
   .info {
-    @apply absolute opacity-0 p-2 border-2 z-10 transition duration-200 shadow-lg transform scale-75;
+    @apply absolute p-2 border-2 z-10 transition duration-200 shadow-lg transform scale-75;
     .btn {
       @apply w-full;
     }
   }
   .swatch {
-    @apply relative p-2 min-h-16 min-w-1/11 flex flex-grow items-center justify-center;
-    &:hover,
-    &:focus-within {
-      .info {
-          @apply opacity-100;
-        }
-      }
-    &:hover {
-      .info {
-        @apply z-11;
-      }
-    }
+    @apply relative p-2 min-h-16 min-w-16 flex flex-grow flex-col items-center justify-center;
   }
 </style>

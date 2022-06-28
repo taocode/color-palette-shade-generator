@@ -26,7 +26,7 @@ let color = `hsla(${h}, ${s}%, ${l}%, ${a})`
 let readable = readableColor("white")
 let complementary = "green"
 let allColors = []
-let scheme = 3
+let scheme = 2
 let schemes = [
 		{ id: 1, text: `Monochrome`, f: () => {
 			return [{
@@ -119,61 +119,64 @@ function updateColor(event) {
 <div class="wrap" style="color: {readable}; background-color: {color};">
 	<h1>Color Palette Shade Generator</h1>
 
-<div class="p-10 flex mx-auto max-w-max" >
-	<div class="text-2xl font-bold">
-		hsla(
-			<input class="hsla" style="background-color: {color};" 
-			bind:value={h} placeholder="Hue"
-			type="number">,
-			<input class="hsla" style="background-color: {color};" bind:value={s} placeholder="Saturation"
-			type="number">%,
-			<input class="hsla" style="background-color: {color};" bind:value={l} placeholder="luminosity"
-			type="number">%,
-			<input class="hsla" style="background-color: {color};" bind:value={a} placeholder="Hue"
-			type="number">
-		)
+	<div class="max-w-max mx-auto pb-4 sm:text-2xl leading-loose">
+		<div class="md:flex" >
+			<div class="font-bold">
+				hsla(
+					<input class="hsla" style="background-color: {color};"
+					bind:value={h} placeholder="Hue"
+					type="number">,
+					<input class="hsla" style="background-color: {color};" bind:value={s} placeholder="Saturation"
+					type="number">%,
+					<input class="hsla" style="background-color: {color};" bind:value={l} placeholder="luminosity"
+					type="number">%,
+					<input class="hsla" style="background-color: {color};" bind:value={a} placeholder="Hue"
+					type="number">
+				)
 		
-	</div>
-	<div class="">
-		<label>
-			<span class="flex-grow"> </span>
-			<input id="steps"
-			class="w-16"
-			style="background-color: {color};" 
-			bind:value={steps}
-			type="number"
-			min={3}
-			max={20}
-			placeholder="steps">
-			Steps
-		</label>
-		<label>
-			<span class="flex-grow"></span>
-			<input id="step-percent"
-			class="w-16"
-			style="background-color: {color};"
-			bind:value={stepPercent}
-			type="number"
-			min={0}
-			max={100}
-			step={0.5}
-			placeholder="">
-				% Step
-		</label>
-		<label>
-			<select style="background-color: {color};" bind:value={scheme}>
+			</div>
+			<div class="">
+				<div class="flex">
+					<label class="mx-2">
+						<input id="steps"
+						class="w-16 mr-1"
+						style="background-color: {color};"
+						bind:value={steps}
+						type="number"
+						min={3}
+						max={20}
+						placeholder="steps">
+						<span>Steps</span>
+					</label>
+					<label>
+						<span class="flex-grow"></span>
+						<input id="step-percent"
+						class="w-16 mr-1"
+						style="background-color: {color};"
+						bind:value={stepPercent}
+						type="number"
+						min={0}
+						max={100}
+						step={0.5}
+						placeholder="">
+							<span class="whitespace-nowrap">% Step</span>
+					</label>
+				</div>
+			</div>
+		</div>
+		<label class="my-2 max-w-min mx-auto">
+			<select class="max-w-min" style="background-color: {color};" bind:value={scheme}>
 				{#each schemes as s, i}
 					<option value={i}>
 						{s.text}
 					</option>
 				{/each}
 			</select>
-
-			Color Scheme
+			<span class="ml-1">Scheme</span>
 		</label>
+		
+		</div>
 	</div>
-</div>
-</div>
 
 {#each allColors as color}
 	<div class="name" style="
@@ -197,8 +200,12 @@ function updateColor(event) {
 	.name {
 		@apply px-4 py-2;
 	}
-	input {
-		@apply text-right  text-2xl border-transparent;
+	input,
+	select {
+		@apply text-right  text-[1.2em] border-transparent leading-tight;
+	}
+	select option {
+		@apply text-xs;
 	}
 	.hsla {
 		@apply font-bold max-w-[4ch];
