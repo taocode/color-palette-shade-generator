@@ -22,7 +22,7 @@ const shades = (color) => {
 	return arr
 }
 
-let color = `hsla(${h},${s}%,${l}%,${a})`
+let color = `hsla(${h}, ${s}%, ${l}%, ${a})`
 let readable = readableColor("white")
 let complementary = "green"
 let allColors = []
@@ -99,7 +99,7 @@ let schemes = [
 $: {
 	stepFactor = stepPercent * 0.01
 	steps
-	color = `hsla(${h},${s}%,${l}%,${a})`
+	color = `hsla(${h}, ${s}%, ${l}%, ${a})`
 	readable = readableColor(color)
 	complementary = adjustHue(color,180)
 	allColors = schemes[scheme].f()
