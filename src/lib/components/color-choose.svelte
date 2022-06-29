@@ -1,12 +1,12 @@
 <script>
-import {adjustHue, darken, readableColor} from 'color2k'
+import { adjustHue, darken, readableColor, toHex, toHsla } from 'color2k'
 import Swatch from './swatch.svelte'
 
-export let h = 240
-export let s = 80
-export let l = 50
-export let a = 0.9
-export let steps = 10
+export let h = 210
+export let s = 75
+export let l = 35
+export let a = 1
+export let steps = 9
 export let stepPercent = 7.5
 let stepFactor = stepPercent * 0.01
 
@@ -26,7 +26,7 @@ let color = `hsla(${h}, ${s}%, ${l}%, ${a})`
 let readable = readableColor("white")
 let complementary = "green"
 let allColors = []
-let scheme = 2
+let scheme = 0
 let schemes = [
 		{ id: 1, text: `Monochrome`, f: () => {
 			return [{
@@ -105,21 +105,40 @@ $: {
 	allColors = schemes[scheme].f()
 }
 let lc = ''
-function updateColor(event) {
-	console.log('updateColor:',event.detail,{event})
-	const newHSLA = event.detail.substring(5)
-	const aHSLA = newHSLA.split(', ')
-	console.log({newHSLA, aHSLA})
+function updateColorFromHSLA(hsla) {	
+	const aHSLA = hsla.substring(5).split(', ')
+	console.log({hsla, aHSLA})
 	h = aHSLA[0]
 	s = aHSLA[1].substring(0,aHSLA[1].length-1)
 	l = aHSLA[2].substring(0,aHSLA[2].length-1)
 	a = aHSLA[3].substring(0,aHSLA[3].length-1)
 }
+function updateColor(event) {
+	console.log('updateColor:',event.detail,{event})
+	updateColorFromHSLA( event.detail )
+}
+
+let hidden = true
+
+function colorPicked({srcElement}) {
+	updateColorFromHSLA(toHsla(srcElement.value))
+}
+
 </script>
 <div class="wrap" style="color: {readable}; background-color: {color};">
 	<h1>Color Palette Shade Generator</h1>
 
 	<div class="max-w-max mx-auto pb-4 sm:text-2xl leading-loose">
+		<div class="flex basis-1/2 items-center justify-center">
+			<div class="w-full text-right flex-grow grow"><label for="colorpicker">Pick/Set Color:</label></div>
+			<div class="w-full">
+				<input type="color" id="colorpicker"
+				on:change={colorPicked}
+				class="w-full"
+				value={toHex(color)}
+				colorpick-eyedropper-active="true">
+			</div>
+		</div>
 		<div class="md:flex" >
 			<div class="font-bold">
 				hsla(
@@ -182,7 +201,19 @@ function updateColor(event) {
 	<div class="name" style="
 	background: {lc = color.shades[color.shades.length-1]};
 	color: {readableColor(lc)}; 
-	background: linear-gradient(90deg, {lc} 10%, {color.shades[0]} 90%;">{color.name}</div>
+	background: linear-gradient(90deg, {lc} 10%, {color.shades[0]} 90%;">{color.name}
+	<button class="border border-transparent hover:border-current rounded px-1 text-xs"
+	on:click={() => { hidden = ! hidden }}>
+	&bullet;&hairsp;&bullet;&hairsp;&bullet;
+	</button>
+	<div class="details hidden" class:hidden>
+		{#each color.shades as c, i}
+		<div>
+			--c-primary-{i+1}00: {c};
+		</div>
+		{/each}
+  </div>
+	</div>
 	<div class="shades">
 	{#each color.shades as c}
 		<Swatch color={c} on:updateColor={updateColor} />
