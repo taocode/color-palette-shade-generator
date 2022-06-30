@@ -61,7 +61,7 @@
       &bullet;&hairsp;&bullet;&hairsp;&bullet;
     </button>
   </div>
-  <div class="info flex" class:hidden style="background-color: {color}; color: {readableColor(color)}">
+  <div class="info hidden flex" class:hidden style="background-color: {color}; color: {readableColor(color)}">
     <button class="text-center block w-full px-1" on:click={() => { hidden=true }}><XIcon /></button>
     <div>
       <button class="text-center block w-full py-1" on:click={() => { hidden=true }}><XIcon /></button>
@@ -80,7 +80,7 @@
     @apply whitespace-nowrap;
   }
   .info {
-    @apply absolute p-2 border-2 z-10 transition duration-200 shadow-lg transform scale-75;
+    @apply absolute p-2 border-2 z-10 transition duration-200 shadow-lg transform;
     .btn {
       @apply w-full;
     }

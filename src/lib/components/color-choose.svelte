@@ -24,7 +24,6 @@ const shades = (color) => {
 
 let color = `hsla(${h}, ${s}%, ${l}%, ${a})`
 let readable = readableColor("white")
-let complementary = "green"
 let allColors = []
 let scheme = 2
 let schemes = [
@@ -99,9 +98,12 @@ let schemes = [
 $: {
 	stepFactor = stepPercent * 0.01
 	steps
+	if (h < 0 || h > 360) h = 0
+	if (s < 0 || s > 100) s = 75
+	if (l < 0 || l > 100) l = 50
+	if (a < 0 || a > 1) a = 1
 	color = `hsla(${h}, ${s}%, ${l}%, ${a})`
 	readable = readableColor(color)
-	complementary = adjustHue(color,180)
 	allColors = schemes[scheme].f()
 }
 let lc = ''
@@ -125,13 +127,13 @@ function updateColor(event) {
 				hsla(
 					<input class="hsla" style="background-color: {color};"
 					bind:value={h} placeholder="Hue"
-					type="number">,
+					type="number" min={0} max={360}>,
 					<input class="hsla" style="background-color: {color};" bind:value={s} placeholder="Saturation"
-					type="number">%,
+					type="number" min={0} max={100}>%,
 					<input class="hsla" style="background-color: {color};" bind:value={l} placeholder="luminosity"
-					type="number">%,
+					type="number" min={0} max={100}>%,
 					<input class="hsla" style="background-color: {color};" bind:value={a} placeholder="Hue"
-					type="number">
+					type="number" min={0} max={1} step={0.1}>
 				)
 		
 			</div>
