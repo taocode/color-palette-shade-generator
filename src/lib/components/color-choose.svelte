@@ -4,21 +4,23 @@ import { browser } from '$app/env'
 import { page } from '$app/stores'
 import Swatch from './swatch.svelte'
 
-export let h = 210
+import { onMount } from 'svelte'
+
+export let h = 200
 export let s = 75
-export let l = 35
+export let l = 50
 export let a = 1
 let color = `hsla(${h}, ${s}%, ${l}%, ${a})`
 export let steps = 9
-export let stepPercent = 7.5
+export let stepPercent = 10
 let stepFactor = stepPercent * 0.01
-let scheme = 0
+let scheme = 3
 
 
 onMount(() => {
 	if (browser) {
 		const searchParams = $page.url.searchParams
-		if (searchParams.has('color')) updateColorFromHSLA(toHsla('#'+searchParams.get('color')))
+		if (searchParams.has('color')) updateHSLA(toHsla('#'+searchParams.get('color')))
 		if (searchParams.has('scheme')) scheme = parseInt(searchParams.get('scheme'))
 		console.log('start color', {searchParams}, $page.url)
 	}
@@ -127,7 +129,7 @@ $: {
 	}
 }
 let lc = ''
-function updateColorFromHSLA(hsla) {	
+function updateHSLA(hsla) {	
 	const aHSLA = hsla.substring(5).split(', ')
 	// console.log({hsla, aHSLA})
 	h = aHSLA[0]
@@ -136,33 +138,31 @@ function updateColorFromHSLA(hsla) {
 	a = aHSLA[3].substring(0,aHSLA[3].length-1)
 }
 function updateColor(event) {
-	updateColorFromHSLA( event.detail )
+	updateHSLA( event.detail )
 }
 
 let hidden = true
 
 function colorPicked({srcElement}) {
-	updateColorFromHSLA(toHsla(srcElement.value))
+	updateHSLA(toHsla(srcElement.value))
 }
 
 </script>
 <div class="wrap" style="color: {readable}; background-color: {color};">
 	<h1>Color Palette Shade Generator</h1>
 
-	<div class="max-w-max mx-auto pb-4 sm:text-2xl leading-loose">
-		<div class="flex basis-1/2 items-center justify-center">
-			<div class="w-full justify-end mr-2 align-top pb-2"><label for="colorpicker">Set Color:</label></div>
-			<div class="w-full">
+	<div class="max-w-max mx-auto pb-4 sm:text-xl leading-loose">
+		<div class="flex flex-col leading-9 xs:flex-row xs:justify-center" >
+			<div class="xs:justify-end">
 				<input type="color" id="colorpicker"
 				on:change={colorPicked}
-				class="w-full"
+				class="block w-3/4  h-8 mx-auto xs:w-16"
 				value={toHex(color).substring(0,7)}
 				colorpick-eyedropper-active="true">
 			</div>
-		</div>
-		<div class="md:flex" >
-			<div class="font-bold">
-				hsla(
+			<div class="xs:ml-2">
+				<label for="colorpicker">hsla(
+
 					<input class="hsla" style="background-color: {color};"
 					bind:value={h} placeholder="Hue"
 					type="number" min={0} max={360}>,
@@ -172,48 +172,49 @@ function colorPicked({srcElement}) {
 					type="number" min={0} max={100}>%,
 					<input class="hsla" style="background-color: {color};" bind:value={a} placeholder="Hue"
 					type="number" min={0} max={1} step={0.1}>
-				)
+					)
+				</label>
 		
 			</div>
-			<div class="">
-				<div class="flex">
-					<label class="mx-2">
-						<input id="steps"
-						class="w-16 mr-1"
-						style="background-color: {color};"
-						bind:value={steps}
-						type="number"
-						min={3}
-						max={20}
-						placeholder="steps">
-						<span>Steps</span>
-					</label>
-					<label>
-						<span class="flex-grow"></span>
-						<input id="step-percent"
-						class="w-16 mr-1"
-						style="background-color: {color};"
-						bind:value={stepPercent}
-						type="number"
-						min={0}
-						max={100}
-						step={0.5}
-						placeholder="">
-							<span class="whitespace-nowrap">% Step</span>
-					</label>
-				</div>
-			</div>
+
 		</div>
-		<label class="my-2 max-w-min mx-auto">
-			<select class="max-w-min" style="background-color: {color};" bind:value={scheme}>
-				{#each schemes as s, i}
-					<option value={i}>
-						{s.text}
-					</option>
-				{/each}
-			</select>
-			<span class="ml-1">Scheme</span>
-		</label>
+		<div class="sm:flex">
+			<div class="flex">
+				<label class="mx-2">
+					<input id="steps"
+					class="w-[2ch] mr-1"
+					style="background-color: {color};"
+					bind:value={steps}
+					type="number"
+					min={3}
+					max={20}
+					placeholder="steps">
+					<span>Steps</span>
+				</label>
+				<label>
+					<input id="step-percent"
+					class="w-[3ch] mr-1"
+					style="background-color: {color};"
+					bind:value={stepPercent}
+					type="number"
+					min={0}
+					max={100}
+					step={0.5}
+					placeholder="">
+						<span class="whitespace-nowrap">% Step</span>
+				</label>
+			</div>
+			<label class="m-2 px-2 max-w-min mx-auto">
+				<select class="max-w-min" style="background-color: {color};" bind:value={scheme}>
+					{#each schemes as s, i}
+						<option value={i}>
+							{s.text}
+						</option>
+					{/each}
+				</select>
+				<span class="ml-1">Scheme</span>
+			</label>
+		</div>		
 		
 		</div>
 	</div>
@@ -247,20 +248,26 @@ function colorPicked({srcElement}) {
 		@apply text-3xl text-center p-4 font-semibold;
 	}
 	label {
-		@apply block flex items-center justify-end w-full;
+		@apply block flex items-center justify-end w-full text-[0.75em];
+		input {
+			@apply text-[2em];
+		}
+		select {
+			@apply text-[1.5em] tracking-tighter;
+		}
 	}
 	.name {
 		@apply px-4 py-2;
 	}
 	input,
 	select {
-		@apply text-right  text-[1.2em] border-transparent leading-tight;
+		@apply text-right border-transparent leading-tight flex-shrink;
 	}
 	select option {
 		@apply text-xs;
 	}
 	.hsla {
-		@apply font-bold max-w-[4ch];
+		@apply font-semibold max-w-[4ch];
 	}
 	.shades {
 		@apply flex flex-wrap text-center;

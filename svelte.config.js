@@ -12,7 +12,7 @@ const config = {
 		vite: {
 			plugins: [
 				autoImport({ 
-					components: ['./src/elements'],
+					// components: ['./src/elements'],
 					// frequently used modules
 					module: {
 						svelte: ['onMount', 'createEventDispatcher'],

@@ -1,0 +1,14 @@
+<script>
+  import { dev } from "$app/env"
+</script>
+{#if dev}
+<div class="fixed top-0 left-0 z-50 flex items-center justify-center w-8 h-8 mt-12 ml-2 text-sm font-semibold opacity-30 hover:opacity-100 text-black uppercase bg-gray-300 rounded-full sm:bg-red-200 md:bg-yellow-200 lg:bg-green-200 xl:bg-blue-200 2xl:bg-pink-200">
+    <span class="block xs:hidden sm:hidden">all</span>
+    <span class="hidden xs:block sm:hidden">xs</span>
+    <span class="hidden sm:block md:hidden">sm</span>
+    <span class="hidden md:block lg:hidden">md</span>
+    <span class="hidden lg:block xl:hidden">lg</span>
+    <span class="hidden xl:block 2xl:hidden">xl</span>
+    <span class="hidden 2xl:block">2xl</span>
+</div>
+{/if}
