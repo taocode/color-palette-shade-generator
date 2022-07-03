@@ -70,7 +70,7 @@
       <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHsla(color)}</button>
       <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toRgba(color)}</button>
       <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHex(color)}</button>
-      <button class="btn my-2" on:click={() => dispatch('updateColor',toHsla(color))}><Edit2Icon class="mx-1 pointer-events-none" size="1x" />Make Primary</button>
+      <button class="btn my-2" on:click={() => {dispatch('updateColor',toHsla(color)); hidden=true;}}><Edit2Icon class="mx-1 pointer-events-none" size="1x" />Make Primary</button>
     </div>
   </div>
 </div>
@@ -87,6 +87,12 @@
   }
   .swatch {
     @apply relative p-2 min-h-16 min-w-16 flex flex-grow flex-col items-center justify-center;
+    &:nth-child(1),
+    &:nth-child(2) { 
+      .info {
+        @apply left-0;
+      }
+    }
     &:nth-child(n+8) .info {
       @apply right-0;
     }

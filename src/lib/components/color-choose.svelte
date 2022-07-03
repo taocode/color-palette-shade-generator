@@ -1,14 +1,28 @@
 <script>
 import { adjustHue, darken, readableColor, toHex, toHsla } from 'color2k'
+import { browser } from '$app/env'
+import { page } from '$app/stores'
 import Swatch from './swatch.svelte'
 
 export let h = 210
 export let s = 75
 export let l = 35
 export let a = 1
+let color = `hsla(${h}, ${s}%, ${l}%, ${a})`
 export let steps = 9
 export let stepPercent = 7.5
 let stepFactor = stepPercent * 0.01
+let scheme = 0
+
+
+onMount(() => {
+	if (browser) {
+		const searchParams = $page.url.searchParams
+		if (searchParams.has('color')) updateColorFromHSLA(toHsla('#'+searchParams.get('color')))
+		if (searchParams.has('scheme')) scheme = parseInt(searchParams.get('scheme'))
+		console.log('start color', {searchParams}, $page.url)
+	}
+});
 
 const shades = (color) => {
 	let arr = [color]
@@ -22,10 +36,8 @@ const shades = (color) => {
 	return arr
 }
 
-let color = `hsla(${h}, ${s}%, ${l}%, ${a})`
 let readable = readableColor("white")
 let allColors = []
-let scheme = 0
 let schemes = [
 		{ id: 1, text: `Monochrome`, f: () => {
 			return [{
@@ -96,27 +108,34 @@ let schemes = [
 	]
 
 $: {
+	if (stepFactor < 0) stepFactor *= -1
 	stepFactor = stepPercent * 0.01
-	steps
-	if (h < 0 || h > 360) h = 0
-	if (s < 0 || s > 100) s = 75
-	if (l < 0 || l > 100) l = 50
-	if (a < 0 || a > 1) a = 1
+	if (steps < 2) steps = 2
+	if (h < 0) h *= -1
+	if (s < 0) s *= -1
+	if (l < 0) l *= -1
+	if (a < 0) a *= -1
+	if (h > 360) h = h % 360
+	if (s > 100) s = s % 100
+	if (l > 100) l = l % 100
+	if (a > 1) a = 1
 	color = `hsla(${h}, ${s}%, ${l}%, ${a})`
 	readable = readableColor(color)
 	allColors = schemes[scheme].f()
+	if (browser) {
+		history.replaceState({'color': toHex(color),'scheme': scheme},'','?color='+toHex(color).substring(1)+'&scheme='+scheme)
+	}
 }
 let lc = ''
 function updateColorFromHSLA(hsla) {	
 	const aHSLA = hsla.substring(5).split(', ')
-	console.log({hsla, aHSLA})
+	// console.log({hsla, aHSLA})
 	h = aHSLA[0]
 	s = aHSLA[1].substring(0,aHSLA[1].length-1)
 	l = aHSLA[2].substring(0,aHSLA[2].length-1)
 	a = aHSLA[3].substring(0,aHSLA[3].length-1)
 }
 function updateColor(event) {
-	console.log('updateColor:',event.detail,{event})
 	updateColorFromHSLA( event.detail )
 }
 
@@ -132,12 +151,12 @@ function colorPicked({srcElement}) {
 
 	<div class="max-w-max mx-auto pb-4 sm:text-2xl leading-loose">
 		<div class="flex basis-1/2 items-center justify-center">
-			<div class="w-full justify-end mr-2 align-top pb-2 flex-grow grow"><label for="colorpicker">Pick/Set Color:</label></div>
+			<div class="w-full justify-end mr-2 align-top pb-2"><label for="colorpicker">Set Color:</label></div>
 			<div class="w-full">
 				<input type="color" id="colorpicker"
 				on:change={colorPicked}
 				class="w-full"
-				value={toHex(color)}
+				value={toHex(color).substring(0,7)}
 				colorpick-eyedropper-active="true">
 			</div>
 		</div>
@@ -228,7 +247,7 @@ function colorPicked({srcElement}) {
 		@apply text-3xl text-center p-4 font-semibold;
 	}
 	label {
-		@apply block flex items-center text-right w-full;
+		@apply block flex items-center justify-end w-full;
 	}
 	.name {
 		@apply px-4 py-2;
