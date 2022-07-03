@@ -27,5 +27,8 @@
 		"vite": "^2.9.12",
 		"vite-plugin-windicss": "^1.8.4"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"svelte-use-click-outside": "^1.0.0"
+	}
 }

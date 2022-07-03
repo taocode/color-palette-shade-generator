@@ -1,9 +1,11 @@
 <script>
   import { readableColor, toRgba, toHex, toHsla } from 'color2k'
   import { createEventDispatcher } from 'svelte';
-  import { CopyIcon, Edit2Icon, XIcon } from 'svelte-feather-icons'
+  import { CopyIcon, Edit2Icon } from 'svelte-feather-icons'
+  import { clickOutside } from 'svelte-use-click-outside';
+  
   export let color = 'black'
-
+  
   const dispatch = createEventDispatcher()
     /**
    * @param {String} HTML representing a single element
@@ -61,17 +63,15 @@
       &bullet;&hairsp;&bullet;&hairsp;&bullet;
     </button>
   </div>
-  <div class="info hidden flex" class:hidden style="background-color: {color}; color: {readableColor(color)}">
-    <button class="text-center block w-full px-1" on:click={() => { hidden=true }}><XIcon /></button>
+  <div class="info hidden flex" class:hidden 
+  use:clickOutside={() => {hidden = true}}
+  style="background-color: {color}; color: {readableColor(color)}">
     <div>
-      <button class="text-center block w-full py-1" on:click={() => { hidden=true }}><XIcon /></button>
       <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHsla(color)}</button>
       <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toRgba(color)}</button>
       <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHex(color)}</button>
       <button class="btn my-2" on:click={() => dispatch('updateColor',toHsla(color))}><Edit2Icon class="mx-1 pointer-events-none" size="1x" />Make Primary</button>
-      <button class="text-center block w-full py-1" on:click={() => { hidden=true }}><XIcon /></button>
     </div>
-    <button class="text-center block w-full px-1" on:click={() => { hidden=true }}><XIcon /></button>
   </div>
 </div>
 
@@ -87,5 +87,9 @@
   }
   .swatch {
     @apply relative p-2 min-h-16 min-w-16 flex flex-grow flex-col items-center justify-center;
+    &:nth-child(n+8) .info {
+      @apply right-0;
+    }
   }
+
 </style>

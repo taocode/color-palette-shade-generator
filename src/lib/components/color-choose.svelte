@@ -132,7 +132,7 @@ function colorPicked({srcElement}) {
 
 	<div class="max-w-max mx-auto pb-4 sm:text-2xl leading-loose">
 		<div class="flex basis-1/2 items-center justify-center">
-			<div class="w-full text-right flex-grow grow"><label for="colorpicker">Pick/Set Color:</label></div>
+			<div class="w-full justify-end mr-2 align-top pb-2 flex-grow grow"><label for="colorpicker">Pick/Set Color:</label></div>
 			<div class="w-full">
 				<input type="color" id="colorpicker"
 				on:change={colorPicked}
