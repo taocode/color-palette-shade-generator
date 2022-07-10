@@ -54,10 +54,9 @@ $: {
 let lc = ''
 function updateHSLA(hsla) {	
 	const aHSLA = parseToHsla(hsla)
-	// console.log({hsla, aHSLA})
 	h = aHSLA[0]
-	s = aHSLA[1]
-	l = aHSLA[2]
+	s = aHSLA[1]*100
+	l = aHSLA[2]*100
 	a = aHSLA[3]
 }
 
