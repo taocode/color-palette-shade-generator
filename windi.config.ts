@@ -1,4 +1,6 @@
 import { defineConfig } from 'windicss/helpers'
+import typography from 'windicss/plugin/typography'
+
 
 export default defineConfig({
   theme: {
@@ -7,5 +9,8 @@ export default defineConfig({
         'xs': '400px'
       }
     }
-  }
+  },
+  plugins: [
+    typography
+  ]
 })

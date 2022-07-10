@@ -2,6 +2,9 @@
 import { adjustHue, darken, readableColor, toHex, toHsla } from 'color2k'
 import { browser } from '$app/env'
 import { page } from '$app/stores'
+import { schemes } from '$lib/lib'
+import { steps, stepFactor } from '$lib/stores'
+
 import Swatch from './swatch.svelte'
 
 import { onMount } from 'svelte'
@@ -10,11 +13,9 @@ export let h = 200
 export let s = 75
 export let l = 50
 export let a = 1
-let color = `hsla(${h}, ${s}%, ${l}%, ${a})`
-export let steps = 9
+export let color = `hsla(${h}, ${s}%, ${l}%, ${a})`
 export let stepPercent = 10
-let stepFactor = stepPercent * 0.01
-let scheme = 3
+let scheme = 0
 
 
 onMount(() => {
@@ -26,93 +27,13 @@ onMount(() => {
 	}
 });
 
-const shades = (color) => {
-	let arr = [color]
-	for (let i = 1; i < steps; i++) {
-		if (i % 2) {
-			arr.unshift(darken(color,(i+1)/2*stepFactor*-1))
-		} else {
-			arr.push(darken(color,i/2*stepFactor))
-		}
-	}
-	return arr
-}
-
 let readable = readableColor("white")
 let allColors = []
-let schemes = [
-		{ id: 1, text: `Monochrome`, f: () => {
-			return [{
-				name: 'primary',
-				shades: shades(color)
-			}]
-		} },
-		{ id: 1, text: `Complementary`, f: () => {
-			return [{
-				name: 'primary',
-				shades: shades(color)
-			},{
-				name: 'complementary',
-				shades: shades(adjustHue(color,180))
-			}]
-		} },
-		{ id: 2, text: `Analogous`, f: () => {
-			return [{
-				name: 'primary',
-				shades: shades(color)
-			}, {
-				name: 'analogous1',
-				shades: shades(adjustHue(color,30))
-			}, {
-				name: 'analogous2',
-				shades: shades(adjustHue(color,60))
-			}]
-		} },
-		{ id: 3, text: `Split Complementary`, f: () => {
-			return [{
-				name: 'primary',
-				shades: shades(color)
-			}, {
-				name: 'split1',
-				shades: shades(adjustHue(color,150))
-			}, {
-				name: 'split2',
-				shades: shades(adjustHue(color,210))
-			}]
-		} },
-		{ id: 4, text: `Triadic`, f: () => {
-			return [{
-				name: 'primary',
-				shades: shades(color)
-			}, {
-				name: 'triad1',
-				shades: shades(adjustHue(color,120))
-			}, {
-				name: 'triad2',
-				shades: shades(adjustHue(color,240))
-			}]
-		} },
-		{ id: 5, text: `Tetradic`, f: () => {
-			return [{
-				name: 'primary',
-				shades: shades(color)
-			}, {
-				name: 'tetra1',
-				shades: shades(adjustHue(color,60))
-			}, {
-				name: 'tetra2',
-				shades: shades(adjustHue(color,180))
-			}, {
-				name: 'tetra3',
-				shades: shades(adjustHue(color,240))
-			}]
-		} },
-	]
 
 $: {
-	if (stepFactor < 0) stepFactor *= -1
-	stepFactor = stepPercent * 0.01
-	if (steps < 2) steps = 2
+
+	stepFactor.set( stepPercent * 0.01)
+
 	if (h < 0) h *= -1
 	if (s < 0) s *= -1
 	if (l < 0) l *= -1
@@ -123,7 +44,7 @@ $: {
 	if (a > 1) a = 1
 	color = `hsla(${h}, ${s}%, ${l}%, ${a})`
 	readable = readableColor(color)
-	allColors = schemes[scheme].f()
+	allColors = schemes[scheme].f(color, steps, stepFactor)
 	if (browser) {
 		history.replaceState({'color': toHex(color),'scheme': scheme},'','?color='+toHex(color).substring(1)+'&scheme='+scheme)
 	}
@@ -137,6 +58,10 @@ function updateHSLA(hsla) {
 	l = aHSLA[2].substring(0,aHSLA[2].length-1)
 	a = aHSLA[3].substring(0,aHSLA[3].length-1)
 }
+const getHue = (hsla) => {
+	return hsla.substring(5).split(', ')[0]
+}
+
 function updateColor(event) {
 	updateHSLA( event.detail )
 }
@@ -146,6 +71,8 @@ let hidden = true
 function colorPicked({srcElement}) {
 	updateHSLA(toHsla(srcElement.value))
 }
+
+let _steps = $steps
 
 </script>
 <div class="wrap" style="color: {readable}; background-color: {color};">
@@ -184,11 +111,12 @@ function colorPicked({srcElement}) {
 					<input id="steps"
 					class="w-[2ch] mr-1"
 					style="background-color: {color};"
-					bind:value={steps}
+					bind:value={_steps}
 					type="number"
 					min={3}
 					max={20}
-					placeholder="steps">
+					placeholder="steps"
+					on:change={() => steps.set(_steps)}>
 					<span>Steps</span>
 				</label>
 				<label>
@@ -208,7 +136,7 @@ function colorPicked({srcElement}) {
 				<select class="max-w-min" style="background-color: {color};" bind:value={scheme}>
 					{#each schemes as s, i}
 						<option value={i}>
-							{s.text}
+							{s.name}
 						</option>
 					{/each}
 				</select>
