@@ -63,10 +63,12 @@
       &bullet;&hairsp;&bullet;&hairsp;&bullet;
     </button>
   </div>
-  <div class="info hidden flex" class:hidden 
-  use:clickOutside={() => {hidden = true}}
-  style="background-color: {color}; color: {readableColor(color)}">
-    <div>
+  <div class="hidden" class:hidden 
+  use:clickOutside={() => hidden = true}
+  >
+    <div class="info"
+    style="background-color: {color}; color: {readableColor(color)}"
+    >
       <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHsla(color)}</button>
       <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toRgba(color)}</button>
       <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHex(color)}</button>
@@ -80,22 +82,13 @@
     @apply whitespace-nowrap;
   }
   .info {
-    @apply absolute p-2 border-2 z-10 transition duration-200 shadow-lg transform;
+    @apply absolute inset-auto p-2 border-2 z-10 transition duration-200 shadow-lg;
     .btn {
       @apply w-full;
     }
   }
   .swatch {
-    @apply relative p-2 min-h-16 min-w-16 flex flex-grow flex-col items-center justify-center;
-    &:nth-child(1),
-    &:nth-child(2) { 
-      .info {
-        @apply left-0;
-      }
-    }
-    &:nth-child(n+8) .info {
-      @apply right-0;
-    }
+    @apply p-2 min-h-16 min-w-16 flex flex-grow flex-col items-center justify-center;
   }
 
 </style>

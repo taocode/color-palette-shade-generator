@@ -1,5 +1,5 @@
 <script>
-import { adjustHue, darken, readableColor, toHex, toHsla } from 'color2k'
+import { adjustHue, darken, readableColor, toHex, toHsla, parseToHsla } from 'color2k'
 import { browser } from '$app/env'
 import { page } from '$app/stores'
 import { schemes } from '$lib/lib'
@@ -23,7 +23,9 @@ onMount(() => {
 		const searchParams = $page.url.searchParams
 		if (searchParams.has('color')) updateHSLA(toHsla('#'+searchParams.get('color')))
 		if (searchParams.has('scheme')) scheme = parseInt(searchParams.get('scheme'))
-		console.log('start color', {searchParams}, $page.url)
+		if (searchParams.has('steps')) _steps = parseInt(searchParams.get('steps'))
+		if (searchParams.has('factor')) stepPercent = 100 * parseFloat(searchParams.get('factor'))
+		// console.log('start color', {searchParams}, $page.url)
 	}
 });
 
@@ -31,7 +33,7 @@ let readable = readableColor("white")
 let allColors = []
 
 $: {
-
+	steps.set(_steps)
 	stepFactor.set( stepPercent * 0.01)
 
 	if (h < 0) h *= -1
@@ -46,20 +48,17 @@ $: {
 	readable = readableColor(color)
 	allColors = schemes[scheme].f(color, steps, stepFactor)
 	if (browser) {
-		history.replaceState({'color': toHex(color),'scheme': scheme},'','?color='+toHex(color).substring(1)+'&scheme='+scheme)
+		history.replaceState({'color': toHex(color),'scheme': scheme},'','?color='+toHex(color).substring(1)+'&scheme='+scheme+'&steps='+_steps+'&factor='+$stepFactor)
 	}
 }
 let lc = ''
 function updateHSLA(hsla) {	
-	const aHSLA = hsla.substring(5).split(', ')
+	const aHSLA = parseToHsla(hsla)
 	// console.log({hsla, aHSLA})
 	h = aHSLA[0]
-	s = aHSLA[1].substring(0,aHSLA[1].length-1)
-	l = aHSLA[2].substring(0,aHSLA[2].length-1)
-	a = aHSLA[3].substring(0,aHSLA[3].length-1)
-}
-const getHue = (hsla) => {
-	return hsla.substring(5).split(', ')[0]
+	s = aHSLA[1]
+	l = aHSLA[2]
+	a = aHSLA[3]
 }
 
 function updateColor(event) {
@@ -115,8 +114,7 @@ let _steps = $steps
 					type="number"
 					min={3}
 					max={20}
-					placeholder="steps"
-					on:change={() => steps.set(_steps)}>
+					placeholder="steps">
 					<span>Steps</span>
 				</label>
 				<label>

@@ -1,4 +1,4 @@
-import { adjustHue, darken, readableColor, toHex, toHsla } from 'color2k'
+import { adjustHue, darken, hsla, parseToHsla } from 'color2k'
 
 import { steps, stepFactor } from '$lib/stores'
 
@@ -47,14 +47,10 @@ export const schemes = [
       shades: shades(color)
     }, {
       name: 'analogous1',
-      shades: shades(adjustHue(color,30))
+      shades: shades(adjustHue(color,330))
     }, {
       name: 'analogous2',
-      shades: () => {
-        let sum = getHue(color) - 30
-        if (sum < 0) sum = 360 - sum
-        shades(adjustHue(color,-30))
-      }
+      shades: shades(adjustHue(color,30))
     }]
   } },
   { id: 3, 
