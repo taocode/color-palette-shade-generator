@@ -2,7 +2,7 @@
 import { adjustHue, darken, readableColor, toHex, toHsla, parseToHsla } from 'color2k'
 import { browser } from '$app/env'
 import { page } from '$app/stores'
-import { schemes } from '$lib/lib'
+import { schemeColors, schemes } from '$lib/lib'
 import { steps, stepFactor } from '$lib/stores'
 
 import Swatch from './swatch.svelte'
@@ -46,7 +46,8 @@ $: {
 	if (a > 1) a = 1
 	color = `hsla(${h}, ${s}%, ${l}%, ${a})`
 	readable = readableColor(color)
-	allColors = schemes[scheme].f(color, steps, stepFactor)
+	allColors = schemeColors(schemes[scheme],color)
+	// console.log('colors vs',{allColors},schemeColors(schemes[scheme],color))
 	if (browser) {
 		history.replaceState({'color': toHex(color),'scheme': scheme},'','?color='+toHex(color).substring(1)+'&scheme='+scheme+'&steps='+_steps+'&factor='+$stepFactor)
 	}

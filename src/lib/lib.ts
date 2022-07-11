@@ -13,97 +13,44 @@ stepFactor.subscribe(value => {
   _stepFactor = value
 })
 
+export const describeScheme = ({hues, varName}) => {
+  return hues.reduce((p,c,i) => {
+    return `${p}, ${varName}${i+1} = φ+${c}°`
+  }, 'primary = φ')
+}
+
+export const schemeColors = ({hues,varName},primary) => {
+  const colors = hues.map((hue,i) => {return {name: varName+(i+1), shades: shades(adjustHue(primary,(hue < 0) ? 360+hue : hue))}})
+  colors.unshift({name: 'primary', shades: shades(primary)})
+  return colors
+}
+
 export const schemes = [
   { id: 0, 
     name: `Monochromatic`, 
-    description: 'a single color in multiple shades',
-    colorCount: 1,
-    f: (color) => {
-      return [{
-        name: 'primary',
-        shades: shades(color)
-      }]
-    } },
-  { id: 1, 
+    hues: [],
+    varName: 'mono'
+  }, { id: 1, 
     name: `Complementary`,
-    description: 'complementary: +180°',
-    colorCount: 2,
-    f: (color) => {
-    return [{
-      name: 'primary',
-      shades: shades(color)
-    },{
-      name: 'complementary',
-      shades: shades(adjustHue(color,180))
-    }]
-  } },
-  { id: 2, 
+    hues: [180],
+    varName: 'comp'
+  }, { id: 2, 
     name: `Analogous`, 
-    description: 'analogous1: -30°, analogus2: +30°',
-    colorCount: 3,
-    f: (color) => {
-    return [{
-      name: 'primary',
-      shades: shades(color)
-    }, {
-      name: 'analogous1',
-      shades: shades(adjustHue(color,330))
-    }, {
-      name: 'analogous2',
-      shades: shades(adjustHue(color,30))
-    }]
-  } },
-  { id: 3, 
+    hues: [-30,30],
+    varName: 'analog'
+  }, { id: 3, 
     name: `Split Complementary`,
-    description: "split1: +150°, split2: +210°",
-    colorCount: 3,
-    f: (color) => {
-    return [{
-      name: 'primary',
-      shades: shades(color)
-    }, {
-      name: 'split1',
-      shades: shades(adjustHue(color,150))
-    }, {
-      name: 'split2',
-      shades: shades(adjustHue(color,210))
-    }]
-  } },
-  { id: 4, 
+    hues: [150,210],
+    varName: 'split'
+  }, { id: 4, 
     name: `Triadic`, 
-    description: "triad1: +120°, traid2: +240°",
-    colorCount: 3,
-    f: (color) => {
-    return [{
-      name: 'primary',
-      shades: shades(color)
-    }, {
-      name: 'triad1',
-      shades: shades(adjustHue(color,120))
-    }, {
-      name: 'triad2',
-      shades: shades(adjustHue(color,240))
-    }]
-  } },
-  { id: 5, 
-    description: "tetra1: +60°, tetra2: +180°, tetra3: +240°",
-    colorCount: 4,
-    name: `Tetradic`, 
-    f: () => {
-    return [{
-      name: 'primary',
-      shades: shades(color)
-    }, {
-      name: 'tetra1',
-      shades: shades(adjustHue(color,60))
-    }, {
-      name: 'tetra2',
-      shades: shades(adjustHue(color,180))
-    }, {
-      name: 'tetra3',
-      shades: shades(adjustHue(color,240))
-    }]
-  } },
+    hues: [120,240],
+    varName: 'triad'
+  }, { id: 5, 
+    name: `Tetradic`,
+    hues: [60,180,240],
+    varName: 'tetra'
+  },
 ]
 const shades = (color) => {
   let arr = [color]

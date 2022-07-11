@@ -1,6 +1,6 @@
 <script>
 	import ColorChoose from "$lib/components/color-choose.svelte"
-	import { schemes } from '$lib/lib'
+	import { schemes, describeScheme } from '$lib/lib'
 	export let color = `hsla(200, 80%, 50%, 1)`
 </script>
 
@@ -15,8 +15,10 @@
 	<h2>About Color Palette Shade Generator</h2>
 	<p>Use this color shade generating app to make multiple shades of colors based on <a target="_blank" href="https://www.interaction-design.org/literature/topics/color-theory">color theory</a> where:</p>
 	<ul>
-		{#each schemes as {name,colorCount,description}}
-		<li><strong>{name}</strong> <em>({colorCount} color{#if colorCount != 1}s{/if})</em> - {description} </li>
+		{#each schemes as s}
+		<li><strong>{s.name}</strong>
+			<em>({1+s.hues.length} color{#if s.hues.length > 0}s{/if})</em> {describeScheme(s)}
+		</li>
 		{/each}
 	</ul>
 	<h2>Features</h2>
