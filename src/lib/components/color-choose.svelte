@@ -15,13 +15,13 @@ export let l = 50
 export let a = 1
 export let color = `hsla(${h}, ${s}%, ${l}%, ${a})`
 export let stepPercent = 10
-let scheme = 0
+export let scheme = 0
 
 
 onMount(() => {
 	if (browser) {
 		const searchParams = $page.url.searchParams
-		if (searchParams.has('color')) updateHSLA(toHsla('#'+searchParams.get('color')))
+		if (searchParams.has('color')) updateHSLAfixed(toHsla('#'+searchParams.get('color')))
 		if (searchParams.has('scheme')) scheme = parseInt(searchParams.get('scheme'))
 		if (searchParams.has('steps')) _steps = parseInt(searchParams.get('steps'))
 		if (searchParams.has('factor')) stepPercent = 100 * parseFloat(searchParams.get('factor'))
@@ -59,6 +59,13 @@ function updateHSLA(hsla) {
 	s = aHSLA[1]*100
 	l = aHSLA[2]*100
 	a = aHSLA[3]
+}
+function updateHSLAfixed(hsla) {	
+	const aHSLA = parseToHsla(hsla)
+	h = aHSLA[0].toFixed()
+	s = (aHSLA[1]*100).toFixed()
+	l = (aHSLA[2]*100).toFixed()
+	a = aHSLA[3].toFixed(1)
 }
 
 function updateColor(event) {
@@ -149,7 +156,7 @@ let _steps = $steps
 	<div class="name" style="
 	background: {lc = color.shades[color.shades.length-1]};
 	color: {readableColor(lc)}; 
-	background: linear-gradient(90deg, {lc} 10%, {color.shades[0]} 90%;">{color.name}
+	background: linear-gradient(90deg, {lc} 10%, {color.shades[0]} 90%;">{color.name} {#if color.description}<em>({color.description} = {color.hue}°)</em>{/if}
 	<button class="border border-transparent hover:border-current rounded px-1 text-xs"
 	on:click={() => { hidden = ! hidden }}>
 	&bullet;&hairsp;&bullet;&hairsp;&bullet;

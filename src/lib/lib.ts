@@ -1,6 +1,7 @@
 import { adjustHue, darken, hsla, parseToHsla } from 'color2k'
 
 import { steps, stepFactor } from '$lib/stores'
+import { toHsla } from 'color2k'
 
 let _steps
 let _stepFactor
@@ -20,8 +21,22 @@ export const describeScheme = ({hues, varName}) => {
 }
 
 export const schemeColors = ({hues,varName},primary) => {
-  const colors = hues.map((hue,i) => {return {name: varName+(i+1), shades: shades(adjustHue(primary,(hue < 0) ? 360+hue : hue))}})
-  colors.unshift({name: 'primary', shades: shades(primary)})
+  const colors = hues.map((hue,i) => {
+    const c = adjustHue(primary,(hue < 0) ? 360+hue : hue)
+    const plus = (hue > 0) ? '+' : ''
+    return {
+      name: varName+(i+1),
+      hue: parseToHsla(c)[0].toFixed(),
+      description: `φ${plus}${hue}°`,
+      shades: shades(c)
+    }
+  })
+  colors.unshift({
+    name: 'primary',
+    hue: parseToHsla(primary)[0].toFixed(),
+    description: 'φ', 
+    shades: shades(primary)
+  })
   return colors
 }
 

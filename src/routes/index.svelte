@@ -1,7 +1,7 @@
 <script>
 	import ColorChoose from "$lib/components/color-choose.svelte"
 	import { schemes, describeScheme } from '$lib/lib'
-	export let color = `hsla(200, 80%, 50%, 1)`
+	export let scheme = 0
 </script>
 
 <svelte:head>
@@ -9,15 +9,18 @@
   <meta name="description" content="Generate a color palette using color theory with multiple shades for use with CSS, Tailwind">
 </svelte:head>
 
-<ColorChoose />
+<ColorChoose {scheme} />
 
-<div class="prose mx-auto my-10">
+<div class="prose mx-auto my-10 px-3 sm:px-0">
 	<h2>About Color Palette Shade Generator</h2>
-	<p>Use this color shade generating app to make multiple shades of colors based on <a target="_blank" href="https://www.interaction-design.org/literature/topics/color-theory">color theory</a> where:</p>
+	<p>Use this color shade generating app to make multiple shades of colors for websites based on <a target="_blank" href="https://www.interaction-design.org/literature/topics/color-theory">color theory</a> where:</p>
 	<ul>
-		{#each schemes as s}
-		<li><strong>{s.name}</strong>
-			<em>({1+s.hues.length} color{#if s.hues.length > 0}s{/if})</em> {describeScheme(s)}
+		{#each schemes as s, i}
+		<li>
+			<div>
+			<button class="font-bold" on:click={()=>scheme=i}>{s.name}</button>
+				<em>({1+s.hues.length} color{#if s.hues.length > 0}s{/if})</em>: {describeScheme(s)}
+		</div>
 		</li>
 		{/each}
 	</ul>
