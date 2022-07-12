@@ -1,7 +1,12 @@
 <script>
-	import ColorChoose from "$lib/components/color-choose.svelte"
+	import About from "$lib/components/about.svelte"
+import ColorChoose from "$lib/components/color-choose.svelte"
 	import { schemes, describeScheme } from '$lib/lib'
-	export let scheme = 0
+	export let scheme = 1
+
+	function updateScheme(event) {
+		scheme = parseInt(event.detail)
+	}
 </script>
 
 <svelte:head>
@@ -9,29 +14,6 @@
   <meta name="description" content="Generate a color palette using color theory with multiple shades for use with CSS, Tailwind">
 </svelte:head>
 
-<ColorChoose {scheme} />
+<ColorChoose {scheme} on:updateScheme={updateScheme} />
 
-<div class="prose mx-auto my-10 px-3 sm:px-0">
-	<h2>About Color Palette Shade Generator</h2>
-	<p>Use this color shade generating app to make multiple shades of colors for websites based on <a target="_blank" href="https://www.interaction-design.org/literature/topics/color-theory">color theory</a> where:</p>
-	<ul>
-		{#each schemes as s, i}
-		<li>
-			<div>
-			<button class="font-bold" on:click={()=>scheme=i}>{s.name}</button>
-				<em>({1+s.hues.length} color{#if s.hues.length > 0}s{/if})</em>: {describeScheme(s)}
-		</div>
-		</li>
-		{/each}
-	</ul>
-	<h2>Features</h2>
-	<ol>
-		<li>HSLA based</li>
-		<li>Variables that are copy+paste ready for CSS and Tailwind/WindiCSS</li>
-		<li>Secondary colors for accents based on color theory</li>
-	</ol>
-	<h2>Why HSLA?</h2>
-	<p>I believe that <strong>H</strong>ue <strong>S</strong>aturation <strong>L</strong>ightness is easier for a human to comprehend. RGBA and Hex outputs are also provided.</p>
-
-</div>
-
+<About on:updateScheme={updateScheme} />

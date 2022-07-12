@@ -3,7 +3,16 @@
   /**
    * Colors
    * --------------------------------------------------------------------- */
-  --c-primary: hsl(199, 80.3%, 41.8%);
+  --c-primary: hsla(250, 65%, 45%, 1);
+  --c-primary-100: hsla(250, 65%, 77%, 1);
+  --c-primary-200: hsla(250, 65%, 69%, 1);
+  --c-primary-300: hsla(250, 65%, 61%, 1);
+  --c-primary-400: hsla(250, 65%, 53%, 1);
+  --c-primary-500: hsla(250, 65%, 45%, 1);
+  --c-primary-600: hsla(250, 65%, 37%, 1);
+  --c-primary-700: hsla(250, 65%, 29%, 1);
+  --c-primary-800: hsla(250, 65%, 21%, 1);
+  --c-primary-900: hsla(250, 65%, 13%, 1);
   --c-teal: hsl(187.4, 23.3%, 47.1%);
   --c-brand-highlight: hsla(211, 55.8%, 71.4%, 0.5);
   --c-brand-active: hsl(187.4, 60.3%, 31.8%);
@@ -24,7 +33,7 @@
   @apply bg-primary;
 }
 .card {
-  @apply relative flex flex-col bg-white border-1 rounded;
+  @apply flex flex-col bg-white border-1 rounded;
 }
 .card-title {
   @apply mb-2;
@@ -37,4 +46,10 @@
 }
 .nav-link {
   @apply inline-block py-1 md:px-2;
+}
+.C,.P,.S,.G {
+  @apply inline-block bg-dark-300;
+}
+.C {
+  @apply bg-primary-600 text-white;
 }

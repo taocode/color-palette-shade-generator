@@ -2,20 +2,22 @@
 import { adjustHue, darken, readableColor, toHex, toHsla, parseToHsla } from 'color2k'
 import { browser } from '$app/env'
 import { page } from '$app/stores'
-import { schemeColors, schemes } from '$lib/lib'
+import { schemeColors, schemes, dots } from '$lib/lib'
 import { steps, stepFactor } from '$lib/stores'
+import ColorPatch from './color-patch.svelte';
 
 import Swatch from './swatch.svelte'
 
-import { onMount } from 'svelte'
+import { onMount,	createEventDispatcher } from 'svelte'
+const dispatch = createEventDispatcher()
 
-export let h = 200
-export let s = 75
-export let l = 50
+export let h = 250
+export let s = 65
+export let l = 45
 export let a = 1
 export let color = `hsla(${h}, ${s}%, ${l}%, ${a})`
-export let stepPercent = 10
-export let scheme = 0
+export let stepPercent = 8
+export let scheme = 1
 
 
 onMount(() => {
@@ -138,7 +140,10 @@ let _steps = $steps
 				</label>
 			</div>
 			<label class="m-2 px-2 max-w-min mx-auto">
-				<select class="max-w-min" style="background-color: {color};" bind:value={scheme}>
+				<select class="max-w-min" style="background-color: {color};" 
+				bind:value={scheme}
+				on:change={() => dispatch('updateScheme',scheme)}
+				>
 					{#each schemes as s, i}
 						<option value={i}>
 							{s.name}
@@ -152,28 +157,8 @@ let _steps = $steps
 		</div>
 	</div>
 
-{#each allColors as color}
-	<div class="name" style="
-	background: {lc = color.shades[color.shades.length-1]};
-	color: {readableColor(lc)}; 
-	background: linear-gradient(90deg, {lc} 10%, {color.shades[0]} 90%;">{color.name} {#if color.description}<em>({color.description} = {color.hue}°)</em>{/if}
-	<button class="border border-transparent hover:border-current rounded px-1 text-xs"
-	on:click={() => { hidden = ! hidden }}>
-	&bullet;&hairsp;&bullet;&hairsp;&bullet;
-	</button>
-	<div class="details hidden" class:hidden>
-		{#each color.shades as c, i}
-		<div>
-			--c-primary-{i+1}00: {c};
-		</div>
-		{/each}
-  </div>
-	</div>
-	<div class="shades">
-	{#each color.shades as c}
-		<Swatch color={c} on:updateColor={updateColor} />
-	{/each}
-	</div>
+{#each allColors as {color, name, shades, hue}}
+	<ColorPatch {color} {name} {shades} {hue} />
 {/each}
 
 <style lang="postcss">
@@ -189,9 +174,7 @@ let _steps = $steps
 			@apply text-[1.5em] tracking-tighter;
 		}
 	}
-	.name {
-		@apply px-4 py-2;
-	}
+
 	input,
 	select {
 		@apply text-right border-transparent leading-tight flex-shrink;
@@ -201,8 +184,5 @@ let _steps = $steps
 	}
 	.hsla {
 		@apply font-semibold max-w-[4ch];
-	}
-	.shades {
-		@apply flex flex-wrap text-center;
 	}
 </style>
