@@ -1,5 +1,6 @@
 import { defineConfig } from 'windicss/helpers'
 import typography from 'windicss/plugin/typography'
+import aspectRatio from 'windicss/plugin/aspect-ratio'
 
 
 export default defineConfig({
@@ -37,6 +38,7 @@ export default defineConfig({
     }
   },
   plugins: [
+    aspectRatio,
     typography
   ]
 })

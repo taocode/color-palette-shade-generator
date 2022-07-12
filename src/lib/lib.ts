@@ -24,7 +24,7 @@ export const schemeColors = ({hues,varName},primary) => {
   const colors = hues.map((hue,i,a) => {
     const color = adjustHue(primary,(hue < 0) ? 360+hue : hue)
     const plus = (hue > 0) ? '+' : ''
-    console.log('schemeColors',{a})
+    // console.log('schemeColors',{a})
     return {
       color,
       name: varName+((a.length > 1) ? (i+1): ''),

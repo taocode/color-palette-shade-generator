@@ -3,16 +3,28 @@
   /**
    * Colors
    * --------------------------------------------------------------------- */
-  --c-primary: hsla(250, 65%, 45%, 1);
-  --c-primary-100: hsla(250, 65%, 77%, 1);
-  --c-primary-200: hsla(250, 65%, 69%, 1);
-  --c-primary-300: hsla(250, 65%, 61%, 1);
-  --c-primary-400: hsla(250, 65%, 53%, 1);
-  --c-primary-500: hsla(250, 65%, 45%, 1);
-  --c-primary-600: hsla(250, 65%, 37%, 1);
-  --c-primary-700: hsla(250, 65%, 29%, 1);
-  --c-primary-800: hsla(250, 65%, 21%, 1);
-  --c-primary-900: hsla(250, 65%, 13%, 1);
+  --color-primary: hsla(250, 65%, 45%, 1);
+  --color-primary-100: hsla(250, 65%, 77%, 1);
+  --color-primary-200: hsla(250, 65%, 69%, 1);
+  --color-primary-300: hsla(250, 65%, 61%, 1);
+  --color-primary-400: hsla(250, 65%, 53%, 1);
+  --color-primary-500: hsla(250, 65%, 45%, 1);
+  --color-primary-600: hsla(250, 65%, 37%, 1);
+  --color-primary-700: hsla(250, 65%, 29%, 1);
+  --color-primary-800: hsla(250, 65%, 21%, 1);
+  --color-primary-900: hsla(250, 65%, 13%, 1);
+  
+  --color-complementary: hsla(70, 65%, 45%, 1);
+  --color-complementary-100: hsla(70, 65%, 77%, 1);
+  --color-complementary-200: hsla(70, 65%, 69%, 1);
+  --color-complementary-300: hsla(70, 65%, 61%, 1);
+  --color-complementary-400: hsla(70, 65%, 53%, 1);
+  --color-complementary-500: hsla(70, 65%, 45%, 1);
+  --color-complementary-600: hsla(70, 65%, 37%, 1);
+  --color-complementary-700: hsla(70, 65%, 29%, 1);
+  --color-complementary-800: hsla(70, 65%, 21%, 1);
+  --color-complementary-900: hsla(70, 65%, 13%, 1);
+
   --c-teal: hsl(187.4, 23.3%, 47.1%);
   --c-brand-highlight: hsla(211, 55.8%, 71.4%, 0.5);
   --c-brand-active: hsl(187.4, 60.3%, 31.8%);
@@ -48,8 +60,17 @@
   @apply inline-block py-1 md:px-2;
 }
 .C,.P,.S,.G {
-  @apply inline-block bg-dark-300;
+  @apply inline-block aspect-square text-center align-middle;
 }
 .C {
-  @apply bg-primary-600 text-white;
+  @apply bg-primary-700 text-white;
+}
+.P {
+  @apply bg-primary-400 text-white;
+}
+.S {
+  @apply bg-complementary-700 text-black;
+}
+.G {
+  @apply bg-complementary-400 text-black;
 }

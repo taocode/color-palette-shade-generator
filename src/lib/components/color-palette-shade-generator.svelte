@@ -6,7 +6,7 @@ export const fanciful = name
         (p,c) => {
           const fl = c.substring(0,1)
           const r = c.substring(1)
-          return `${p} <span class="${fl}">_${fl}_</span>${r}`
+          return `${p} <span class="inline-block py-1 px-3 ${fl}">${fl}</span>${r}`
         },''
       )
 </script>

@@ -4,7 +4,8 @@ import { browser } from '$app/env'
 import { page } from '$app/stores'
 import { schemeColors, schemes, dots } from '$lib/lib'
 import { steps, stepFactor } from '$lib/stores'
-import ColorPatch from './color-patch.svelte';
+import ColorPatch from './color-patch.svelte'
+import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
 
 import Swatch from './swatch.svelte'
 
@@ -54,7 +55,7 @@ $: {
 		history.replaceState({'color': toHex(color),'scheme': scheme},'','?color='+toHex(color).substring(1)+'&scheme='+scheme+'&steps='+_steps+'&factor='+$stepFactor)
 	}
 }
-let lc = ''
+
 function updateHSLA(hsla) {	
 	const aHSLA = parseToHsla(hsla)
 	h = aHSLA[0]
@@ -84,7 +85,7 @@ let _steps = $steps
 
 </script>
 <div class="wrap" style="color: {readable}; background-color: {color};">
-	<h1>Color Palette Shade Generator</h1>
+	<h1><ColorPaletteShadeGenerator /></h1>
 
 	<div class="max-w-max mx-auto pb-4 sm:text-xl leading-loose">
 		<div class="flex flex-col leading-9 xs:flex-row xs:justify-center" >
@@ -157,8 +158,9 @@ let _steps = $steps
 		</div>
 	</div>
 
-{#each allColors as {color, name, shades, hue}}
-	<ColorPatch {color} {name} {shades} {hue} />
+{#each allColors as {color, name, shades, hue, description}}
+	<ColorPatch {color} {description} {name} {shades} {hue} 
+	on:updateColor={updateColor} />
 {/each}
 
 <style lang="postcss">
