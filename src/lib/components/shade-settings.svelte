@@ -56,6 +56,9 @@
 </div>
 
 <style lang="postcss">
+  .shade-settings {
+    @apply max-w-prose mx-auto;
+  }
   label {
 		@apply block flex items-center justify-end w-full text-[0.75em];
 		input {
