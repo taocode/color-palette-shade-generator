@@ -27,18 +27,29 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
      showgrid="true"
-     inkscape:zoom="7.5179542"
-     inkscape:cx="-14.432118"
-     inkscape:cy="22.013968"
+     inkscape:zoom="10.631993"
+     inkscape:cx="18.764121"
+     inkscape:cy="35.411988"
      inkscape:window-width="1920"
      inkscape:window-height="1051"
      inkscape:window-x="-9"
      inkscape:window-y="-9"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1">
+     inkscape:current-layer="layer1"
+     showguides="true">
     <inkscape:grid
        type="xygrid"
        id="grid27" />
+    <sodipodi:guide
+       position="16,56"
+       orientation="1,0"
+       id="guide1004"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="10,48"
+       orientation="0,-1"
+       id="guide1006"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <defs
      id="defs16" />
@@ -76,47 +87,47 @@
        y="32" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:37.3333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none"
-       x="2.2612536"
-       y="29.130266"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:34.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+       x="15.906901"
+       y="28.602224"
        id="text6252"><tspan
          sodipodi:role="line"
          id="tspan6250"
-         x="2.2612536"
-         y="29.130266"
-         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:37.3333px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans Semi-Bold';fill:#ffffff;fill-opacity:1">C</tspan></text>
+         x="15.906901"
+         y="28.602224"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:34.6667px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1">C</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:37.3333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none"
-       x="36.810482"
-       y="29.051764"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:34.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+       x="47.085938"
+       y="28.602224"
        id="text6252-7"><tspan
          sodipodi:role="line"
          id="tspan6250-9"
-         x="36.810482"
-         y="29.051764"
-         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:37.3333px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans Semi-Bold';fill:#ffffff;fill-opacity:1">P</tspan></text>
+         x="47.085938"
+         y="28.602224"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:34.6667px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1">P</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:37.3333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-       x="4.9306431"
-       y="61.315521"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:34.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+       x="15.695312"
+       y="60.602226"
        id="text6252-0"><tspan
          sodipodi:role="line"
          id="tspan6250-2"
-         x="4.9306431"
-         y="61.315521"
-         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:37.3333px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans Semi-Bold';fill:#000000;fill-opacity:1">S</tspan></text>
+         x="15.695312"
+         y="60.602226"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:34.6667px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1">S</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:37.3333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-       x="33.760231"
-       y="61.104008"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:34.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+       x="48.431641"
+       y="60.585297"
        id="text6252-7-0"><tspan
          sodipodi:role="line"
          id="tspan6250-9-9"
-         x="33.760231"
-         y="61.104008"
-         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:37.3333px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans Semi-Bold';fill:#000000;fill-opacity:1">G</tspan></text>
+         x="48.431641"
+         y="60.585297"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:34.6667px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1">G</tspan></text>
   </g>
 </svg>
