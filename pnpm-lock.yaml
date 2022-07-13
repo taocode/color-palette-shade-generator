@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@sveltejs/adapter-auto': next
   '@sveltejs/adapter-static': 1.0.0-next.34
-  '@sveltejs/kit': next
+  '@sveltejs/kit': 1.0.0-next.358
   color2k: ^2.0.0
   prettier: ^2.6.2
   prettier-plugin-svelte: ^2.7.0
@@ -16,19 +16,17 @@ specifiers:
   vite: ^2.9.12
   vite-plugin-windicss: ^1.8.4
 
-dependencies:
-  svelte-use-click-outside: 1.0.0
-
 devDependencies:
-  '@sveltejs/adapter-auto': 1.0.0-next.53
+  '@sveltejs/adapter-auto': 1.0.0-next.57
   '@sveltejs/adapter-static': 1.0.0-next.34
-  '@sveltejs/kit': 1.0.0-next.357_svelte@3.48.0
+  '@sveltejs/kit': 1.0.0-next.358_svelte@3.48.0
   color2k: 2.0.0
   prettier: 2.7.1
   prettier-plugin-svelte: 2.7.0_nakrehnrzdf7fdea5k3a4dfy4m
   svelte: 3.48.0
   svelte-check: 2.7.2_svelte@3.48.0
   svelte-feather-icons: 4.0.0
+  svelte-use-click-outside: 1.0.0
   sveltekit-autoimport: 1.6.8
   typescript: 4.7.4
   vite: 2.9.12
@@ -38,6 +36,10 @@ packages:
 
   /@antfu/utils/0.5.2:
     resolution: {integrity: sha512-CQkeV+oJxUazwjlHD0/3ZD08QWKuGQkhnrKo3e6ly5pd48VUpXbb77q0xMU4+vc2CkJnDS02Eq/M9ugyX20XZA==}
+    dev: true
+
+  /@cloudflare/workers-types/3.14.1:
+    resolution: {integrity: sha512-B1/plF62pt+H2IJHvApK8fdOJAVsvojvacuac8x8s+JIyqbropMyqNqHTKLm3YD8ZFLGwYeFTudU+PQ7vGvBdA==}
     dev: true
 
   /@iarna/toml/2.2.5:
@@ -107,26 +109,27 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /@sveltejs/adapter-auto/1.0.0-next.53:
-    resolution: {integrity: sha512-LyaeU0rkcymGWvV/3K26AZxqG/+ZQHwa+hrx3xsbmOykjQ2WQPTXRVwmH23zV4A5ABvni76LRMsQOoqWzP3G9Q==}
+  /@sveltejs/adapter-auto/1.0.0-next.57:
+    resolution: {integrity: sha512-OuIt5CZzezKvncs8sPwGAv3MbQRKJ7rqofAfMvBiHO4XEtOUneUSaKQ78o3Td6AH3JNfHJQkTykhLBWUOmQLOg==}
     dependencies:
-      '@sveltejs/adapter-cloudflare': 1.0.0-next.24
-      '@sveltejs/adapter-netlify': 1.0.0-next.66
-      '@sveltejs/adapter-vercel': 1.0.0-next.59
+      '@sveltejs/adapter-cloudflare': 1.0.0-next.27
+      '@sveltejs/adapter-netlify': 1.0.0-next.68
+      '@sveltejs/adapter-vercel': 1.0.0-next.60
     transitivePeerDependencies:
       - encoding
       - supports-color
     dev: true
 
-  /@sveltejs/adapter-cloudflare/1.0.0-next.24:
-    resolution: {integrity: sha512-g1QSrjWYjM6sfJB+pQn52EIfbVFjpk23GYsj5PLt2Gi3zRNfLRbpkFkPeyAOZbAfT4k/9lUqfLW+pkh+W3yxlg==}
+  /@sveltejs/adapter-cloudflare/1.0.0-next.27:
+    resolution: {integrity: sha512-uon/ciCBalRt8vyeUbEsVjDBHzNC61lTtmqIJi9GbvTm8i4xbHoyJ97+wO9qug75jFg63pjT51sL7b+Cb1MFYw==}
     dependencies:
+      '@cloudflare/workers-types': 3.14.1
       esbuild: 0.14.47
       worktop: 0.8.0-next.14
     dev: true
 
-  /@sveltejs/adapter-netlify/1.0.0-next.66:
-    resolution: {integrity: sha512-UypTRnTd+R1O6SaDdc8l3A3c9/mQF8xLNoVb3Ay5ipb7uPU5WmjVYjfLVGyeVy67gztFfeFC/9Esu4OI2Ayx1A==}
+  /@sveltejs/adapter-netlify/1.0.0-next.68:
+    resolution: {integrity: sha512-j/kofUuWcVImZpl0S64g4/axnnQO0iAQIPy2JIDWyrwb+xSpLc8d266g2fW+1K3zwVuzcLLaMSE4ajtV1scyZA==}
     dependencies:
       '@iarna/toml': 2.2.5
       esbuild: 0.14.47
@@ -140,8 +143,8 @@ packages:
       tiny-glob: 0.2.9
     dev: true
 
-  /@sveltejs/adapter-vercel/1.0.0-next.59:
-    resolution: {integrity: sha512-1lq5IFLWiLUXmNJVUXjwaInDb07BJg5er43xlMilpFpTA9BZI2hqjYCgtdtk7O6ee5EYJk876b2riM1m+y1M4Q==}
+  /@sveltejs/adapter-vercel/1.0.0-next.60:
+    resolution: {integrity: sha512-Xq+gaxQ2iKvP9G+7C8+r4xScMOUEhBouDEFyLCOzKrwmd+JWBzCl1N0qKeKm71MbR7l4YJn8J+e7105j8x+RXA==}
     dependencies:
       '@vercel/nft': 0.20.0
       esbuild: 0.14.47
@@ -150,8 +153,8 @@ packages:
       - supports-color
     dev: true
 
-  /@sveltejs/kit/1.0.0-next.357_svelte@3.48.0:
-    resolution: {integrity: sha512-nCAehVybIEpQNnPu61V/EFVdfDb1nBSiQUfW9EcSSDEUbyAMCVBOKZZuzQ0qQDp3xniqRkyDzpBA4wN+ADxHBw==}
+  /@sveltejs/kit/1.0.0-next.358_svelte@3.48.0:
+    resolution: {integrity: sha512-GaP7oKS9eawpCy01piJmdDqobFVsFObXSC5sGydyqwqe1RXOR/QoISBys6SZJ+gx+1bp9AOwvIiw7+GrltDN8A==}
     engines: {node: '>=16.7'}
     hasBin: true
     peerDependencies:
@@ -1563,7 +1566,7 @@ packages:
 
   /svelte-use-click-outside/1.0.0:
     resolution: {integrity: sha512-tOWeMPxeIoW9RshS0WbogRhdYdbxcJV0ebkzSh1lwR7Ihl0hSZMmB4YyCHHoXJK4xcbxCCFh0AnQ1vkzGZfLVQ==}
-    dev: false
+    dev: true
 
   /svelte/3.48.0:
     resolution: {integrity: sha512-fN2YRm/bGumvjUpu6yI3BpvZnpIm9I6A7HR4oUNYd7ggYyIwSA/BX7DJ+UXXffLp6XNcUijyLvttbPVCYa/3xQ==}

@@ -83,3 +83,30 @@ const shades = (color) => {
   }
   return arr
 }
+
+/**
+ * @param {String} HTML representing a single element
+ * @return {Element}
+ */
+export const htmlToElement = (html) => {
+  var template = document.createElement('template');
+  html = html.trim(); // Never return a text node of whitespace as the result
+  template.innerHTML = html;
+  return template.content.firstChild;
+}
+
+export const notice = (text,addTo) => {
+  const note = htmlToElement(`<div class="absolute top-0 bottom-auto px-4 py-1 z-100 border-yellow-300 border-4 bg-yellow-200 text-dark-100 transition duration-50 duration-300 ease-out opacity-90 opacity-0">${text}</div>`)
+  note.classList.remove('opacity-90','duration-300')
+  addTo.prepend(note)
+  setTimeout(function() {
+    note.classList.remove('opacity-0')
+  },50)
+  setTimeout(function() {
+    note.classList.remove('opacity-90','duration-50')
+    note.classList.add('opacity-0','duration-300')
+  },1000)
+  setTimeout(function() {
+    note.remove()
+  },1500)
+}

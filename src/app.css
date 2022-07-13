@@ -59,9 +59,6 @@
 .nav-link {
   @apply inline-block py-1 md:px-2;
 }
-.C,.P,.S,.G {
-  @apply inline-block aspect-square text-center align-middle;
-}
 .C {
   @apply bg-primary-700 text-white;
 }
