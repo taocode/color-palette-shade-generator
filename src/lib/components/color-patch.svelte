@@ -12,7 +12,7 @@ export let hue = 0
 export let description = 'Color'
 export let shades = ['white']
 
-let hidden = false
+let hidden = true
 let includeDefault = false
 
 $: lastShade = shades[shades.length-1]

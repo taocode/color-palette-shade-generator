@@ -1,188 +1,85 @@
 <script>
-import { adjustHue, darken, readableColor, toHex, toHsla, parseToHsla } from 'color2k'
+import { adjustHue, darken, readableColor, hsla, toHex, toHsla, parseToHsla } from 'color2k'
 import { browser } from '$app/env'
 import { page } from '$app/stores'
 import { schemeColors, schemes, dots } from '$lib/lib'
 import { steps, stepFactor } from '$lib/stores'
 import ColorPatch from './color-patch.svelte'
-import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
 
-import Swatch from './swatch.svelte'
 
-import { onMount,	createEventDispatcher } from 'svelte'
+import { createEventDispatcher } from 'svelte'
 const dispatch = createEventDispatcher()
 
 export let h = 250
-export let s = 65
-export let l = 45
+export let s = 0.65
+export let l = 0.45
 export let a = 1
-export let color = `hsla(${h}, ${s}%, ${l}%, ${a})`
-export let stepPercent = 8
-export let scheme = 1
 
-
-onMount(() => {
-	if (browser) {
-		const searchParams = $page.url.searchParams
-		if (searchParams.has('color')) updateHSLAfixed(toHsla('#'+searchParams.get('color')))
-		if (searchParams.has('scheme')) scheme = parseInt(searchParams.get('scheme'))
-		if (searchParams.has('steps')) _steps = parseInt(searchParams.get('steps'))
-		if (searchParams.has('factor')) stepPercent = 100 * parseFloat(searchParams.get('factor'))
-		// console.log('start color', {searchParams}, $page.url)
-	}
-});
-
-let readable = readableColor("white")
-let allColors = []
+let color = hsla(h, s, l, a)
+let sP = s*100
+let lP = l*100
 
 $: {
-	steps.set(_steps)
-	stepFactor.set( stepPercent * 0.01)
-
 	if (h < 0) h *= -1
 	if (s < 0) s *= -1
 	if (l < 0) l *= -1
 	if (a < 0) a *= -1
 	if (h > 360) h = h % 360
-	if (s > 100) s = s % 100
-	if (l > 100) l = l % 100
+	if (s > 100) s = s % 1
+	if (l > 100) l = l % 1
 	if (a > 1) a = 1
-	color = `hsla(${h}, ${s}%, ${l}%, ${a})`
-	readable = readableColor(color)
-	allColors = schemeColors(schemes[scheme],color)
-	// console.log('colors vs',{allColors},schemeColors(schemes[scheme],color))
-	if (browser) {
-		history.replaceState({'color': toHex(color),'scheme': scheme},'','?color='+toHex(color).substring(1)+'&scheme='+scheme+'&steps='+_steps+'&factor='+$stepFactor)
-	}
+	
+	color = hsla(h, s, l, a)
+	dispatch("updateColor",color)
 }
-
-function updateHSLA(hsla) {	
-	const aHSLA = parseToHsla(hsla)
-	h = aHSLA[0]
-	s = aHSLA[1]*100
-	l = aHSLA[2]*100
-	a = aHSLA[3]
-}
-function updateHSLAfixed(hsla) {	
-	const aHSLA = parseToHsla(hsla)
-	h = aHSLA[0].toFixed()
-	s = (aHSLA[1]*100).toFixed()
-	l = (aHSLA[2]*100).toFixed()
-	a = aHSLA[3].toFixed(1)
-}
-
-function updateColor(event) {
-	updateHSLA( event.detail )
-}
-
-let hidden = true
 
 function colorPicked({srcElement}) {
-	updateHSLA(toHsla(srcElement.value))
+	dispatch("updateColor",toHsla(srcElement.value))
 }
 
-let _steps = $steps
-
 </script>
-<div class="wrap" style="color: {readable}; background-color: {color};">
-	<h1><ColorPaletteShadeGenerator /></h1>
 
-	<div class="max-w-max mx-auto pb-4 sm:text-xl leading-loose">
-		<div class="flex flex-col leading-9 xs:flex-row xs:justify-center" >
-			<div class="xs:justify-end">
-				<input type="color" id="colorpicker"
-				on:change={colorPicked}
-				class="block w-3/4  h-8 mx-auto xs:w-16"
-				value={toHex(color).substring(0,7)}
-				colorpick-eyedropper-active="true">
-			</div>
-			<div class="xs:ml-2">
-				<label for="colorpicker">hsla(
 
-					<input class="hsla" style="background-color: {color};"
-					bind:value={h} placeholder="Hue"
-					type="number" min={0} max={360}>,
-					<input class="hsla" style="background-color: {color};" bind:value={s} placeholder="Saturation"
-					type="number" min={0} max={100}>%,
-					<input class="hsla" style="background-color: {color};" bind:value={l} placeholder="luminosity"
-					type="number" min={0} max={100}>%,
-					<input class="hsla" style="background-color: {color};" bind:value={a} placeholder="Hue"
-					type="number" min={0} max={1} step={0.1}>
-					)
-				</label>
-		
-			</div>
-
+<div class="max-w-max mx-auto pb-4 sm:text-xl leading-loose">
+	<div class="flex flex-col leading-9 xs:flex-row xs:justify-center" >
+		<div class="xs:justify-end">
+			<input type="color" id="colorpicker"
+			on:change={colorPicked}
+			class="block w-3/4  h-8 mx-auto xs:w-16"
+			value={toHex(color).substring(0,7)}
+			colorpick-eyedropper-active="true">
 		</div>
-		<div class="sm:flex">
-			<div class="flex">
-				<label class="mx-2">
-					<input id="steps"
-					class="w-[2ch] mr-1"
-					style="background-color: {color};"
-					bind:value={_steps}
-					type="number"
-					min={3}
-					max={20}
-					placeholder="steps">
-					<span>Steps</span>
-				</label>
-				<label>
-					<input id="step-percent"
-					class="w-[3ch] mr-1"
-					style="background-color: {color};"
-					bind:value={stepPercent}
-					type="number"
-					min={0}
-					max={100}
-					step={0.5}
-					placeholder="">
-						<span class="whitespace-nowrap">% Step</span>
-				</label>
-			</div>
-			<label class="m-2 px-2 max-w-min mx-auto">
-				<select class="max-w-min" style="background-color: {color};" 
-				bind:value={scheme}
-				on:change={() => dispatch('updateScheme',scheme)}
-				>
-					{#each schemes as s, i}
-						<option value={i}>
-							{s.name}
-						</option>
-					{/each}
-				</select>
-				<span class="ml-1">Scheme</span>
+		<div class="xs:ml-2">
+			<label for="colorpicker">hsla(
+
+				<input class="hsla" style="background-color: {color};"
+				bind:value={h} placeholder="Hue"
+				type="number" min={0} max={360}>,
+				<input class="hsla" style="background-color: {color};" bind:value={sP} placeholder="Saturation"
+				type="number" min={0} max={100}>%,
+				<input class="hsla" style="background-color: {color};" bind:value={lP} placeholder="luminosity"
+				type="number" min={0} max={100}>%,
+				<input class="hsla" style="background-color: {color};" bind:value={a} placeholder="Hue"
+				type="number" min={0} max={1} step={0.1}>
+				)
 			</label>
-		</div>		
-		
+	
 		</div>
+
 	</div>
 
-{#each allColors as {color, name, shades, hue, description}}
-	<ColorPatch {color} {description} {name} {shades} {hue} 
-	on:updateColor={updateColor} />
-{/each}
+</div>
+
 
 <style lang="postcss">
-	h1 {
-		@apply text-3xl text-center p-4 font-semibold;
-	}
 	label {
 		@apply block flex items-center justify-end w-full text-[0.75em];
 		input {
 			@apply text-[2em];
 		}
-		select {
-			@apply text-[1.5em] tracking-tighter;
-		}
 	}
-
-	input,
-	select {
+	input {
 		@apply text-right border-transparent leading-tight flex-shrink;
-	}
-	select option {
-		@apply text-xs;
 	}
 	.hsla {
 		@apply font-semibold max-w-[4ch];

@@ -31,8 +31,8 @@
   }
 </script>
 <div class="vars-output {type.toLocaleLowerCase()}">
-  <h2>{type}</h2>
-  <button on:click={copyClick} class="inline-block mx-1">
+  <button title="Copy" on:click={copyClick} class="inline-block">
+    <h2 class="mr-1">{type}</h2>
     <CopyIcon size="1x" />
   </button>
   {#if showIncludeDefault}

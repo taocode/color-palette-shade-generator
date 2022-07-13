@@ -59,6 +59,9 @@
 .nav-link {
   @apply inline-block py-1 md:px-2;
 }
+.CPSG {
+  @apply inline-flex justify-center place-items-center font-700;
+}
 .C {
   @apply bg-primary-700 text-white;
 }
@@ -66,8 +69,8 @@
   @apply bg-primary-400 text-white;
 }
 .S {
-  @apply bg-complementary-700 text-black;
+  @apply bg-complementary-600 text-black;
 }
 .G {
-  @apply bg-complementary-400 text-black;
+  @apply bg-complementary-400 text-black px-2;
 }
