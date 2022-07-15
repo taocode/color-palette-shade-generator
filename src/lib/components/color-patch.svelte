@@ -4,7 +4,7 @@ import { clickOutside } from 'svelte-use-click-outside'
 import Swatch from './swatch.svelte'
 import VarsOutput from './vars-output.svelte'
 
-import { dots } from '$lib/lib'
+import { dots } from '$lib'
 
 export let name = 'color'
 export let color = 'black'

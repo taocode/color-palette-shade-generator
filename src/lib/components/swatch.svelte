@@ -4,7 +4,7 @@
   import { CopyIcon, Edit2Icon } from 'svelte-feather-icons'
   import { clickOutside } from 'svelte-use-click-outside'
 
-  import { dots, notice } from '$lib/lib'
+  import { dots, notice } from '$lib'
   
   export let color = 'black'
   

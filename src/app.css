@@ -59,6 +59,9 @@
 .nav-link {
   @apply inline-block py-1 md:px-2;
 }
+.settings {
+  @apply max-w-prose mx-auto text-center flex justify-center;
+}
 .CPSG {
   @apply inline-flex justify-center place-items-center font-700;
 }

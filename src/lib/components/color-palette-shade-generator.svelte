@@ -1,6 +1,6 @@
 <script>
 export const name = 'Color Palette Shade Generator'
-export const size = '1.25em'
+export let size = '1.25em'
 export let grid = true
 export const fanciful = name
   .split(' ')
@@ -13,7 +13,7 @@ export const fanciful = name
       )
 </script>
 
-<div class="max-w-fit mx-auto">
+<div class="max-w-fit mx-auto sm:mx-3">
   <div class="max-w-60 mx-auto flex-wrap justify-center sm:(inline-flex flex-nowrap max-w-none grid-cols-none)"
   class:grid={grid} class:grid-cols-2={grid} class:inline-flex={!grid} 
   >
@@ -21,8 +21,3 @@ export const fanciful = name
   </div>
 </div>
 
-<style lang="postcss">
-  .inflex {
-    @apply inline-flex;
-  }
-</style>

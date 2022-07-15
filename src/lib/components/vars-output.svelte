@@ -2,7 +2,7 @@
   import { toHsla } from 'color2k'
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
-  import { notice } from '$lib/lib'
+  import { notice } from '$lib'
 
   export let type = 'CSS'
   export let name = 'color'
@@ -14,13 +14,14 @@
   function copyClick(event) {
     const varsOutput = event.srcElement.closest('.vars-output')
     const text = varsOutput.querySelector('.copyTarget').innerText.trim()
+    const heading = varsOutput.querySelector('h2')
     console.log({text,event,varsOutput})
     if (!navigator.clipboard) {
       document.execCommand('copy',false,text)
     } else {
       navigator.clipboard.writeText(text).then(
         function() {
-          notice(`copied: <span class="whitespace-nowrap">${text}</span>`,varsOutput)
+          notice(`copied vars for: <span class="whitespace-nowrap">${heading.innerText}</span>`,varsOutput)
         }
       ).catch(
         function(err) {

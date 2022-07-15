@@ -2,13 +2,13 @@
 import { createEventDispatcher } from 'svelte'
 const dispatch = createEventDispatcher()
 
-import { describeScheme, schemes } from "$lib/lib"
+import { describeScheme, schemes } from "$lib"
 import ColorPaletteShadeGenerator from "./color-palette-shade-generator.svelte"
 
 </script>
 
 <div class="prose mx-auto my-10 px-3 sm:px-0">
-	<h2 class="flex">About <ColorPaletteShadeGenerator /></h2>
+	<h2 class="flex align-bottom"><span class="">About</span> <ColorPaletteShadeGenerator size="1.5em" /></h2>
 	<p>Use this color shade generating app to make multiple shades of colors for websites based on <a target="_blank" href="https://www.interaction-design.org/literature/topics/color-theory">color theory</a> where:</p>
 	<ul class="list-disc">
 		{#each schemes as s, i}

@@ -3,12 +3,13 @@
 	import { browser } from '$app/env'
 	import { page } from '$app/stores'
 
-	import { schemes, schemeColors } from '$lib/lib'
+	import { schemes, schemeColors } from '$lib'
 	import ColorPaletteShadeGenerator from '$lib/components/color-palette-shade-generator.svelte'
 	import About from "$lib/components/about.svelte"
 	import ColorChoose from "$lib/components/color-choose.svelte"
 	import ColorPatch from '$lib/components/color-patch.svelte'
-	import ShadeSettings from "$lib/components/shade-settings.svelte"
+	import SettingsScheme from '$lib/components/settings-scheme.svelte'
+	import SettingsShades from "$lib/components/settings-shades.svelte"
 	import { steps, stepFactor } from '$lib/stores'
 
 	export let h = 250
@@ -23,7 +24,7 @@
 		console.log("onMount()",{browser})
 		if (browser) {
 			const searchParams = $page.url.searchParams
-			if (searchParams.has('color')) updateHSLAfixed(toHsla('#'+searchParams.get('color')))
+			if (searchParams.has('color')) updateHSLA(toHsla('#'+searchParams.get('color')),true)
 			if (searchParams.has('scheme')) scheme = parseInt(searchParams.get('scheme'))
 			if (searchParams.has('steps')) _steps = parseInt(searchParams.get('steps'))
 			if (searchParams.has('factor')) stepPercent = 100 * parseFloat(searchParams.get('factor'))
@@ -42,20 +43,37 @@
 		console.log('updateColor(event)',event.detail,{event})
 		updateHSLA( event.detail )
 	}
-
-	function updateHSLA(hsla) {	
-		const aHSLA = parseToHsla(hsla)
-		h = aHSLA[0]
-		s = aHSLA[1]
-		l = aHSLA[2]
-		a = aHSLA[3]
+	function updateHue(event) {
+		// console.log('updateHue(event)',event.detail,{event})
+		h = event.detail
 	}
-	function updateHSLAfixed(hsla) {	
-		const aHSLA = parseToHsla(hsla)
-		h = aHSLA[0].toFixed()
-		s = (aHSLA[1]).toFixed(3)
-		l = (aHSLA[2]).toFixed(3)
-		a = aHSLA[3].toFixed(2)
+	function updateSaturation(event) {
+		// console.log('updateSaturation(event)',event.detail,{event})
+		s = event.detail
+	}
+	function updateLuminosity(event) {
+		// console.log('updateLuminosity(event)',event.detail,{event})
+		l = event.detail
+	}
+	function updateAlpha(event) {
+		// console.log('updateAlpha(event)',event.detail,{event})
+		a = event.detail
+	}
+
+	function updateHSLA(hsla,fix=false) {	
+		[h,s,l,a] = parseToHsla(hsla)
+		if (fix) {
+			h = h.toFixed()
+			s = s.toFixed(3)
+			l = l.toFixed(3)
+			a = a.toFixed(2)
+		}
+	}
+	function updateSteps(event) {
+		_steps = event.detail
+	}
+	function updateStepPercent(event) {
+		stepPercent = event.detail
 	}
 
 	$: {
@@ -73,16 +91,11 @@
 			params.append('scheme', scheme)
 			params.append('steps', _steps)
 			params.append('factor', $stepFactor)
-			console.log(params.toString(),{params})
+			// console.log(params.toString(),{params})
 			history.replaceState({'color': toHex(color),'scheme': scheme},'',`?${params}`)
 		}
 	}
-	function updateSteps(event) {
-		_steps = event.detail
-	}
-	function updateStepPercent(event) {
-		stepPercent = event.detail
-	}
+
 </script>
 
 <svelte:head>
@@ -90,19 +103,27 @@
   <meta name="description" content="Generate a color palette using color theory with multiple shades for use with CSS, Tailwind">
 </svelte:head>
 
-<div class="wrap" style="color: {readable}; background-color: {color};">
+<div class="pt-2 pb-6" style="color: {readable}; background-color: {color};">
 	<h1><ColorPaletteShadeGenerator /></h1>
-	<ColorChoose {h} {s} {l} {a} on:updateScheme={updateScheme} on:updateColor={updateColor}/>
-	<ShadeSettings {color} {scheme} steps={_steps} {stepPercent}
-	on:updateScheme={updateScheme}
-	on:updateSteps={updateSteps} 
-	on:updateStepPercent={updateStepPercent} />
+	<ColorChoose {h} {s} {l} {a} 
+		on:updateHue={updateHue}
+		on:updateSaturation={updateSaturation}
+		on:updateLuminosity={updateLuminosity}
+		on:updateAlpha={updateAlpha}
+		on:updateColor={updateColor}
+	/>
+	<SettingsScheme {color} {scheme} 
+		on:updateScheme={updateScheme}
+	/>
+	<SettingsShades {color} steps={_steps} {stepPercent}
+		on:updateSteps={updateSteps} 
+		on:updateStepPercent={updateStepPercent} 
+	/>
 </div>
 {#each allColors as {color, name, shades, hue, description}}
 	<ColorPatch {color} {description} {name} {shades} {hue} 
 	on:updateColor={updateColor} />
 {/each}
-
 
 <About on:updateScheme={updateScheme} />
 
@@ -110,5 +131,4 @@
 	h1 {
 		@apply text-3xl text-center p-4 font-semibold;
 	}
-	
 </style>
