@@ -1,21 +1,20 @@
 <script>
-  import { createEventDispatcher } from 'svelte'
-  const dispatch = createEventDispatcher()
-
   import { schemes, dots } from '$lib'
+  import { scheme, color } from '$lib/stores'
 
-  export let scheme = 0
-  export let color = 'black'
+  let _scheme = 1
+
+  $: scheme.set(_scheme)
+  $: _scheme = $scheme
 
 </script>
 <div class="settings scheme">
-  <div class="sm:flex">
+  <div class="">
     <div class="flex">
     <label class="m-2 px-2 max-w-min mx-auto">
       <span class="ml-r">Scheme</span>
-      <select class="max-w-min" style="background-color: {color};"
-      bind:value={scheme}
-      on:change={() => dispatch('updateScheme',scheme)}
+      <select class="max-w-min" style="background-color: {$color};"
+      bind:value={_scheme}
       >
         {#each schemes as s, i}
           <option value={i}>

@@ -1,9 +1,7 @@
 <script>
-import { createEventDispatcher } from 'svelte'
-const dispatch = createEventDispatcher()
-
-import { describeScheme, schemes } from "$lib"
-import ColorPaletteShadeGenerator from "./color-palette-shade-generator.svelte"
+import { describeScheme, schemes } from '$lib'
+import { scheme } from '$lib/stores'
+import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
 
 </script>
 
@@ -14,7 +12,7 @@ import ColorPaletteShadeGenerator from "./color-palette-shade-generator.svelte"
 		{#each schemes as s, i}
 		<li>
 			<span>
-			<button class="font-bold" on:click={()=>dispatch('updateScheme',i)}>{s.name}</button>
+			<button class="font-bold" on:click={()=>scheme.set(i)}>{s.name}</button>
 				<em>({1+s.hues.length} color{#if s.hues.length > 0}s{/if})</em>: {describeScheme(s)}
 		</span>
 		</li>
