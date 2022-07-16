@@ -1,5 +1,6 @@
 <script>
 import { readableColor, toHsla } from 'color2k'
+import { XIcon } from 'svelte-feather-icons'
 import { clickOutside } from 'svelte-use-click-outside'
 import Swatch from './swatch.svelte'
 import VarsOutput from './vars-output.svelte'
@@ -33,13 +34,15 @@ background: linear-gradient(90deg, {lastShade} 10%, {shades[0]} 90%;">
     <div class="details"
     use:clickOutside={() => hidden = true}
     style="background-color: {color}; color: {readableColor(color)}">
-      <div>
+    <button title="close" class="close flex lg:hidden" on:click={() => hidden = true}><XIcon size="1.5x" /></button>
+    <div>
         <VarsOutput type="CSS" {name} {color} {shades} />
       </div>
       <div>
         <VarsOutput type="Tailwind+CSS" {name} {color} {shades} {includeDefault} showIncludeDefault />
       </div>
       <div>
+        <button title="close" class="close hidden lg:flex" on:click={() => hidden = true}><XIcon size="1.5x" /></button>
         <VarsOutput type="Tailwind" {name} {color} {shades} />
       </div>
     </div>
@@ -54,6 +57,9 @@ background: linear-gradient(90deg, {lastShade} 10%, {shades[0]} 90%;">
   .name {
 		@apply px-4 py-2;
 	}
+  .close {
+    @apply bg-white text-dark-300 rounded-sm float-right;
+  }
   .varName {
     /* @apply w-max-w-16; */
   }
@@ -61,8 +67,10 @@ background: linear-gradient(90deg, {lastShade} 10%, {shades[0]} 90%;">
 		@apply flex flex-wrap text-center;
 	}
   .details {
-    @apply inset-auto mx-auto my-auto p-2 border-2 z-10 transition duration-200 shadow-lg;
-    @apply md:(grid gap-2 grid-cols-3);
+    @apply inset-auto m-auto p-2 border-2 z-10 
+    transition duration-200 shadow-lg 
+    max-h-[90vh] max-w-[95vw] overflow-auto
+    lg:(grid gap-2 grid-cols-3);
   }
 
 </style>
