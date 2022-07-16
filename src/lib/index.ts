@@ -1,4 +1,4 @@
-import { adjustHue, darken, hsla, parseToHsla, saturate } from 'color2k'
+import { adjustHue, darken, lighten, parseToHsla, saturate } from 'color2k'
 
 import { steps, factorLightness, factorSaturation } from '$lib/stores'
 import { toHsla } from 'color2k'
@@ -81,7 +81,7 @@ const shades = (color) => {
   let arr = [toHsla(color)]
   for (let i = 1; i < _steps; i++) {
     if (i % 2) {
-      const lighter = darken(color,(i+1)/2*_stepFactorLightness*-1)
+      const lighter = lighten(color,(i+1)/2*_stepFactorLightness)
       arr.unshift(saturate(lighter,(i+1)/2*_stepFactorSaturation))
     } else {
       const darker = darken(color,i/2*_stepFactorLightness)

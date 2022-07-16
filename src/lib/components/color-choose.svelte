@@ -4,7 +4,7 @@ import { adjustHue, darken, readableColor, hsla, toHex, toHsla, parseToHsla } fr
 import { createEventDispatcher } from 'svelte'
 const dispatch = createEventDispatcher()
 
-import { color } from '$lib/stores'
+import { primaryColor } from '$lib/stores'
 
 export let h = 250
 export let s = 0.65
@@ -14,7 +14,7 @@ export let a = 1
 let sP = s*100
 let lP = l*100
 
-$: color.set(hsla(h, s, l, a))
+$: primaryColor.set(hsla(h, s, l, a))
 $: dispatch("updateHue",h)
 $: {
 	s = sP/100
@@ -27,8 +27,8 @@ $: {
 $: dispatch("updateAlpha",a)
 
 function colorPicked({srcElement}) {
-	[h,s,l,a] = parseToHsla(srcElement.value)
-	dispatch("updateColor",toHsla(srcElement.value))
+	let [h,s,l,a] = parseToHsla(srcElement.value)
+	primaryColor.set(toHsla(srcElement.value))
 }
 </script>
 
@@ -39,7 +39,7 @@ function colorPicked({srcElement}) {
 			<input id="colorpicker"
 				type="color" 
 				colorpick-eyedropper-active="true"
-				value={toHex($color).substring(0,7)}
+				value={toHex($primaryColor).substring(0,7)}
 				on:change={colorPicked}
 				class="block w-3/4 h-8 mx-auto xs:w-16"
 			>
@@ -51,7 +51,7 @@ function colorPicked({srcElement}) {
 					type="number" 
 					min={0} max={360}
 					class="hsla" 
-					style="background-color: {$color};"
+					style="background-color: {$primaryColor};"
 					bind:value={h} 
 				>,
 				<input id="saturation"
@@ -59,7 +59,7 @@ function colorPicked({srcElement}) {
 					type="number" 
 					min={0} max={100} step={0.5}
 					class="hsla" 
-					style="background-color: {$color};" 
+					style="background-color: {$primaryColor};" 
 					bind:value={sP}
 				>%,
 				<input id="luminosity"
@@ -67,7 +67,7 @@ function colorPicked({srcElement}) {
 					type="number" 
 					min={0} max={100} step={0.5}
 					class="hsla" 
-					style="background-color: {$color};" 
+					style="background-color: {$primaryColor};" 
 					bind:value={lP} 
 				>%,
 				<input id="alpha"
@@ -75,7 +75,7 @@ function colorPicked({srcElement}) {
 					type="number" 
 					min={0} max={1} step={0.05}
 					class="hsla" 
-					style="background-color: {$color};" 
+					style="background-color: {$primaryColor};" 
 					bind:value={a}
 				>
 				)

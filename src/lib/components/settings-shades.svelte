@@ -1,15 +1,16 @@
 <script>
-  import { createEventDispatcher } from 'svelte'
-  const dispatch = createEventDispatcher()
 
-  export let steps = 9
-  export let color = 'black'
-  export let stepPercent = 8
-  export let saturationStepPercent = -1
+  import { primaryColor, steps, factorLightness, factorSaturation } from '$lib/stores'
 
-  $: dispatch('updateSteps',steps)
-  $: dispatch('updateStepPercent',stepPercent)
-  $: dispatch('updateSaturationStepPercent',saturationStepPercent)
+  let _steps = $steps
+  let lightnessPercent = $factorLightness * 100
+  let saturationPercent = $factorSaturation * 100
+
+  $: steps.set( _steps )
+  $: {
+    factorLightness.set( lightnessPercent*0.01 )
+  }
+  $: factorSaturation.set( saturationPercent*0.01 )
 </script>
 <div class="settings shades">
   <div class="sm:flex">
@@ -17,8 +18,8 @@
       <label>
         <input id="step-percent"
         class="w-[3ch] mr-1"
-        style="background-color: {color};"
-        bind:value={stepPercent}
+        style="background-color: {$primaryColor};"
+        bind:value={lightnessPercent}
         type="number"
         min={0}
         max={100}
@@ -29,11 +30,11 @@
       <label>
         <input id="step-percent"
         class="w-[3ch] mr-1"
-        style="background-color: {color};"
-        bind:value={saturationStepPercent}
+        style="background-color: {$primaryColor};"
+        bind:value={saturationPercent}
         type="number"
-        min={-100}
-        max={100}
+        min={-50}
+        max={50}
         step={0.5}
         placeholder="">
           <span class="whitespace-nowrap">%S/Step</span>
@@ -42,8 +43,8 @@
       <label class="mx-2">
         <input id="steps"
         class="w-[2ch] mr-1"
-        style="background-color: {color};"
-        bind:value={steps}
+        style="background-color: {$primaryColor};"
+        bind:value={_steps}
         type="number"
         min={3}
         max={20}

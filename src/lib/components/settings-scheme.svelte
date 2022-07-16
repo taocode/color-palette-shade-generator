@@ -1,6 +1,6 @@
 <script>
   import { schemes, dots } from '$lib'
-  import { scheme, color } from '$lib/stores'
+  import { scheme, primaryColor } from '$lib/stores'
 
   let _scheme = 1
 
@@ -13,7 +13,7 @@
     <div class="flex">
     <label class="m-2 px-2 max-w-min mx-auto">
       <span class="ml-r">Scheme</span>
-      <select class="max-w-min" style="background-color: {$color};"
+      <select class="max-w-min" style="background-color: {$primaryColor};"
       bind:value={_scheme}
       >
         {#each schemes as s, i}

@@ -4,6 +4,7 @@
   import { CopyIcon, Edit2Icon } from 'svelte-feather-icons'
   import { clickOutside } from 'svelte-use-click-outside'
 
+  import { primaryColor } from '$lib/stores'
   import { dots, notice } from '$lib'
   
   export let color = 'black'
@@ -45,7 +46,7 @@
         <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHsla(color)}</button>
         <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toRgba(color)}</button>
         <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHex(color)}</button>
-        <button class="btn my-2" on:click={() => {dispatch('updateColor',toHsla(color)); hidden=true;}}><Edit2Icon class="mx-1 pointer-events-none" size="1x" />Make Primary</button>
+        <button class="btn my-2" on:click={() => {primaryColor.set(toHsla(color)); hidden=true;}}><Edit2Icon class="mx-1 pointer-events-none" size="1x" />Make Primary</button>
       </div>
     </div>
   </div>

@@ -11,15 +11,13 @@
 	import SettingsShades from "$lib/components/settings-shades.svelte"
 
 	import { schemes, schemeColors } from '$lib'
-	import { scheme, steps, factorLightness, factorSaturation } from '$lib/stores'
+	import { primaryColor, scheme, steps, factorLightness, factorSaturation } from '$lib/stores'
 
 	export let h = 250
 	export let s = 0.65
 	export let l = 0.45
 	export let a = 1
-	export let color = hsla(h, s, l, a)
 	export let lightnessPercent = 8
-	export let _scheme = 1
 	export let saturationPercent = -2
 	
 	onMount(() => {
@@ -27,16 +25,18 @@
 		if (browser) {
 			const searchParams = $page.url.searchParams
 			if (searchParams.has('color')) updateHSLA(toHsla('#'+searchParams.get('color')),true)
-			if (searchParams.has('scheme')) _scheme = parseInt(searchParams.get('scheme'))
-			if (searchParams.has('steps')) _steps = parseInt(searchParams.get('steps'))
-			if (searchParams.has('fL')) lightnessPercent = 100 * parseFloat(searchParams.get('fL'))
+			if (searchParams.has('scheme')) scheme.set( parseInt(searchParams.get('scheme')) )
+			if (searchParams.has('steps')) steps.set( parseInt(searchParams.get('steps')) )
+			if (searchParams.has('pL')) factorLightness.set( 0.01 * parseFloat(searchParams.get('pL')) )
+			if (searchParams.has('pS')) factorSaturation.set( 0.01 * parseFloat(searchParams.get('pS')) )
 			// console.log('start color', {searchParams}, $page.url)
+			allColors = schemeColors(schemes[$scheme],$primaryColor)
 		}
 	})
 
 	let readable = readableColor("white")
+	let _color = 'black'
 	let allColors = []
-	let _steps = 9
 
 	function updateColor(event) {
 		console.log('updateColor(event)',event.detail,{event})
@@ -69,23 +69,26 @@
 		}
 	}
 	$: {
-		steps.set( _steps )
-		factorLightness.set( lightnessPercent * 0.01 )
-		factorSaturation.set( saturationPercent * 0.01 )
+		$steps
+		lightnessPercent = $factorLightness*100
+		saturationPercent = $factorSaturation*100
 
-		color = hsla(h, s, l, a)
-		readable = readableColor(color)
-		allColors = schemeColors(schemes[$scheme],color)
+		_color = $primaryColor
+
+		readable = readableColor(_color)
+		allColors = schemeColors(schemes[$scheme],_color)
 		// console.log('colors vs',{allColors},schemeColors(schemes[scheme],color))
 		if (browser) {
-			let params = new URLSearchParams()
-			params.append('color', toHex(color).substring(1))
-			params.append('scheme', _scheme)
-			params.append('steps', _steps)
-			params.append('fL', $factorLightness)
-			params.append('fS', $factorSaturation)
+			const state = {
+				color: toHex(_color).substring(1),
+				scheme: $scheme,
+				steps: $steps,
+				pL: $factorLightness*100,
+				pS: $factorSaturation*100,
+			}
+			const params = new URLSearchParams(state)
 			// console.log(params.toString(),{params})
-			history.replaceState({'color': toHex(color),'scheme': _scheme},'',`?${params}`)
+			history.replaceState(state,'',`?${params}`)
 		}
 	}
 
@@ -96,7 +99,7 @@
   <meta name="description" content="Generate a color palette using color theory with multiple shades for use with CSS, Tailwind">
 </svelte:head>
 
-<div class="pt-2 pb-6" style="color: {readable}; background-color: {color};">
+<div class="pt-2 pb-6" style="color: {readable}; background-color: {$primaryColor};">
 	<h1><ColorPaletteShadeGenerator /></h1>
 	<ColorChoose {h} {s} {l} {a} 
 		on:updateHue={updateHue}
@@ -106,7 +109,7 @@
 		on:updateColor={updateColor}
 	/>
 	<SettingsScheme />
-	<SettingsShades  />
+	<SettingsShades />
 </div>
 {#each allColors as {color, name, shades, hue, description}}
 	<ColorPatch {color} {description} {name} {shades} {hue} 
