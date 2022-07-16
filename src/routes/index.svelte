@@ -10,7 +10,7 @@
 	import ColorPatch from '$lib/components/color-patch.svelte'
 	import SettingsScheme from '$lib/components/settings-scheme.svelte'
 	import SettingsShades from "$lib/components/settings-shades.svelte"
-	import { steps, stepFactor } from '$lib/stores'
+	import { steps, stepFactor, saturationStepFactor } from '$lib/stores'
 
 	export let h = 250
 	export let s = 0.65
@@ -19,6 +19,7 @@
 	export let color = hsla(h, s, l, a)
 	export let stepPercent = 8
 	export let scheme = 1
+	export let saturationStepPercent = -2
 	
 	onMount(() => {
 		console.log("onMount()",{browser})
@@ -75,14 +76,16 @@
 	function updateStepPercent(event) {
 		stepPercent = event.detail
 	}
-
+	function updateSaturationStepPercent(event) {
+		saturationStepPercent = event.detail
+	}
 	$: {
 		steps.set(_steps)
 		stepFactor.set( stepPercent * 0.01)
+		saturationStepFactor.set( saturationStepPercent * 0.01)
 
 		color = hsla(h, s, l, a)
 		readable = readableColor(color)
-
 		allColors = schemeColors(schemes[scheme],color)
 		// console.log('colors vs',{allColors},schemeColors(schemes[scheme],color))
 		if (browser) {
@@ -99,7 +102,7 @@
 </script>
 
 <svelte:head>
-	<title>Color Palette Shade Generato</title>
+	<title>Color Palette Shade Generator</title>
   <meta name="description" content="Generate a color palette using color theory with multiple shades for use with CSS, Tailwind">
 </svelte:head>
 
@@ -115,9 +118,10 @@
 	<SettingsScheme {color} {scheme} 
 		on:updateScheme={updateScheme}
 	/>
-	<SettingsShades {color} steps={_steps} {stepPercent}
+	<SettingsShades {color} steps={_steps} {stepPercent} {saturationStepPercent}
 		on:updateSteps={updateSteps} 
 		on:updateStepPercent={updateStepPercent} 
+		on:updateSaturationStepPercent={updateSaturationStepPercent}
 	/>
 </div>
 {#each allColors as {color, name, shades, hue, description}}

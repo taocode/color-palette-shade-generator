@@ -1,10 +1,11 @@
-import { adjustHue, darken, hsla, parseToHsla } from 'color2k'
+import { adjustHue, darken, hsla, parseToHsla, saturate } from 'color2k'
 
-import { steps, stepFactor } from '$lib/stores'
+import { steps, stepFactor, saturationStepFactor } from '$lib/stores'
 import { toHsla } from 'color2k'
 
 let _steps
 let _stepFactor
+let _saturationStepFactor
 
 steps.subscribe(value => {
   _steps = value
@@ -12,6 +13,10 @@ steps.subscribe(value => {
 
 stepFactor.subscribe(value => {
   _stepFactor = value
+})
+
+saturationStepFactor.subscribe(value => {
+  _saturationStepFactor = value
 })
 
 export const describeScheme = ({hues, varName}) => {
@@ -76,9 +81,11 @@ const shades = (color) => {
   let arr = [toHsla(color)]
   for (let i = 1; i < _steps; i++) {
     if (i % 2) {
-      arr.unshift(darken(color,(i+1)/2*_stepFactor*-1))
+      const lighter = darken(color,(i+1)/2*_stepFactor*-1)
+      arr.unshift(saturate(lighter,(i+1)/2*_saturationStepFactor))
     } else {
-      arr.push(darken(color,i/2*_stepFactor))
+      const darker = darken(color,i/2*_stepFactor)
+      arr.push(saturate(darker,i/2*_saturationStepFactor))
     }
   }
   return arr
