@@ -3,32 +3,33 @@
 	import { browser } from '$app/env'
 	import { page } from '$app/stores'
 
-	import { schemes, schemeColors } from '$lib'
 	import ColorPaletteShadeGenerator from '$lib/components/color-palette-shade-generator.svelte'
 	import About from "$lib/components/about.svelte"
 	import ColorChoose from "$lib/components/color-choose.svelte"
 	import ColorPatch from '$lib/components/color-patch.svelte'
 	import SettingsScheme from '$lib/components/settings-scheme.svelte'
 	import SettingsShades from "$lib/components/settings-shades.svelte"
-	import { steps, stepFactor, saturationStepFactor } from '$lib/stores'
+
+	import { schemes, schemeColors } from '$lib'
+	import { scheme, steps, factorLightness, factorSaturation } from '$lib/stores'
 
 	export let h = 250
 	export let s = 0.65
 	export let l = 0.45
 	export let a = 1
 	export let color = hsla(h, s, l, a)
-	export let stepPercent = 8
-	export let scheme = 1
-	export let saturationStepPercent = -2
+	export let lightnessPercent = 8
+	export let _scheme = 1
+	export let saturationPercent = -2
 	
 	onMount(() => {
-		console.log("onMount()",{browser})
+		// console.log("onMount()",{browser})
 		if (browser) {
 			const searchParams = $page.url.searchParams
 			if (searchParams.has('color')) updateHSLA(toHsla('#'+searchParams.get('color')),true)
-			if (searchParams.has('scheme')) scheme = parseInt(searchParams.get('scheme'))
+			if (searchParams.has('scheme')) _scheme = parseInt(searchParams.get('scheme'))
 			if (searchParams.has('steps')) _steps = parseInt(searchParams.get('steps'))
-			if (searchParams.has('factor')) stepPercent = 100 * parseFloat(searchParams.get('factor'))
+			if (searchParams.has('fL')) lightnessPercent = 100 * parseFloat(searchParams.get('fL'))
 			// console.log('start color', {searchParams}, $page.url)
 		}
 	})
@@ -37,9 +38,6 @@
 	let allColors = []
 	let _steps = 9
 
-	function updateScheme(event) {
-		scheme = parseInt(event.detail)
-	}
 	function updateColor(event) {
 		console.log('updateColor(event)',event.detail,{event})
 		updateHSLA( event.detail )
@@ -62,7 +60,7 @@
 	}
 
 	function updateHSLA(hsla,fix=false) {	
-		[h,s,l,a] = parseToHsla(hsla)
+		let [h,s,l,a] = parseToHsla(hsla)
 		if (fix) {
 			h = h.toFixed()
 			s = s.toFixed(3)
@@ -70,32 +68,24 @@
 			a = a.toFixed(2)
 		}
 	}
-	function updateSteps(event) {
-		_steps = event.detail
-	}
-	function updateStepPercent(event) {
-		stepPercent = event.detail
-	}
-	function updateSaturationStepPercent(event) {
-		saturationStepPercent = event.detail
-	}
 	$: {
-		steps.set(_steps)
-		stepFactor.set( stepPercent * 0.01)
-		saturationStepFactor.set( saturationStepPercent * 0.01)
+		steps.set( _steps )
+		factorLightness.set( lightnessPercent * 0.01 )
+		factorSaturation.set( saturationPercent * 0.01 )
 
 		color = hsla(h, s, l, a)
 		readable = readableColor(color)
-		allColors = schemeColors(schemes[scheme],color)
+		allColors = schemeColors(schemes[$scheme],color)
 		// console.log('colors vs',{allColors},schemeColors(schemes[scheme],color))
 		if (browser) {
 			let params = new URLSearchParams()
 			params.append('color', toHex(color).substring(1))
-			params.append('scheme', scheme)
+			params.append('scheme', _scheme)
 			params.append('steps', _steps)
-			params.append('factor', $stepFactor)
+			params.append('fL', $factorLightness)
+			params.append('fS', $factorSaturation)
 			// console.log(params.toString(),{params})
-			history.replaceState({'color': toHex(color),'scheme': scheme},'',`?${params}`)
+			history.replaceState({'color': toHex(color),'scheme': _scheme},'',`?${params}`)
 		}
 	}
 
@@ -115,21 +105,15 @@
 		on:updateAlpha={updateAlpha}
 		on:updateColor={updateColor}
 	/>
-	<SettingsScheme {color} {scheme} 
-		on:updateScheme={updateScheme}
-	/>
-	<SettingsShades {color} steps={_steps} {stepPercent} {saturationStepPercent}
-		on:updateSteps={updateSteps} 
-		on:updateStepPercent={updateStepPercent} 
-		on:updateSaturationStepPercent={updateSaturationStepPercent}
-	/>
+	<SettingsScheme />
+	<SettingsShades  />
 </div>
 {#each allColors as {color, name, shades, hue, description}}
 	<ColorPatch {color} {description} {name} {shades} {hue} 
 	on:updateColor={updateColor} />
 {/each}
 
-<About on:updateScheme={updateScheme} />
+<About />
 
 <style lang="postcss">
 	h1 {
