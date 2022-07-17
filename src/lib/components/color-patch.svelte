@@ -5,7 +5,7 @@ import { clickOutside } from 'svelte-use-click-outside'
 import Swatch from './swatch.svelte'
 import VarsOutput from './vars-output.svelte'
 
-import { dots } from '$lib'
+import { dots, hueName } from '$lib'
 
 export let name = 'color'
 export let color = 'black'
@@ -18,6 +18,7 @@ let includeDefault = false
 
 $: lastShade = shades[shades.length-1]
 $: darkerColor = darken(color,0.075)
+$: name = hueName(hue)
 </script>
 
 <div class="name" style="

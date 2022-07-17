@@ -21,6 +21,41 @@ unsubs.push(factorSaturation.subscribe(value => {
   _stepFactorSaturation = value
 }))
 
+export const hueNames = [
+  {red:0},
+  {orangered:16},
+  {orange:33},
+  {goldenrod:43},
+  {gold:51},
+  {yellow:60},
+  {yellowgreen:80},
+  {chartreuse:90},
+  {green:120},
+  {seagreen:147},
+  {aquamarine:160},
+  {aqua:180},
+  {skyblue:195},
+  {cornflowerblue:219},
+  {royalblue:225},
+  {blue:240},
+  {slateblue:248},
+  {blueviolet:271},
+  {indigo:275},
+  {purple:285},
+  {magenta:300},
+  {mediumvioletred:322},
+  {violetred:340},
+  {crimson:348},
+]
+export const hueName = (hue) => {
+  return hueNames.reduce((p,c,i) => {
+    const pi = ((i>0) ? i : hueNames.length) - 1
+    const [prev, ph] = Object.entries(hueNames[pi])[0]
+    const [name, h] = Object.entries(c)[0]
+    return (hue <= h && hue > ph) ? `${p}${name}` : `${p}`
+  },'')
+}
+
 export const updateHSLA = (color, fix=false) => {	
   let [h,s,l,a] = parseToHsla(color)
   if (fix) {
@@ -42,22 +77,24 @@ export const describeScheme = ({hues, varName}) => {
 }
 
 export const schemeColors = ({hues,varName},primary) => {
+  const primaryH = parseToHsla(primary)[0].toFixed()
   const colors = hues.map((hue,i,a) => {
     const color = adjustHue(primary,(hue < 0) ? 360+hue : hue)
     const plus = (hue > 0) ? '+' : ''
     // console.log('schemeColors',{a})
+    const h = parseToHsla(color)[0].toFixed()
     return {
       color,
-      name: varName+((a.length > 1) ? (i+1): ''),
-      hue: parseToHsla(color)[0].toFixed(),
+      name: hueName(h),
+      hue: h,
       description: `φ${plus}${hue}°`,
       shades: shades(color)
     }
   })
   colors.unshift({
     color: primary,
-    name: 'primary',
-    hue: parseToHsla(primary)[0].toFixed(),
+    name: hueName(primaryH),
+    hue: primaryH,
     description: 'φ', 
     shades: shades(primary)
   })
