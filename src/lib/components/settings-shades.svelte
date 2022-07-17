@@ -1,5 +1,6 @@
 <script>
 
+  import { hsla } from 'color2k';
   import { primaryColor, steps, factorLightness, factorSaturation } from '$lib/stores'
 
   let _steps = $steps
@@ -7,9 +8,7 @@
   let saturationPercent = $factorSaturation * 100
 
   $: steps.set( _steps )
-  $: {
-    factorLightness.set( lightnessPercent*0.01 )
-  }
+  $: factorLightness.set( lightnessPercent*0.01 )
   $: factorSaturation.set( saturationPercent*0.01 )
 </script>
 <div class="settings shades">
@@ -17,8 +16,9 @@
     <div class="flex">
       <label>
         <input id="step-percent"
-        class="w-[3ch] mr-1"
+        class="mr-1"
         style="background-color: {$primaryColor};"
+        size={lightnessPercent.toString().length}
         bind:value={lightnessPercent}
         type="number"
         min={0}
@@ -29,8 +29,9 @@
       </label>
       <label>
         <input id="step-percent"
-        class="w-[3ch] mr-1"
+        class="mr-1"
         style="background-color: {$primaryColor};"
+        size={saturationPercent.toString().length}
         bind:value={saturationPercent}
         type="number"
         min={-50}
@@ -42,8 +43,9 @@
 
       <label class="mx-2">
         <input id="steps"
-        class="w-[2ch] mr-1"
+        class="max-w-min mr-1"
         style="background-color: {$primaryColor};"
+        size={_steps.toString().length}
         bind:value={_steps}
         type="number"
         min={3}
@@ -59,7 +61,7 @@
   label {
 		@apply block flex items-center justify-end w-full text-[0.75em];
 		input {
-			@apply text-[2em] ;
+			@apply text-[2em];
 		}
 	}
   input {

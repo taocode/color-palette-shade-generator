@@ -14,14 +14,14 @@
   function copyClick(event) {
     const varsOutput = event.srcElement.closest('.vars-output')
     const text = varsOutput.querySelector('.copyTarget').innerText.trim()
-    const heading = varsOutput.querySelector('h2')
+    const heading = varsOutput.querySelector('h2').innerText.trim()
     console.log({text,event,varsOutput})
     if (!navigator.clipboard) {
       document.execCommand('copy',false,text)
     } else {
       navigator.clipboard.writeText(text).then(
         function() {
-          notice(`copied vars for: <span class="whitespace-nowrap">${heading.innerText}</span>`,varsOutput)
+          notice(`copied vars for: <span class="whitespace-nowrap">${heading}</span>`,varsOutput)
         }
       ).catch(
         function(err) {

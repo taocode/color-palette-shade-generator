@@ -1,24 +1,22 @@
 <script>
-	import { adjustHue, darken, readableColor, hsla, toHex, toHsla, parseToHsla } from 'color2k'
+	import { readableColor, hsla, toHex, toHsla, parseToHsla } from 'color2k'
 	import { browser } from '$app/env'
 	import { page } from '$app/stores'
+	import { onMount, onDestroy } from 'svelte'
 
 	import ColorPaletteShadeGenerator from '$lib/components/color-palette-shade-generator.svelte'
-	import About from "$lib/components/about.svelte"
-	import ColorChoose from "$lib/components/color-choose.svelte"
+	import About from '$lib/components/about.svelte'
+	import ColorChoose from '$lib/components/color-choose.svelte'
 	import ColorPatch from '$lib/components/color-patch.svelte'
 	import SettingsScheme from '$lib/components/settings-scheme.svelte'
-	import SettingsShades from "$lib/components/settings-shades.svelte"
+	import SettingsShades from '$lib/components/settings-shades.svelte'
 
-	import { schemes, schemeColors } from '$lib'
-	import { primaryColor, scheme, steps, factorLightness, factorSaturation } from '$lib/stores'
+	import { schemes, schemeColors, unsubs, updateHSLA } from '$lib'
+	import { hue, saturation, lightness, alpha, primaryColor, scheme, steps, factorLightness, factorSaturation } from '$lib/stores'
 
-	export let h = 250
-	export let s = 0.65
-	export let l = 0.45
-	export let a = 1
-	export let lightnessPercent = 8
-	export let saturationPercent = -2
+	
+	export let lightnessPercent = $factorLightness*100
+	export let saturationPercent = $factorSaturation*100
 	
 	onMount(() => {
 		// console.log("onMount()",{browser})
@@ -33,54 +31,34 @@
 			allColors = schemeColors(schemes[$scheme],$primaryColor)
 		}
 	})
+	// onDestroy(() => {
+	// 	console.log('lib:onDestroy()',unsubs)
+	// 	unsubs.forEach((unsub) => {unsub()})
+	// })
 
+	$: primaryColor.set($hue, $saturation, $lightness, $alpha)
+	
 	let readable = readableColor("white")
-	let _color = 'black'
 	let allColors = []
-
+	
 	function updateColor(event) {
 		console.log('updateColor(event)',event.detail,{event})
 		updateHSLA( event.detail )
 	}
-	function updateHue(event) {
-		// console.log('updateHue(event)',event.detail,{event})
-		h = event.detail
-	}
-	function updateSaturation(event) {
-		// console.log('updateSaturation(event)',event.detail,{event})
-		s = event.detail
-	}
-	function updateLuminosity(event) {
-		// console.log('updateLuminosity(event)',event.detail,{event})
-		l = event.detail
-	}
-	function updateAlpha(event) {
-		// console.log('updateAlpha(event)',event.detail,{event})
-		a = event.detail
-	}
 
-	function updateHSLA(hsla,fix=false) {	
-		let [h,s,l,a] = parseToHsla(hsla)
-		if (fix) {
-			h = h.toFixed()
-			s = s.toFixed(3)
-			l = l.toFixed(3)
-			a = a.toFixed(2)
-		}
-	}
 	$: {
 		$steps
 		lightnessPercent = $factorLightness*100
 		saturationPercent = $factorSaturation*100
 
-		_color = $primaryColor
+		primaryColor.set( hsla($hue, $saturation, $lightness, $alpha) )
 
-		readable = readableColor(_color)
-		allColors = schemeColors(schemes[$scheme],_color)
+		readable = readableColor($primaryColor)
+		allColors = schemeColors(schemes[$scheme],$primaryColor)
 		// console.log('colors vs',{allColors},schemeColors(schemes[scheme],color))
 		if (browser) {
 			const state = {
-				color: toHex(_color).substring(1),
+				color: toHex($primaryColor).substring(1),
 				scheme: $scheme,
 				steps: $steps,
 				pL: $factorLightness*100,
@@ -101,13 +79,7 @@
 
 <div class="pt-2 pb-6" style="color: {readable}; background-color: {$primaryColor};">
 	<h1><ColorPaletteShadeGenerator /></h1>
-	<ColorChoose {h} {s} {l} {a} 
-		on:updateHue={updateHue}
-		on:updateSaturation={updateSaturation}
-		on:updateLuminosity={updateLuminosity}
-		on:updateAlpha={updateAlpha}
-		on:updateColor={updateColor}
-	/>
+	<ColorChoose />
 	<SettingsScheme />
 	<SettingsShades />
 </div>

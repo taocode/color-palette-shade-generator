@@ -23,27 +23,36 @@ $: lastShade = shades[shades.length-1]
 background: {lastShade};
 color: {readableColor(lastShade)}; 
 background: linear-gradient(90deg, {lastShade} 10%, {shades[0]} 90%;">
-  <input bind:value={name} 
+  <input bind:value={name}
     size={name.length}
     class="varName"
     style="background:{lastShade};">
-  {#if description}<em>({description} = {hue}°)</em>{/if}
+{#if description}<em>({description} = {hue}°)</em>{/if}
   <button class="border border-transparent hover:border-current rounded p-1 text-xs"
   on:click={() => { hidden = ! hidden }}>{@html dots}</button>
   <div class="fixed hidden bg-dark-900 bg-opacity-80 inset-0 flex z-10" class:hidden>
     <div class="details"
-    use:clickOutside={() => hidden = true}
-    style="background-color: {color}; color: {readableColor(color)}">
-    <button title="close" class="close flex lg:hidden" on:click={() => hidden = true}><XIcon size="1.5x" /></button>
-    <div>
-        <VarsOutput type="CSS" {name} {color} {shades} />
+      use:clickOutside={() => hidden = true}
+      style="background-color: {color}; color: {readableColor(color)}">
+      <div class="var-title">
+        <label>
+          var:
+          <input bind:value={name} class="border-1 px-1"
+          size={name.length}
+          style="background-color: {color}; color: {readableColor(color)}">
+        </label>
+        <button title="close" class="close flex" on:click={() => hidden = true}><XIcon size="1.5x" /></button>
       </div>
-      <div>
-        <VarsOutput type="Tailwind+CSS" {name} {color} {shades} {includeDefault} showIncludeDefault />
-      </div>
-      <div>
-        <button title="close" class="close hidden lg:flex" on:click={() => hidden = true}><XIcon size="1.5x" /></button>
-        <VarsOutput type="Tailwind" {name} {color} {shades} />
+      <div class="var-panels">
+        <div>
+          <VarsOutput type="CSS" {name} {color} {shades} />
+        </div>
+        <div>
+          <VarsOutput type="Tailwind+CSS" {name} {color} {shades} {includeDefault} showIncludeDefault />
+        </div>
+        <div>
+          <VarsOutput type="Tailwind" {name} {color} {shades} />
+        </div>
       </div>
     </div>
   </div>
@@ -70,7 +79,10 @@ background: linear-gradient(90deg, {lastShade} 10%, {shades[0]} 90%;">
     @apply inset-auto m-auto p-2 border-2 z-10 
     transition duration-200 shadow-lg 
     max-h-[90vh] max-w-[95vw] overflow-auto
-    lg:(grid gap-2 grid-cols-3);
+    ;
+  }
+  .var-panels {
+    @apply lg:(grid gap-2 grid-cols-3)
   }
 
 </style>

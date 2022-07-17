@@ -1,11 +1,11 @@
 <script>
-  import { readableColor, toRgba, toHex, toHsla } from 'color2k'
+  import { readableColor, toRgba, toHex, toHsla, parseToHsla } from 'color2k'
   import { createEventDispatcher } from 'svelte'
   import { CopyIcon, Edit2Icon } from 'svelte-feather-icons'
   import { clickOutside } from 'svelte-use-click-outside'
 
-  import { primaryColor } from '$lib/stores'
-  import { dots, notice } from '$lib'
+  import { hue, saturation, lightness, alpha, primaryColor } from '$lib/stores'
+  import { dots, notice, updateHSLA } from '$lib'
   
   export let color = 'black'
   
@@ -30,7 +30,7 @@
     }
   }
   let hidden = true
-  
+
 </script>
 <div class="swatch" style="background-color: {color}; color: {readableColor(color)}">
   <div class="ml-2">{color.split(',')[2]}</div>
@@ -46,7 +46,7 @@
         <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHsla(color)}</button>
         <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toRgba(color)}</button>
         <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHex(color)}</button>
-        <button class="btn my-2" on:click={() => {primaryColor.set(toHsla(color)); hidden=true;}}><Edit2Icon class="mx-1 pointer-events-none" size="1x" />Make Primary</button>
+        <button class="btn my-2" on:click={() => {updateHSLA(color,true); hidden=true;}}><Edit2Icon class="mx-1 pointer-events-none" size="1x" />Make Primary</button>
       </div>
     </div>
   </div>

@@ -1,34 +1,22 @@
 <script>
 import { adjustHue, darken, readableColor, hsla, toHex, toHsla, parseToHsla } from 'color2k'
 
-import { createEventDispatcher } from 'svelte'
-const dispatch = createEventDispatcher()
+import { hue, saturation, lightness, alpha, primaryColor } from '$lib/stores'
+import { updateHSLA } from '$lib';
 
-import { primaryColor } from '$lib/stores'
+$: h = $hue
+$: lP = $lightness*100
+$: sP = $saturation*100
+$: a = $alpha
 
-export let h = 250
-export let s = 0.65
-export let l = 0.45
-export let a = 1
-
-let sP = s*100
-let lP = l*100
-
-$: primaryColor.set(hsla(h, s, l, a))
-$: dispatch("updateHue",h)
-$: {
-	s = sP/100
-	dispatch("updateSaturation",s)
-}
-$: {
-	l = lP/100
-	dispatch("updateLuminosity",l)
-}
-$: dispatch("updateAlpha",a)
+$: primaryColor.set( hsla($hue, $saturation, $lightness, $alpha) )
+$: hue.set( h )
+$: saturation.set( sP/100 )
+$: lightness.set( lP/100 )
+$: alpha.set(a)
 
 function colorPicked({srcElement}) {
-	let [h,s,l,a] = parseToHsla(srcElement.value)
-	primaryColor.set(toHsla(srcElement.value))
+	updateHSLA(srcElement.value,true)
 }
 </script>
 
@@ -89,7 +77,7 @@ function colorPicked({srcElement}) {
 		@apply block flex items-center justify-end w-full text-[0.75em];
 	}
 	label input {
-		@apply text-[2em];
+		@apply text-[2em] ml-2;
 	}
 	input {
 		@apply text-right border-transparent leading-tight flex-shrink;

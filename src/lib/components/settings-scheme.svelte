@@ -1,6 +1,6 @@
 <script>
   import { schemes, dots } from '$lib'
-  import { scheme, primaryColor } from '$lib/stores'
+  import { primaryColor, scheme } from '$lib/stores'
 
   let _scheme = 1
 

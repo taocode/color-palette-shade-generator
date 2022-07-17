@@ -1,23 +1,39 @@
-import { adjustHue, darken, lighten, parseToHsla, saturate } from 'color2k'
+import { adjustHue, darken, lighten, parseToHsla, saturate, toHsla } from 'color2k'
 
-import { steps, factorLightness, factorSaturation } from '$lib/stores'
-import { toHsla } from 'color2k'
+
+import { steps, factorLightness, factorSaturation, hue, saturation, lightness, alpha } from '$lib/stores'
 
 let _steps
 let _stepFactorLightness
 let _stepFactorSaturation
 
-steps.subscribe(value => {
+export const unsubs = []
+
+unsubs.push(steps.subscribe(value => {
   _steps = value
-})
+}))
 
-factorLightness.subscribe(value => {
+unsubs.push(factorLightness.subscribe(value => {
   _stepFactorLightness = value
-})
+}))
 
-factorSaturation.subscribe(value => {
+unsubs.push(factorSaturation.subscribe(value => {
   _stepFactorSaturation = value
-})
+}))
+
+export const updateHSLA = (color, fix=false) => {	
+  let [h,s,l,a] = parseToHsla(color)
+  if (fix) {
+    h = h.toFixed()
+    s = s.toFixed(3)
+    l = l.toFixed(3)
+    a = a.toFixed(2)
+  }
+  hue.set(h)
+  saturation.set(s)
+  lightness.set(l)
+  alpha.set(a)
+}
 
 export const describeScheme = ({hues, varName}) => {
   return hues.reduce((p,c,i) => {
