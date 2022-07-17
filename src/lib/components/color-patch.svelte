@@ -1,5 +1,5 @@
 <script>
-import { readableColor, toHsla } from 'color2k'
+import { darken, readableColor, toHsla } from 'color2k'
 import { XIcon } from 'svelte-feather-icons'
 import { clickOutside } from 'svelte-use-click-outside'
 import Swatch from './swatch.svelte'
@@ -17,6 +17,7 @@ let hidden = true
 let includeDefault = false
 
 $: lastShade = shades[shades.length-1]
+$: darkerColor = darken(color,0.075)
 </script>
 
 <div class="name" style="
@@ -35,11 +36,11 @@ background: linear-gradient(90deg, {lastShade} 10%, {shades[0]} 90%;">
       use:clickOutside={() => hidden = true}
       style="background-color: {color}; color: {readableColor(color)}">
       <div class="var-title">
-        <label>
+        <label class="py-1 pl-2" style="color: {color}; background-color: {readableColor(color)};">
           var:
           <input bind:value={name} class="border-1 px-1"
           size={name.length}
-          style="background-color: {color}; color: {readableColor(color)}">
+          style="background-color: {darkerColor}; color: {readableColor(darkerColor)}; border-color: {readableColor(darkerColor)}">
         </label>
         <button title="close" class="close flex" on:click={() => hidden = true}><XIcon size="1.5x" /></button>
       </div>
