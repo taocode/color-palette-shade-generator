@@ -69,7 +69,7 @@ export const updateHSLA = (color, fix=false) => {
 
 export const describeScheme = ({hues, varName}) => {
   return hues.reduce((p,c,i) => {
-    return `${p}, ${varName}` + ((hues.length > 1) ? i+1 : '' ) + ` = φ+${c}°`
+    return `${p}, ${varName}` + ((hues.length > 1) ? i+1 : '' ) + ` = φ+${c.toFixed()}°`
   }, 'primary = φ')
 }
 
@@ -127,6 +127,25 @@ export const schemes = [
     varName: 'tetradic'
   },
 ]
+
+export const shadesAsCSS = (name,masterColor,shades) => {
+  if (!name || name === '') name = hueName(parseToHsla(masterColor)[0])
+  return shades.reduce((p,c,i) => {
+    return `${p}<div class="pl-3">--color-${name}-${i+1}00: ${c};</div>\n`
+  },`<div class="pl-3">--color-${name}: ${masterColor};</div>`)
+}
+export const shadesAsTailwindAndCSS = (name,masterColor,shades,includeDefault) => {
+  if (!name || name === '') name = hueName(parseToHsla(masterColor)[0])
+  return shades.reduce((p,c,i) => {
+    return `${p}<div class="pl-3">'${i+1}00': 'var(--color-${name}-${i+1}00${!includeDefault ? '': ', '+c})',</div>\n`
+  },`<div class="pl-3">DEFAULT: 'var(--color-${name}${!includeDefault ? '' : ', ' + toHsla(masterColor)})',</div>`)
+}
+export const shadesAsTailwind = (name,masterColor,shades) => {
+  if (!name || name === '') name = hueName(parseToHsla(masterColor)[0])
+  return shades.reduce((p,c,i) => {
+    return `${p}<div class="pl-3">'${i+1}00': '${c}',</div>\n`
+  },`<div class="pl-3">DEFAULT: '${masterColor}',</div>`)
+}
 const shades = (color) => {
   let arr = [toHsla(color)]
   for (let i = 1; i < _steps; i++) {

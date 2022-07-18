@@ -10,9 +10,10 @@
 	import ColorPatch from '$lib/components/color-patch.svelte'
 	import SettingsScheme from '$lib/components/settings-scheme.svelte'
 	import SettingsShades from '$lib/components/settings-shades.svelte'
+	import VarsOutput from '$lib/components/vars-output.svelte'
 
-	import { schemes, schemeColors, unsubs, updateHSLA } from '$lib'
-	import { hue, saturation, lightness, alpha, primaryColor, scheme, steps, factorLightness, factorSaturation } from '$lib/stores'
+	import { schemes, schemeColors, unsubs, updateHSLA, shadesAsCSS } from '$lib'
+	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, factorLightness, factorSaturation } from '$lib/stores'
 
 	
 	export let lightnessPercent = $factorLightness*100
@@ -83,10 +84,18 @@
 	<SettingsScheme />
 	<SettingsShades />
 </div>
-{#each allColors as {color, name, shades, hue, description}}
-	<ColorPatch {color} {description} {name} {shades} {hue} 
+{#each allColors as {color, shades, description}, i}
+	<ColorPatch {color} {description} {shades} schemeIndex={i}
 	on:updateColor={updateColor} />
 {/each}
+
+<div class="prose">
+	<h2>All Vars CSS</h2>
+	{#each allColors as {color, name, shades}, i}
+		{@html shadesAsCSS(($colorNames[i]) ? $colorNames[i] : name,color,shades)}
+	{/each}
+</div>
+
 
 <About />
 

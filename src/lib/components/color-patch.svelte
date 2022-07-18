@@ -1,24 +1,26 @@
 <script>
-import { darken, readableColor, toHsla } from 'color2k'
+import { lighten, parseToHsla, readableColor, toHsla } from 'color2k'
 import { XIcon } from 'svelte-feather-icons'
 import { clickOutside } from 'svelte-use-click-outside'
 import Swatch from './swatch.svelte'
 import VarsOutput from './vars-output.svelte'
 
 import { dots, hueName } from '$lib'
+import { colorNames } from '$lib/stores'
 
-export let name = 'color'
+export let name = ''
 export let color = 'black'
-export let hue = 0
 export let description = 'Color'
 export let shades = ['white']
+export let schemeIndex = 0
 
 let hidden = true
 let includeDefault = false
 
 $: lastShade = shades[shades.length-1]
-$: darkerColor = darken(color,0.075)
-$: name = hueName(hue)
+$: inputColor = lighten(color,0.40)
+$: hue = parseToHsla(color)[0].toFixed()
+$: $colorNames[schemeIndex] = name
 </script>
 
 <div class="name" style="
@@ -26,7 +28,8 @@ background: {lastShade};
 color: {readableColor(lastShade)}; 
 background: linear-gradient(90deg, {lastShade} 10%, {shades[0]} 90%;">
   <input bind:value={name}
-    size={name.length}
+    placeholder={hueName(hue)}
+    size={5}
     class="varName"
     style="background:{lastShade};">
 {#if description}<em>({description} = {hue}°)</em>{/if}
@@ -39,9 +42,9 @@ background: linear-gradient(90deg, {lastShade} 10%, {shades[0]} 90%;">
       <div class="var-title">
         <label class="py-1 pl-2" style="color: {color}; background-color: {readableColor(color)};">
           var:
-          <input bind:value={name} class="border-1 px-1"
+          <input placeholder={hueName(hue)} bind:value={name} class="border-1 px-1"
           size={name.length}
-          style="background-color: {darkerColor}; color: {readableColor(darkerColor)}; border-color: {readableColor(darkerColor)}">
+          style="background-color: {inputColor}; color: {readableColor(inputColor)}; border-color: {readableColor(inputColor)}">
         </label>
         <button title="close" class="close flex" on:click={() => hidden = true}><XIcon size="1.5x" /></button>
       </div>

@@ -1,15 +1,17 @@
 <script>
-  import { toHsla } from 'color2k'
+  import { parseToHsla, toHsla } from 'color2k'
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
-  import { notice } from '$lib'
+  import { hueName, notice, shadesAsCSS, shadesAsTailwind, shadesAsTailwindAndCSS } from '$lib'
 
   export let type = 'CSS'
-  export let name = 'color'
+  export let name = ''
   export let color = 'black'
   export let shades = ['white']
   export let showIncludeDefault = false
   export let includeDefault = false
+  $: hue = parseToHsla(color)[0]
+  $: hName = hueName(hue)
 
   function copyClick(event) {
     const varsOutput = event.srcElement.closest('.vars-output')
@@ -43,12 +45,9 @@
     {#if type === "Tailwind+CSS"}
     <div class="muted">colors: &lbrace;</div>
     <div class="copyTarget">
-      <div>
-        {name}: &lbrace;
-          <div>DEFAULT: 'var(--color-{name}{#if includeDefault}, {toHsla(color)}{/if})',</div>
-          {#each shades as c, i}
-            <div>'{i+1}00': 'var(--color-{name}-{i+1}00{#if includeDefault}, {toHsla(c)}{/if})',</div>
-          {/each}
+      <div class="pl-3">
+        '{name || hName}': &lbrace;
+        {@html shadesAsTailwindAndCSS( name, color, shades, includeDefault )}          
           &rbrace;,
       </div>
     </div>
@@ -56,27 +55,17 @@
     {:else if type === "Tailwind"}
     <div class="muted">colors: &lbrace;</div>
     <div class="copyTarget">
-      <div>
-        {name}: &lbrace;
-          <div>DEFAULT: '{toHsla(color)}',</div>
-          {#each shades as c, i}
-            <div>'{i+1}00': '{toHsla(c)}',</div>
-          {/each}
-          &rbrace;,
+      <div class="pl-3">
+        '{name || hName}': &lbrace;
+        {@html shadesAsTailwind( name, color, shades )}
+        &rbrace;,
       </div>
     </div>
     <div class="muted">&rbrace;,</div>
     {:else}
     <div class="muted">::root &lbrace;</div>
     <div class="copyTarget">
-      <div>
-        --color-{name}: {toHsla(color)};
-      </div>
-      {#each shades as c, i}
-      <div>
-        --color-{name}-{i+1}00: {c};
-      </div>
-      {/each}
+      {@html shadesAsCSS( name, color, shades )}
     </div>
     <div class="muted">&rbrace;</div>
     {/if}
@@ -89,9 +78,6 @@
   }
   .vars {
     @apply font-mono text-xs;
-  }
-  .vars div div {
-    padding-left: 2ch;
   }
   .muted {
     @apply opacity-50 italic;

@@ -12,3 +12,5 @@ export const hue = writable(250)
 export const saturation = writable(0.65)
 export const lightness = writable(0.45)
 export const alpha = writable(1)
+
+export const colorNames = writable([])
