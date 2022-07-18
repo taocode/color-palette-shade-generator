@@ -24,12 +24,11 @@ unsubs.push(factorSaturation.subscribe(value => {
 export const hueNames = [
   {red:0},
   {orangered:16},
-  {orange:33},
+  {orange:30},
   {goldenrod:43},
   {gold:51},
   {yellow:60},
-  {yellowgreen:80},
-  {chartreuse:90},
+  {yellowgreen:85},
   {green:120},
   {seagreen:147},
   {aquamarine:160},
@@ -38,21 +37,19 @@ export const hueNames = [
   {cornflowerblue:219},
   {royalblue:225},
   {blue:240},
-  {slateblue:248},
-  {blueviolet:271},
-  {indigo:275},
+  {blueviolet:265},
   {purple:285},
   {magenta:300},
   {mediumvioletred:322},
   {violetred:340},
-  {crimson:348},
+  {red:360}
 ]
 export const hueName = (hue) => {
   return hueNames.reduce((p,c,i) => {
     const pi = ((i>0) ? i : hueNames.length) - 1
     const [prev, ph] = Object.entries(hueNames[pi])[0]
     const [name, h] = Object.entries(c)[0]
-    return (hue <= h && hue > ph) ? `${p}${name}` : `${p}`
+    return (hue < h && hue >= ph) ? `${p}${prev}` : `${p}`
   },'')
 }
 
