@@ -14,7 +14,7 @@ export let description = 'Color'
 export let shades = ['white']
 export let schemeIndex = 0
 
-let hidden = false
+let hidden = true
 let includeDefault = false
 
 $: lastShade = shades[shades.length-1]
@@ -24,16 +24,16 @@ $: $colorNames[schemeIndex] = name
 </script>
 
 <div class="name" style="
-background: {lastShade};
-color: {shades[0]}; 
-background: linear-gradient(90deg, {lastShade} 10%, {shades[0]} 90%;">
+--color-background: {lastShade};
+--color-foreground: {shades[0]};
+">
   <input bind:value={name}
     placeholder={hueName(hue)}
     size={5}
     class="varName"
     style="--color-background:{lastShade}; 
     --color-foreground: {shades[0]}; 
-    --color-placeholder:{shades[1]};">
+    --color-placeholder:{shades[3]};">
 {#if description}<em>({description} = {hue}°)</em>{/if}
   <button class="border border-transparent hover:border-current rounded p-1 text-xs"
   on:click={() => { hidden = ! hidden }}>{@html dots}</button>
@@ -72,6 +72,16 @@ background: linear-gradient(90deg, {lastShade} 10%, {shades[0]} 90%;">
 <style lang="postcss">
   .name {
 		@apply px-4 py-2;
+    --start-percent: 50%;
+    background: var(--color-background);
+    color: var(--color-foreground); 
+    background: linear-gradient(90deg, var(--color-background) var(--start-percent), var(--color-foreground) 100%);
+    @screen xs {
+      --start-percent: 33%;
+    }
+    @screen sm {
+      --start-percent: 20%;
+    }
 	}
   .close {
     @apply bg-white text-dark-300 rounded-sm float-right;
@@ -80,13 +90,13 @@ background: linear-gradient(90deg, {lastShade} 10%, {shades[0]} 90%;">
     @apply text-xl p-1 pl-2 inline-block;
   }
   input {
+    @apply font-500 max-w-30 border-0 pl-2;
     background-color: var(--color-background);
     color: var(--color-foreground);
-    @apply font-500 max-w-30 border-0 pl-2;
   }
   ::placeholder {
+    @apply font-300;
     color: var(--color-placeholder);
-    font-weight: 300;
   }
   .varName {
     /* @apply w-max-w-16; */
@@ -102,7 +112,6 @@ background: linear-gradient(90deg, {lastShade} 10%, {shades[0]} 90%;">
     background-color: var(--color-background);
   }
   .var-panels {
-    @apply lg:(grid gap-2 grid-cols-3)
+    @apply lg:(grid gap-2 grid-cols-3);
   }
-
 </style>
