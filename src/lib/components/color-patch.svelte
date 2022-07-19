@@ -1,5 +1,5 @@
 <script>
-import { lighten, parseToHsla, readableColor, toHsla } from 'color2k'
+import { darken, lighten, parseToHsla, readableColor, toHsla } from 'color2k'
 import { XIcon } from 'svelte-feather-icons'
 import { clickOutside } from 'svelte-use-click-outside'
 import Swatch from './swatch.svelte'
@@ -18,7 +18,8 @@ let hidden = true
 let includeDefault = false
 
 $: lastShade = shades[shades.length-1]
-$: inputColor = lighten(color,0.40)
+$: inputColor = lighten(color,0.30)
+$: placeholderColor = lighten(color,0.2)
 $: hue = parseToHsla(color)[0].toFixed()
 $: $colorNames[schemeIndex] = name
 </script>
@@ -31,20 +32,20 @@ background: linear-gradient(90deg, {lastShade} 10%, {shades[0]} 90%;">
     placeholder={hueName(hue)}
     size={5}
     class="varName"
-    style="background:{lastShade};">
+    style="background:{lastShade}; --color-placeholder:{lighten(color,0.25)};">
 {#if description}<em>({description} = {hue}°)</em>{/if}
   <button class="border border-transparent hover:border-current rounded p-1 text-xs"
   on:click={() => { hidden = ! hidden }}>{@html dots}</button>
   <div class="fixed hidden bg-dark-900 bg-opacity-80 inset-0 flex z-10" class:hidden>
     <div class="details"
       use:clickOutside={() => hidden = true}
-      style="background-color: {color}; color: {readableColor(color)}">
+      style="--color-background: {color}; --color-foreground: {readableColor(color)}">
       <div class="var-title">
         <label class="py-1 pl-2" style="color: {color}; background-color: {readableColor(color)};">
           var:
           <input placeholder={hueName(hue)} bind:value={name} class="border-1 px-1"
           size={name.length}
-          style="background-color: {inputColor}; color: {readableColor(inputColor)}; border-color: {readableColor(inputColor)}">
+          style="--color-placeholder: {darken(color,0.3)}; background-color: {inputColor}; color: {readableColor(inputColor)}; border-color: {readableColor(inputColor)};">
         </label>
         <button title="close" class="close flex" on:click={() => hidden = true}><XIcon size="1.5x" /></button>
       </div>
@@ -85,6 +86,10 @@ background: linear-gradient(90deg, {lastShade} 10%, {shades[0]} 90%;">
     transition duration-200 shadow-lg 
     max-h-[90vh] max-w-[95vw] overflow-auto
     ;
+    background-color: var(--color-background);
+  }
+  ::placeholder {
+    color: var(--color-placeholder);
   }
   .var-panels {
     @apply lg:(grid gap-2 grid-cols-3)
