@@ -81,6 +81,7 @@
 		}
 	}
 let includeDefaults = true
+let showAll = false
 </script>
 
 <svelte:head>
@@ -98,27 +99,42 @@ let includeDefaults = true
 	<ColorPatch {color} name={$colorNames[i]} {description} {shades} schemeIndex={i}
 	on:updateColor={updateColor} />
 {/each}
-
-<div class="prose">
-	<h2>All Vars CSS</h2>
-	{#each allColors as {color, name, shades}, i}
-		{@html shadesAsCSS(($colorNames[i]) ? $colorNames[i] : name,color,shades)}
-	{/each}
-	<h2>All Vars Tailwind+CSS</h2>
-	<div>colors: &lbrace;</div>
-	{#each allColors as {color, name, shades}, i}
-		<div>{$colorNames[i] || name}: &lbrace;</div>
-		{@html shadesAsTailwindAndCSS($colorNames[i] || name,color,shades,includeDefaults)}
-		<div>&rbrace;,</div>
-	{/each}
-	<div>&rbrace;,</div>
-	<h2>Tailwind</h2>
-	<div>colors: &lbrace;</div>
-	{#each allColors as {color, name, shades}, i}
-		<div>{$colorNames[i] || name}: &lbrace;</div>
-		{@html shadesAsTailwind($colorNames[i] || name,color,shades)}
-		<div>&rbrace;,</div>
-	{/each}
+<div class="text-center my-6"><button class="py-2 px-6"
+	 on:click={() => showAll = ! showAll }
+	 style="background-color:{$primaryColor}; color: {readableColor($primaryColor)}">
+	{#if showAll}Hide{:else}Show{/if} All Vars
+</button></div>
+<div class="prose mx-auto hidden px-5" class:hidden={!showAll}>
+	<div class="code">
+		<h2>All Vars CSS</h2>
+		<div class="muted">::root &lbrace;</div>
+		<div class="pl-3">
+			{#each allColors as {color, name, shades}, i}
+				{@html shadesAsCSS(($colorNames[i]) ? $colorNames[i] : name,color,shades)}
+			{/each}
+		</div>
+		<div class="muted">&rbrace;</div>
+		<h2>All Vars Tailwind+CSS</h2>
+		<div class="muted">colors: &lbrace;</div>
+		<div class="pl-3">
+			{#each allColors as {color, name, shades}, i}
+				<div>{$colorNames[i] || name}: &lbrace;</div>
+				{@html shadesAsTailwindAndCSS($colorNames[i] || name,color,shades,includeDefaults)}
+				<div>&rbrace;,</div>
+			{/each}
+		</div>
+		<div class="muted">&rbrace;,</div>
+		<h2>Tailwind</h2>
+		<div class="muted">colors: &lbrace;</div>
+		<div class="pl-3">
+			{#each allColors as {color, name, shades}, i}
+				<div>{$colorNames[i] || name}: &lbrace;</div>
+				{@html shadesAsTailwind($colorNames[i] || name,color,shades)}
+				<div>&rbrace;,</div>
+			{/each}
+		</div>
+		<div class="muted">&rbrace;</div>
+	</div>
 </div>
 
 
@@ -127,5 +143,8 @@ let includeDefaults = true
 <style lang="postcss">
 	h1 {
 		@apply text-3xl text-center p-4 font-semibold;
+	}
+	.muted {
+		@apply opacity-60;
 	}
 </style>
