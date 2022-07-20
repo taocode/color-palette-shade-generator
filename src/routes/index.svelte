@@ -12,7 +12,7 @@
 	import SettingsShades from '$lib/components/settings-shades.svelte'
 	import VarsOutput from '$lib/components/vars-output.svelte'
 
-	import { schemes, schemeColors, unsubs, updateHSLA, shadesAsCSS } from '$lib'
+	import { schemes, schemeColors, unsubs, updateHSLA, shadesAsCSS, shadesAsTailwindAndCSS, shadesAsTailwind } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, factorLightness, factorSaturation } from '$lib/stores'
 
 	
@@ -28,6 +28,10 @@
 			if (searchParams.has('steps')) steps.set( parseInt(searchParams.get('steps')) )
 			if (searchParams.has('pL')) factorLightness.set( 0.01 * parseFloat(searchParams.get('pL')) )
 			if (searchParams.has('pS')) factorSaturation.set( 0.01 * parseFloat(searchParams.get('pS')) )
+			const colorNamesSP = new Array(3).fill('c')
+				.map((c,i) => searchParams.has(c+i) ? searchParams.get(c+i) : '')
+			// console.log('onMount(colorNamesSearchParams)',{colorNamesSP,searchParams})
+			colorNames.set(colorNamesSP)
 			// console.log('start color', {searchParams}, $page.url)
 			allColors = schemeColors(schemes[$scheme],$primaryColor)
 		}
@@ -65,12 +69,18 @@
 				pL: $factorLightness*100,
 				pS: $factorSaturation*100,
 			}
+			$colorNames.forEach((name,i) => {
+				if (name && name !== '') {
+					state[`c${i}`] = name
+				}
+			})
+			// console.log('colornames:',{$colorNames,state})
 			const params = new URLSearchParams(state)
 			// console.log(params.toString(),{params})
 			history.replaceState(state,'',`?${params}`)
 		}
 	}
-
+let includeDefaults = true
 </script>
 
 <svelte:head>
@@ -85,7 +95,7 @@
 	<SettingsShades />
 </div>
 {#each allColors as {color, shades, description}, i}
-	<ColorPatch {color} {description} {shades} schemeIndex={i}
+	<ColorPatch {color} name={$colorNames[i]} {description} {shades} schemeIndex={i}
 	on:updateColor={updateColor} />
 {/each}
 
@@ -93,6 +103,21 @@
 	<h2>All Vars CSS</h2>
 	{#each allColors as {color, name, shades}, i}
 		{@html shadesAsCSS(($colorNames[i]) ? $colorNames[i] : name,color,shades)}
+	{/each}
+	<h2>All Vars Tailwind+CSS</h2>
+	<div>colors: &lbrace;</div>
+	{#each allColors as {color, name, shades}, i}
+		<div>{$colorNames[i] || name}: &lbrace;</div>
+		{@html shadesAsTailwindAndCSS($colorNames[i] || name,color,shades,includeDefaults)}
+		<div>&rbrace;,</div>
+	{/each}
+	<div>&rbrace;,</div>
+	<h2>Tailwind</h2>
+	<div>colors: &lbrace;</div>
+	{#each allColors as {color, name, shades}, i}
+		<div>{$colorNames[i] || name}: &lbrace;</div>
+		{@html shadesAsTailwind($colorNames[i] || name,color,shades)}
+		<div>&rbrace;,</div>
 	{/each}
 </div>
 

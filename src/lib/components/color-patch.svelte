@@ -8,11 +8,11 @@ import VarsOutput from './vars-output.svelte'
 import { dots, hueName } from '$lib'
 import { colorNames } from '$lib/stores'
 
-export let name = ''
 export let color = 'black'
 export let description = 'Color'
 export let shades = ['white']
 export let schemeIndex = 0
+export let name = $colorNames[schemeIndex]
 
 let hidden = true
 let includeDefault = false
@@ -33,7 +33,7 @@ $: $colorNames[schemeIndex] = name
     class="varName"
     style="--color-background:{lastShade}; 
     --color-foreground: {shades[0]}; 
-    --color-placeholder:{shades[3]};">
+    --color-placeholder:{shades[2]};">
 {#if description}<em>({description} = {hue}°)</em>{/if}
   <button class="border border-transparent hover:border-current rounded p-1 text-xs"
   on:click={() => { hidden = ! hidden }}>{@html dots}</button>
@@ -45,7 +45,7 @@ $: $colorNames[schemeIndex] = name
         <label class="" style="color: {color}; background-color: {lastShade};">
           var:
           <input placeholder={hueName(hue)} bind:value={name} class="border-1 ml-1"
-          size={name.length}
+          size={name?.length || 6}
           style="--color-placeholder: {darken(color,0.175)}; --color-background: {inputColor}; --color-foreground: {darken(color,0.25)}; border-color: {readableColor(inputColor)};">
         </label>
         <button title="close" class="close flex" on:click={() => hidden = true}><XIcon size="1.5x" /></button>
