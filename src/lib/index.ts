@@ -23,25 +23,22 @@ unsubs.push(factorSaturation.subscribe(value => {
 
 export const hueNames = [
   {red:0},
-  {orangered:16},
+  {orangered:15},
   {orange:30},
-  {goldenrod:43},
-  {gold:51},
+  {goldenrod:45},
   {yellow:60},
-  {yellowgreen:85},
+  {yellowgreen:90},
   {green:120},
-  {seagreen:147},
+  {seagreen:145},
   {aquamarine:160},
   {aqua:180},
   {skyblue:195},
-  {cornflowerblue:219},
   {royalblue:225},
   {blue:240},
   {blueviolet:265},
   {purple:285},
   {magenta:300},
-  {mediumvioletred:322},
-  {violetred:340},
+  {redviolet:330},
   {red:360}
 ]
 export const hueName = (hue) => {
