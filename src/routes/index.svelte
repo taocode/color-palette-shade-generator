@@ -10,9 +10,9 @@
 	import ColorPatch from '$lib/components/color-patch.svelte'
 	import SettingsScheme from '$lib/components/settings-scheme.svelte'
 	import SettingsShades from '$lib/components/settings-shades.svelte'
-	import VarsOutput from '$lib/components/vars-output.svelte'
+	import AllVarsOutput from '$lib/components/all-vars-output.svelte'
 
-	import { schemes, schemeColors, unsubs, updateHSLA, shadesAsCSS, shadesAsTailwindAndCSS, shadesAsTailwind } from '$lib'
+	import { schemes, schemeColors, unsubs, updateHSLA } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, factorLightness, factorSaturation } from '$lib/stores'
 
 	
@@ -81,7 +81,7 @@
 		}
 	}
 let includeDefaults = true
-let showAll = false
+let showAll = true
 </script>
 
 <svelte:head>
@@ -105,36 +105,7 @@ let showAll = false
 	{#if showAll}Hide{:else}Show{/if} All Vars
 </button></div>
 <div class="prose mx-auto hidden px-5" class:hidden={!showAll}>
-	<div class="code">
-		<h2>All Vars CSS</h2>
-		<div class="muted">::root &lbrace;</div>
-		<div class="pl-3">
-			{#each allColors as {color, name, shades}, i}
-				{@html shadesAsCSS(($colorNames[i]) ? $colorNames[i] : name,color,shades)}
-			{/each}
-		</div>
-		<div class="muted">&rbrace;</div>
-		<h2>All Vars Tailwind+CSS</h2>
-		<div class="muted">colors: &lbrace;</div>
-		<div class="pl-3">
-			{#each allColors as {color, name, shades}, i}
-				<div>{$colorNames[i] || name}: &lbrace;</div>
-				{@html shadesAsTailwindAndCSS($colorNames[i] || name,color,shades,includeDefaults)}
-				<div>&rbrace;,</div>
-			{/each}
-		</div>
-		<div class="muted">&rbrace;,</div>
-		<h2>Tailwind</h2>
-		<div class="muted">colors: &lbrace;</div>
-		<div class="pl-3">
-			{#each allColors as {color, name, shades}, i}
-				<div>{$colorNames[i] || name}: &lbrace;</div>
-				{@html shadesAsTailwind($colorNames[i] || name,color,shades)}
-				<div>&rbrace;,</div>
-			{/each}
-		</div>
-		<div class="muted">&rbrace;</div>
-	</div>
+	<AllVarsOutput type="Tailwind" {allColors}/>
 </div>
 
 

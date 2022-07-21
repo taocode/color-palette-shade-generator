@@ -131,17 +131,21 @@ export const shadesAsCSS = (name,masterColor,shades) => {
     return `${p}<div class="pl-3">--color-${name}-${i+1}00: ${c};</div>\n`
   },`<div class="pl-3">--color-${name}: ${masterColor};</div>`)
 }
-export const shadesAsTailwindAndCSS = (name,masterColor,shades,includeDefault) => {
+export const shadesAsTailwind = (name,masterColor,shades,varOpt='both') => {
   if (!name || name === '') name = hueName(parseToHsla(masterColor)[0])
+  let varValue = `'var(--color-${name}, ${masterColor})'`
+  if (varOpt === 'varonly')
+    varValue = `'var(--color-${name})'`
+  else if (varOpt === 'novar') 
+    varValue = `'${masterColor}'`
   return shades.reduce((p,c,i) => {
-    return `${p}<div class="pl-3">'${i+1}00': 'var(--color-${name}-${i+1}00${!includeDefault ? '': ', '+c})',</div>\n`
-  },`<div class="pl-3">DEFAULT: 'var(--color-${name}${!includeDefault ? '' : ', ' + toHsla(masterColor)})',</div>`)
-}
-export const shadesAsTailwind = (name,masterColor,shades) => {
-  if (!name || name === '') name = hueName(parseToHsla(masterColor)[0])
-  return shades.reduce((p,c,i) => {
-    return `${p}<div class="pl-3">'${i+1}00': '${c}',</div>\n`
-  },`<div class="pl-3">DEFAULT: '${masterColor}',</div>`)
+    varValue = `'var(--color-${name}-${i+1}00, ${c})'`
+    if (varOpt === 'varonly')
+      varValue = `'var(--color-${name}-${i+1}00)'`
+    else if (varOpt === 'novar')
+      varValue = `'${c}'`
+    return `${p}<div class="pl-3">'${i+1}00': ${varValue},</div>` 
+  },`<div class="pl-3">DEFAULT: ${varValue},</div>\n`)
 }
 const shades = (color) => {
   let arr = [toHsla(color)]

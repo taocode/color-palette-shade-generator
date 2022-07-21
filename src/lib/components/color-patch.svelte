@@ -55,9 +55,6 @@ $: $colorNames[schemeIndex] = name
           <VarsOutput type="CSS" {name} {color} {shades} />
         </div>
         <div>
-          <VarsOutput type="Tailwind+CSS" {name} {color} {shades} {includeDefault} showIncludeDefault />
-        </div>
-        <div>
           <VarsOutput type="Tailwind" {name} {color} {shades} />
         </div>
       </div>

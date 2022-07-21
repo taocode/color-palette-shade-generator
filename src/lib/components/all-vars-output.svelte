@@ -3,14 +3,15 @@
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
   import { hueName, notice, shadesAsCSS, shadesAsTailwind } from '$lib'
+  import { colorNames } from '$lib/stores'
 
   export let type = 'CSS'
   export let name = ''
-  export let color = 'black'
-  export let shades = ['white']
-  export let tailwindVarOpt = 'both'
-  let showVarOpt = type === 'Tailwind'
-  $: hue = parseToHsla(color)[0]
+  export let allColors = []
+  export let showIncludeDefault = false
+  export let includeDefault = false
+  $: color = allColors[0]?.color || 'black'
+  $: hue = parseToHsla(color)[0].toFixed()
   $: hName = hueName(hue)
 
   function copyClick(event) {
@@ -33,35 +34,41 @@
     }
   }
 </script>
-<div class="vars-output {type.toLocaleLowerCase()}">
+ALLVARS
+<div class="all-vars-output {type.toLocaleLowerCase()}">
   <button title="Copy" on:click={copyClick} class="inline-block">
     <h2 class="mr-1">{type}</h2>
     <CopyIcon size="1x" />
   </button>
-  {#if showVarOpt}
-  <select bind:value={tailwindVarOpt}>
-    <option value="novar">No CSS Variables</option>
-    <option value="varonly">Only CSS Variables</option>
-    <option value="both">CSS Variables with fallback</option>
-  </select>
-
+  {#if showIncludeDefault}
+  <label><input type="checkbox" bind:checked={includeDefault} ><PlusIcon size="1x" />default</label>
   {/if}
   <div class="vars">
     {#if type === "Tailwind"}
     <div class="muted">colors: &lbrace;</div>
     <div class="copyTarget">
       <div class="pl-3">
-        '{name || hName}': &lbrace;
-        {@html shadesAsTailwind( name, color, shades, tailwindVarOpt )}
-          &rbrace;,
+        <div class="pl-3">
+          {#each allColors as {color, name, shades}, i}
+            <div>{$colorNames[i] || name}: &lbrace;</div>
+            {@html shadesAsTailwind($colorNames[i] || name,color,shades)}
+            <div>&rbrace;,</div>
+          {/each}
+        </div>
+        &rbrace;,
       </div>
     </div>
     <div class="muted">&rbrace;,</div>
     {:else}
     <div class="muted">::root &lbrace;</div>
     <div class="copyTarget">
-      {@html shadesAsCSS( name, color, shades )}
-    </div>
+      <div class="pl-3">
+        {#each allColors as {color, name, shades}, i}
+          {@html shadesAsCSS($colorNames[i] || name,color,shades)}
+        {/each}
+      </div>
+      &rbrace;,
+  </div>
     <div class="muted">&rbrace;</div>
     {/if}
   </div>
