@@ -1,17 +1,19 @@
 <script>
-  import { parseToHsla, toHsla } from 'color2k'
+  import { parseToHsla, readableColor, toHsla } from 'color2k'
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
-  import { hueName, notice, shadesAsCSS, shadesAsTailwind } from '$lib'
+  import { hueName, notice, shadesAsCSS, shadesAsTailwind, tailwindVarOpts } from '$lib'
+  import { tailwindVarOpt } from '$lib/stores'
 
   export let type = 'CSS'
   export let name = ''
   export let color = 'black'
   export let shades = ['white']
-  export let tailwindVarOpt = 'both'
   let showVarOpt = type === 'Tailwind'
   $: hue = parseToHsla(color)[0]
   $: hName = hueName(hue)
+  let _tailwindVarOpt = $tailwindVarOpt
+  $: tailwindVarOpt.set(_tailwindVarOpt)
 
   function copyClick(event) {
     const varsOutput = event.srcElement.closest('.vars-output')
@@ -39,10 +41,11 @@
     <CopyIcon size="1x" />
   </button>
   {#if showVarOpt}
-  <select bind:value={tailwindVarOpt}>
-    <option value="novar">No CSS Variables</option>
-    <option value="varonly">Only CSS Variables</option>
-    <option value="both">CSS Variables with fallback</option>
+<select bind:value={_tailwindVarOpt}
+  style="--color-background: {color}; --color-foreground: {readableColor(color)};">
+    {#each tailwindVarOpts as o, i}
+    <option value={o[0]}>{o[1]}</option>
+    {/each}
   </select>
 
   {/if}
@@ -52,7 +55,7 @@
     <div class="copyTarget">
       <div class="pl-3">
         '{name || hName}': &lbrace;
-        {@html shadesAsTailwind( name, color, shades, tailwindVarOpt )}
+        {@html shadesAsTailwind( name, color, shades, _tailwindVarOpt )}
           &rbrace;,
       </div>
     </div>
@@ -76,5 +79,9 @@
   }
   .muted {
     @apply opacity-50 italic;
+  }
+  select {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
   }
 </style>

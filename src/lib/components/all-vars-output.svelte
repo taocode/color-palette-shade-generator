@@ -2,20 +2,21 @@
   import { parseToHsla, toHsla } from 'color2k'
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
-  import { hueName, notice, shadesAsCSS, shadesAsTailwind } from '$lib'
-  import { colorNames } from '$lib/stores'
+  import { hueName, notice, shadesAsCSS, shadesAsTailwind, tailwindVarOpts } from '$lib'
+  import { colorNames, tailwindVarOpt } from '$lib/stores'
 
   export let type = 'CSS'
   export let name = ''
   export let allColors = []
-  export let showIncludeDefault = false
-  export let includeDefault = false
+  export let showVarOpts = type === 'Tailwind'
+  export let _tailwindVarOpt = $tailwindVarOpt
+  $: tailwindVarOpt.set(_tailwindVarOpt)
   $: color = allColors[0]?.color || 'black'
   $: hue = parseToHsla(color)[0].toFixed()
   $: hName = hueName(hue)
 
   function copyClick(event) {
-    const varsOutput = event.srcElement.closest('.vars-output')
+    const varsOutput = event.srcElement.closest('.all-vars-output')
     const text = varsOutput.querySelector('.copyTarget').innerText.trim()
     const heading = varsOutput.querySelector('h2').innerText.trim()
     console.log({text,event,varsOutput})
@@ -34,14 +35,17 @@
     }
   }
 </script>
-ALLVARS
 <div class="all-vars-output {type.toLocaleLowerCase()}">
   <button title="Copy" on:click={copyClick} class="inline-block">
     <h2 class="mr-1">{type}</h2>
     <CopyIcon size="1x" />
   </button>
-  {#if showIncludeDefault}
-  <label><input type="checkbox" bind:checked={includeDefault} ><PlusIcon size="1x" />default</label>
+  {#if showVarOpts}
+  <select bind:value={_tailwindVarOpt}>
+    {#each tailwindVarOpts as o, i}
+    <option value={o[0]}>{o[1]}</option>
+    {/each}
+  </select>
   {/if}
   <div class="vars">
     {#if type === "Tailwind"}
@@ -51,12 +55,12 @@ ALLVARS
         <div class="pl-3">
           {#each allColors as {color, name, shades}, i}
             <div>{$colorNames[i] || name}: &lbrace;</div>
-            {@html shadesAsTailwind($colorNames[i] || name,color,shades)}
+            {@html shadesAsTailwind($colorNames[i] || name,color,shades,_tailwindVarOpt)}
             <div>&rbrace;,</div>
           {/each}
         </div>
-        &rbrace;,
       </div>
+      &rbrace;,
     </div>
     <div class="muted">&rbrace;,</div>
     {:else}
@@ -67,8 +71,7 @@ ALLVARS
           {@html shadesAsCSS($colorNames[i] || name,color,shades)}
         {/each}
       </div>
-      &rbrace;,
-  </div>
+    </div>
     <div class="muted">&rbrace;</div>
     {/if}
   </div>

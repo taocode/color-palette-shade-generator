@@ -15,7 +15,6 @@ export let schemeIndex = 0
 export let name = $colorNames[schemeIndex]
 
 let hidden = true
-let includeDefault = false
 
 $: lastShade = shades[shades.length-1]
 $: inputColor = lighten(color,0.30)
@@ -109,6 +108,6 @@ $: $colorNames[schemeIndex] = name
     background-color: var(--color-background);
   }
   .var-panels {
-    @apply lg:(grid gap-2 grid-cols-3);
+    @apply md:(flex gap-6 flex-cols-2);
   }
 </style>

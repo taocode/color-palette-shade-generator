@@ -125,6 +125,12 @@ export const schemes = [
   },
 ]
 
+export const tailwindVarOpts = [
+  ['novar', 'No CSS variables'],
+  ['varonly', 'Only CSS variables'],
+  ['both', 'CSS variables with fallback']
+]
+
 export const shadesAsCSS = (name,masterColor,shades) => {
   if (!name || name === '') name = hueName(parseToHsla(masterColor)[0])
   return shades.reduce((p,c,i) => {

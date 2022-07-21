@@ -13,7 +13,8 @@
 	import AllVarsOutput from '$lib/components/all-vars-output.svelte'
 
 	import { schemes, schemeColors, unsubs, updateHSLA } from '$lib'
-	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, factorLightness, factorSaturation } from '$lib/stores'
+	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, 
+		factorLightness, factorSaturation, tailwindVarOpt } from '$lib/stores'
 
 	
 	export let lightnessPercent = $factorLightness*100
@@ -44,6 +45,8 @@
 	$: primaryColor.set($hue, $saturation, $lightness, $alpha)
 	
 	let readable = readableColor("white")
+	let _tailwindVarOpt = $tailwindVarOpt
+	$: tailwindVarOpt.set(_tailwindVarOpt)
 	let allColors = []
 	
 	function updateColor(event) {
@@ -80,8 +83,7 @@
 			history.replaceState(state,'',`?${params}`)
 		}
 	}
-let includeDefaults = true
-let showAll = true
+let showAll = false
 </script>
 
 <svelte:head>
@@ -105,7 +107,8 @@ let showAll = true
 	{#if showAll}Hide{:else}Show{/if} All Vars
 </button></div>
 <div class="prose mx-auto hidden px-5" class:hidden={!showAll}>
-	<AllVarsOutput type="Tailwind" {allColors}/>
+	<AllVarsOutput type="CSS" {allColors} />
+	<AllVarsOutput type="Tailwind" {allColors} />
 </div>
 
 

@@ -14,3 +14,5 @@ export const lightness = writable(0.45)
 export const alpha = writable(1)
 
 export const colorNames = writable([])
+
+export const tailwindVarOpt = writable('novar')
