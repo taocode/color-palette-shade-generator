@@ -2,18 +2,21 @@
   import { parseToHsla, readableColor, toHsla } from 'color2k'
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
-  import { hueName, notice, shadesAsCSS, shadesAsTailwind, tailwindVarOpts } from '$lib'
-  import { tailwindVarOpt } from '$lib/stores'
+  import { hueName, notice, shadesAsCSS, shadesAsTailwind } from '$lib'
+  import { varOptTailwind, varOptCSS } from '$lib/stores'
+
+  import SettingVarTailwind from './setting-var-tailwind.svelte'
+  import SettingVarCss from './setting-var-css.svelte'
 
   export let type = 'CSS'
   export let name = ''
   export let color = 'black'
   export let shades = ['white']
-  let showVarOpt = type === 'Tailwind'
+
   $: hue = parseToHsla(color)[0]
   $: hName = hueName(hue)
-  let _tailwindVarOpt = $tailwindVarOpt
-  $: tailwindVarOpt.set(_tailwindVarOpt)
+  $: _varOptCSS = $varOptCSS
+  $: _varOptTailwind = $varOptTailwind
 
   function copyClick(event) {
     const varsOutput = event.srcElement.closest('.vars-output')
@@ -40,14 +43,11 @@
     <h2 class="mr-1">{type}</h2>
     <CopyIcon size="1x" />
   </button>
-  {#if showVarOpt}
-<select bind:value={_tailwindVarOpt}
-  style="--color-background: {color}; --color-foreground: {readableColor(color)};">
-    {#each tailwindVarOpts as o, i}
-    <option value={o[0]}>{o[1]}</option>
-    {/each}
-  </select>
-
+  {#if type === 'CSS'}
+  <SettingVarCss fixedColor={color} />
+  {/if}
+  {#if type === 'Tailwind'}
+  <SettingVarTailwind fixedColor={color} />
   {/if}
   <div class="vars">
     {#if type === "Tailwind"}
@@ -55,7 +55,7 @@
     <div class="copyTarget">
       <div class="pl-3">
         '{name || hName}': &lbrace;
-        {@html shadesAsTailwind( name, color, shades, _tailwindVarOpt )}
+        {@html shadesAsTailwind( name, color, shades, _varOptCSS, _varOptTailwind )}
           &rbrace;,
       </div>
     </div>
@@ -63,7 +63,7 @@
     {:else}
     <div class="muted">::root &lbrace;</div>
     <div class="copyTarget">
-      {@html shadesAsCSS( name, color, shades )}
+      {@html shadesAsCSS( name, color, shades, _varOptCSS )}
     </div>
     <div class="muted">&rbrace;</div>
     {/if}

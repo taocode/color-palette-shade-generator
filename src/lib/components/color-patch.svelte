@@ -1,12 +1,13 @@
 <script>
 import { darken, lighten, parseToHsla, readableColor, toHsla } from 'color2k'
-import { XIcon } from 'svelte-feather-icons'
+import { XIcon, CopyIcon } from 'svelte-feather-icons'
+import TailwindIcon from '$lib/components/svg/tailwind.svelte'
 import { clickOutside } from 'svelte-use-click-outside'
 import Swatch from './swatch.svelte'
 import VarsOutput from './vars-output.svelte'
 
 import { dots, hueName } from '$lib'
-import { colorNames } from '$lib/stores'
+import { colorNames, varOptCSS, varOptTailwind } from '$lib/stores'
 
 export let color = 'black'
 export let description = 'Color'
@@ -20,26 +21,37 @@ $: lastShade = shades[shades.length-1]
 $: inputColor = lighten(color,0.30)
 $: hue = parseToHsla(color)[0].toFixed()
 $: $colorNames[schemeIndex] = name
+$: {
+  $varOptCSS
+  $varOptTailwind
+}
 </script>
 
 <div class="name" style="
---color-background: {lastShade};
---color-foreground: {shades[0]};
+--color-background: {color};
+--color-foreground: {readableColor(color)};
 ">
-  <input bind:value={name}
-    placeholder={hueName(hue)}
-    size={5}
-    class="varName"
-    style="--color-background:{lastShade}; 
-    --color-foreground: {shades[0]}; 
-    --color-placeholder:{shades[2]};">
-{#if description}<em>({description} = {hue}°)</em>{/if}
-  <button class="border border-transparent hover:border-current rounded p-1 text-xs"
-  on:click={() => { hidden = ! hidden }}>{@html dots}</button>
+  <div class="flex align-middle">
+    <input bind:value={name}
+      placeholder={hueName(hue)}
+      size={name?.length || 6}
+      class="varName"
+      style="--color-background:{lastShade};
+      --color-foreground: {shades[0]};
+      --color-placeholder:{shades[2]};">
+    {#if description}
+    <em>({description} = {hue}°)</em>
+    {/if}
+    <button class="mx-3 mt-2 inline-flex text-xs" title="Copy CSS variables">
+      <CopyIcon size="1.25x" class="mr-1" /><span class="align-bottom tracking-tighter">CSS</span>
+    </button>
+    <button class="border border-transparent hover:border-current rounded px-1 "
+    on:click={() => { hidden = ! hidden }}>{@html dots}</button>
+  </div>
   <div class="fixed hidden bg-dark-900 bg-opacity-80 inset-0 flex z-10" class:hidden>
     <div class="details"
       use:clickOutside={() => hidden = true}
-      style="--color-background: {color}; --color-foreground: {shades[0]}">
+      style="--color-background: {color}; --color-foreground: {readableColor(color)}">
       <div class="var-title">
         <label class="" style="color: {color}; background-color: {lastShade};">
           var:
@@ -68,15 +80,15 @@ $: $colorNames[schemeIndex] = name
 <style lang="postcss">
   .name {
 		@apply px-4 py-2;
-    --start-percent: 50%;
+    --start-percent: 75%;
     background: var(--color-background);
     color: var(--color-foreground); 
     background: linear-gradient(90deg, var(--color-background) var(--start-percent), var(--color-foreground) 100%);
     @screen xs {
-      --start-percent: 33%;
+      --start-percent: 66%;
     }
     @screen sm {
-      --start-percent: 20%;
+      --start-percent: 40%;
     }
 	}
   .close {
@@ -95,7 +107,7 @@ $: $colorNames[schemeIndex] = name
     color: var(--color-placeholder);
   }
   .varName {
-    /* @apply w-max-w-16; */
+    @apply py-0 leading-0;
   }
   .shades {
 		@apply flex flex-wrap text-center;

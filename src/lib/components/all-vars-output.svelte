@@ -2,18 +2,21 @@
   import { parseToHsla, toHsla } from 'color2k'
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
-  import { hueName, notice, shadesAsCSS, shadesAsTailwind, tailwindVarOpts } from '$lib'
-  import { colorNames, tailwindVarOpt } from '$lib/stores'
+  import { hueName, notice, shadesAsCSS, shadesAsTailwind } from '$lib'
+  import { colorNames, varOptCSS, varOptTailwind } from '$lib/stores'
+  import SettingVarTailwind from './setting-var-tailwind.svelte'
+  import SettingVarCss from './setting-var-css.svelte'
 
   export let type = 'CSS'
   export let name = ''
   export let allColors = []
-  export let showVarOpts = type === 'Tailwind'
-  export let _tailwindVarOpt = $tailwindVarOpt
-  $: tailwindVarOpt.set(_tailwindVarOpt)
+  export let _varOptCSS = $varOptCSS
+  export let _varOptTailwind = $varOptTailwind
   $: color = allColors[0]?.color || 'black'
   $: hue = parseToHsla(color)[0].toFixed()
   $: hName = hueName(hue)
+  $: _varOptTailwind = $varOptTailwind
+  $: _varOptCSS = $varOptCSS
 
   function copyClick(event) {
     const varsOutput = event.srcElement.closest('.all-vars-output')
@@ -40,12 +43,11 @@
     <h2 class="mr-1">{type}</h2>
     <CopyIcon size="1x" />
   </button>
-  {#if showVarOpts}
-  <select bind:value={_tailwindVarOpt}>
-    {#each tailwindVarOpts as o, i}
-    <option value={o[0]}>{o[1]}</option>
-    {/each}
-  </select>
+  {#if type === "CSS"}
+  <SettingVarCss noColor />
+  {/if}
+  {#if type === "Tailwind"}
+  <SettingVarTailwind noColor />
   {/if}
   <div class="vars">
     {#if type === "Tailwind"}
@@ -55,7 +57,7 @@
         <div class="pl-3">
           {#each allColors as {color, name, shades}, i}
             <div>{$colorNames[i] || name}: &lbrace;</div>
-            {@html shadesAsTailwind($colorNames[i] || name,color,shades,_tailwindVarOpt)}
+            {@html shadesAsTailwind($colorNames[i] || name,color,shades, _varOptCSS, _varOptTailwind)}
             <div>&rbrace;,</div>
           {/each}
         </div>
@@ -68,7 +70,7 @@
     <div class="copyTarget">
       <div class="pl-3">
         {#each allColors as {color, name, shades}, i}
-          {@html shadesAsCSS($colorNames[i] || name,color,shades)}
+          {@html shadesAsCSS($colorNames[i] || name, color, shades, _varOptCSS)}
         {/each}
       </div>
     </div>

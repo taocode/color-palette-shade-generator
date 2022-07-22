@@ -1,11 +1,12 @@
-import { adjustHue, darken, lighten, parseToHsla, saturate, toHsla } from 'color2k'
+import { adjustHue, darken, lighten, parseToHsla, parseToRgba, saturate, toHex, toHsla, toRgba } from 'color2k'
 
-
-import { steps, factorLightness, factorSaturation, hue, saturation, lightness, alpha } from '$lib/stores'
+import { steps, factorLightness, factorSaturation, hue, saturation, lightness, alpha, varOptCSS, varOptTailwind } from '$lib/stores'
 
 let _steps
 let _stepFactorLightness
 let _stepFactorSaturation
+let _varOptCSS
+let _varOptTailwind
 
 export const unsubs = []
 
@@ -19,6 +20,14 @@ unsubs.push(factorLightness.subscribe(value => {
 
 unsubs.push(factorSaturation.subscribe(value => {
   _stepFactorSaturation = value
+}))
+
+unsubs.push(varOptCSS.subscribe(value => {
+  _varOptCSS = value
+}))
+
+unsubs.push(varOptTailwind.subscribe(value => {
+  _varOptTailwind = value
 }))
 
 export const hueNames = [
@@ -125,33 +134,47 @@ export const schemes = [
   },
 ]
 
-export const tailwindVarOpts = [
-  ['novar', 'No CSS variables'],
-  ['varonly', 'Only CSS variables'],
-  ['both', 'CSS variables with fallback']
-]
-
-export const shadesAsCSS = (name,masterColor,shades) => {
-  if (!name || name === '') name = hueName(parseToHsla(masterColor)[0])
-  return shades.reduce((p,c,i) => {
-    return `${p}<div class="pl-3">--color-${name}-${i+1}00: ${c};</div>\n`
-  },`<div class="pl-3">--color-${name}: ${masterColor};</div>`)
+const cssColor = (color) => {
+  // console.log(`cssColor(${_varOptCSS},${color})`)
+  if (_varOptCSS === 'RGBA') {
+    return toRgba(color)
+  } else if (_varOptCSS === '#HexA') {
+    return toHex(color)
+  } else if (_varOptCSS === '#Hex') {
+    return toHex(color).substring(0,7)
+  } else if (_varOptCSS === 'HSL') {
+    const hsl = parseToHsla(color)
+    return `hsl(${hsl[0].toFixed()}, ${(100*hsl[1]).toFixed()}%, ${(100*hsl[2]).toFixed()}%)`
+  } else if (_varOptCSS === 'RGB') {
+    const rgb = parseToRgba(color)
+    return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`
+  }
+  return toHsla(color)
 }
-export const shadesAsTailwind = (name,masterColor,shades,varOpt='both') => {
+
+export const shadesAsCSS = (name,masterColor,shades,varOpt) => {
   if (!name || name === '') name = hueName(parseToHsla(masterColor)[0])
-  let varValue = `'var(--color-${name}, ${masterColor})'`
-  if (varOpt === 'varonly')
-    varValue = `'var(--color-${name})'`
-  else if (varOpt === 'novar') 
-    varValue = `'${masterColor}'`
+  let varValue = cssColor(masterColor)
   return shades.reduce((p,c,i) => {
-    varValue = `'var(--color-${name}-${i+1}00, ${c})'`
-    if (varOpt === 'varonly')
-      varValue = `'var(--color-${name}-${i+1}00)'`
-    else if (varOpt === 'novar')
-      varValue = `'${c}'`
-    return `${p}<div class="pl-3">'${i+1}00': ${varValue},</div>` 
-  },`<div class="pl-3">DEFAULT: ${varValue},</div>\n`)
+      varValue = cssColor(c)
+      return `${p}<div class="pl-3">--color-${name}-${i+1}00: ${varValue};</div>\n`
+    },`<div class="pl-3">--color-${name}: ${varValue};</div>`)
+}
+const tailwindColor = (name, color, n = 0) => {
+  const varName = `--color-${name}` + ((n < 1) ? '' : `-${n}00` )
+  if (_varOptTailwind === 'varonly')
+    return `var(${varName})`
+  else if (_varOptTailwind === 'novar') 
+    return `${cssColor(color)}`
+  return `var(${varName}, ${cssColor(color)})`
+}
+export const shadesAsTailwind = (name,masterColor,shades,vOptCSS,vOptTailwind) => {
+  if (!name || name === '') name = hueName(parseToHsla(masterColor)[0])
+  let varValue = tailwindColor(name,masterColor)
+  return shades.reduce((p,c,i) => {
+    varValue = tailwindColor(name,c,i+1)
+    return `${p}<div class="pl-3">'${i+1}00': '${varValue}',</div>` 
+  },`<div class="pl-3">DEFAULT: '${varValue}',</div>\n`)
 }
 const shades = (color) => {
   let arr = [toHsla(color)]

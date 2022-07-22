@@ -36,24 +36,25 @@
   <div class="ml-2">{color.split(',')[2]}</div>
   <div>
     <button class="border border-transparent hover:border-current rounded px-1 text-xs"
-    on:click={() => { hidden = false }}>{@html dots}</button>
+    on:click={() => { hidden = false }}
+    tabindex={1}>{@html dots}</button>
   </div>
   <div class="fixed hidden bg-dark-900 bg-opacity-80 inset-0 flex z-10" class:hidden>
       <div class="info"
       use:clickOutside={() => hidden = true}
       style="background-color: {color}; color: {readableColor(color)}"
       >
-        <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHsla(color)}</button>
-        <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toRgba(color)}</button>
-        <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mx-1 pointer-events-none" size="1x" /> {toHex(color)}</button>
-        <button class="btn my-2" on:click={() => {updateHSLA(color,true); hidden=true;}}><Edit2Icon class="mx-1 pointer-events-none" size="1x" />Make Primary</button>
+        <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mt-1 mx-1 pointer-events-none" size="1x" /> {toHsla(color)}</button>
+        <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mt-1 mx-1 pointer-events-none" size="1x" /> {toRgba(color)}</button>
+        <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mt-1 mx-1 pointer-events-none" size="1x" /> {toHex(color)}</button>
+        <button class="btn my-2 " on:click={() => {updateHSLA(color,true); hidden=true;}}><span class="text-lg inline-block -mt-1 mx-1">φ</span> Make Primary</button>
       </div>
     </div>
   </div>
 
 <style lang="postcss">
   .btn {
-      @apply tracking-tight;
+      @apply tracking-tight flex;
   }
   .btn-copy {
     @apply whitespace-nowrap;

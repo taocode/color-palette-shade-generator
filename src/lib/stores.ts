@@ -15,4 +15,5 @@ export const alpha = writable(1)
 
 export const colorNames = writable([])
 
-export const tailwindVarOpt = writable('novar')
+export const varOptTailwind = writable('novar')
+export const varOptCSS = writable('HSLA')

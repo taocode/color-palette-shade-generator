@@ -11,10 +11,12 @@
 	import SettingsScheme from '$lib/components/settings-scheme.svelte'
 	import SettingsShades from '$lib/components/settings-shades.svelte'
 	import AllVarsOutput from '$lib/components/all-vars-output.svelte'
+	import SettingVarTailwind from '$lib/components/setting-var-tailwind.svelte'
+	import SettingVarCss from '$lib/components/setting-var-css.svelte'
 
 	import { schemes, schemeColors, unsubs, updateHSLA } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, 
-		factorLightness, factorSaturation, tailwindVarOpt } from '$lib/stores'
+		factorLightness, factorSaturation, varOptTailwind } from '$lib/stores'
 
 	
 	export let lightnessPercent = $factorLightness*100
@@ -45,8 +47,6 @@
 	$: primaryColor.set($hue, $saturation, $lightness, $alpha)
 	
 	let readable = readableColor("white")
-	let _tailwindVarOpt = $tailwindVarOpt
-	$: tailwindVarOpt.set(_tailwindVarOpt)
 	let allColors = []
 	
 	function updateColor(event) {
@@ -95,7 +95,17 @@ let showAll = false
 	<h1><ColorPaletteShadeGenerator /></h1>
 	<ColorChoose />
 	<SettingsScheme />
-	<SettingsShades />
+	<div class="flex justify-center gap-6 mx-auto">
+		<div>
+				<SettingVarCss withLabel />
+		</div>
+		<div>
+				<SettingVarTailwind withLabel />
+		</div>
+	</div>
+	<div class="my-3">
+		<SettingsShades />
+	</div>
 </div>
 {#each allColors as {color, shades, description}, i}
 	<ColorPatch {color} name={$colorNames[i]} {description} {shades} schemeIndex={i}
