@@ -178,7 +178,7 @@ export const shadesAsTailwind = (name,masterColor,shades,cssPrefix,vOptCSS,vOptT
     varValue = tailwindColor(name,c,cssPrefix,i)
     const varNum = `${i<1 ? 5 : i+'0'}0`
     return `${p}\n\t<div class="pl-3">'${varNum}': '${varValue}',</div>` 
-  },`<div class="pl-3">'DEFAULT': '${varValue}',</div>`)
+  },`<div class="pl-3">DEFAULT: '${varValue}',</div>`)
 }
 const shades = (color) => {
   let arr = [toHsla(color)]

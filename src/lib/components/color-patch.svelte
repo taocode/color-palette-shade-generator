@@ -18,7 +18,7 @@ export let shades = ['white']
 export let schemeIndex = 0
 export let name = $colorNames[schemeIndex]
 
-let hidden = true
+let hidden = false
 
 $: lastShade = shades[shades.length-1]
 $: inputColor = lighten(color,0.30)
@@ -59,13 +59,12 @@ function copyClick(event,chosen) {
 --color-light: {shades[0]};
 ">
   <div class="flex align-middle">
-    <input bind:value={name}
+    <input id="varName" 
+      bind:value={name}
       placeholder={hueName(hue)}
       size={name?.length || 6}
       class="varName"
-      style="--color-background:{lastShade};
-      --color-foreground: {shades[0]};
-      --color-placeholder:{shades[1]};">
+      >
     <button 
       on:click={(event)=>copyClick(event,'css')}
       title="Copy CSS variables"
@@ -93,22 +92,21 @@ function copyClick(event,chosen) {
       <button title="close" class="close flex absolute top-1 right-1" on:click={() => hidden = true}><XIcon size="1.5x" /></button>
       <div class="var-title">
         <div class="pl-2 flex place-items-center"
-        style="background-color: {lastShade};
-          color: {color}">
-          <div class="flex place-items-center">CSS var:</div>
+        style="">
+          <div class="flex place-items-center mr-1">CSS var:</div>
           <SettingVarCssPrefix dashDash fixedColor={color} />
-          <label for="varname{schemeIndex}" title="var name" class="" style="color: {color}; background-color: {lastShade};">
+          {#if _cssVarPrefix}
+          <label for="varname{schemeIndex}" title="var name" class="">
             -
           </label>
+          {/if}
           <input id="varname{schemeIndex}" 
             placeholder={hueName(hue)} 
             bind:value={name} 
             class="border-1 ml-1"
             size={name?.length || 6}
-            style="--color-placeholder: {darken(color,0.2)};
-                  --color-background: {inputColor};
-                  --color-foreground: {darken(color,0.2)};
-                  border-color: {readableColor(inputColor)};"
+            style="--color-placeholder: {darken(color,0.3)};
+                  border-color: var(--color-dark);"
             >
         </div>
       </div>
@@ -159,7 +157,7 @@ function copyClick(event,chosen) {
     filter: saturate(0.25);
   }
   .varName {
-    @apply py-0 leading-0;
+    @apply py-0 leading-0 max-w-20 focus:max-w-none;
   }
   .shades {
 		@apply flex flex-wrap text-center;
@@ -170,6 +168,7 @@ function copyClick(event,chosen) {
     max-h-[90vh] max-w-[95vw] overflow-auto
     ;
     background-color: var(--color-background);
+    color: var(--color-foreground);
   }
   .var-panels {
     @apply md:(flex gap-6 flex-cols-2);

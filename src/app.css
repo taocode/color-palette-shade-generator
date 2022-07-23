@@ -92,6 +92,14 @@
     @apply text-[0.8em] mt-2 mr-1;
   }
 }
+.color-patch .details {
+  input,
+  select {
+    @apply font-500;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+}
 
 .CPSG {
   @apply inline-flex justify-center place-items-center font-700;

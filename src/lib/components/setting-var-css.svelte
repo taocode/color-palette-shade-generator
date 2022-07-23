@@ -6,8 +6,8 @@
     'HSLA','RGBA','#HexA', 'HSL', 'RGB', '#Hex'
   ]
   export let noColor = false
-  export let fixedColor
-  export let color = noColor ? 'white' : $primaryColor
+  export let fixedColor = ''
+  export let color = noColor ? 'white' : (fixedColor || $primaryColor)
   export let withLabel = false
 
   $: _varOptCSS = $varOptCSS

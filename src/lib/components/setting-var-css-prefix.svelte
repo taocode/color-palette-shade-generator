@@ -3,9 +3,9 @@
   import { primaryColor, cssVarPrefix } from '$lib/stores'
 
   export let noColor = false
-  export let fixedColor
+  export let fixedColor = false
   export let dashDash = false
-  export let color = noColor ? 'white' : $primaryColor
+  export let color = noColor ? 'white' : (fixedColor || $primaryColor)
   export let label = ''
   
   $: _cssVarPrefix = $cssVarPrefix
@@ -30,13 +30,17 @@
     class="var-prefix"
     type="text"
     size={_cssVarPrefix?.length || 1}
-    style="background-color: {color};
-        color: {readableColor(color)};"
+    style="--color-background: {color};
+        --color-foreground: {readableColor(color)};"
     >
 </div>
 
 <style lang="postcss">
   .dash-dash {
     @apply flex flex-col text-xl;
+  }
+  input {
+    color: var(--color-foreground);
+    background-color: var(--color-background);
   }
 </style>

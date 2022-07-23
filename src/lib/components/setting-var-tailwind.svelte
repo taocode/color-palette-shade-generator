@@ -9,7 +9,7 @@
   ]
   export let noColor = false
   export let color = noColor ? 'white' : $primaryColor
-  export let fixedColor
+  export let fixedColor = ''
   export let withLabel = false
   // $: color = 
   $: _varOptTailwind = $varOptTailwind
