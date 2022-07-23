@@ -64,22 +64,22 @@
   <div class="vars">
     {#if type === "Tailwind"}
     <div class="muted">colors: &lbrace;</div>
-    <div class="copyTarget">
+    <div id="all-vars-tailwind" class="copyTarget">
       <div class="pl-3">
         <div class="pl-3">
-          {#each allColors as {color, name, shades}, i}
-            <div>'{$colorNames[i] || name}': &lbrace;</div>
-            {@html shadesAsTailwind($colorNames[i] || name,color,shades, _cssVarPrefix, _varOptCSS, _varOptTailwind)}
-            <div>&rbrace;,</div>
-          {/each}
+{#each allColors as {color, name, shades}, i}
+<div>'{$colorNames[i] || name}': &lbrace;</div>
+{@html shadesAsTailwind($colorNames[i] || name,color,shades, _cssVarPrefix, _varOptCSS, _varOptTailwind)}
+<div>&rbrace;,</div>
+{/each}
         </div>
       </div>
-      &rbrace;,
+&rbrace;,
     </div>
     <div class="muted">&rbrace;,</div>
     {:else}
     <div class="muted">::root &lbrace;</div>
-    <div class="copyTarget">
+    <div id="all-vars-css" class="copyTarget">
       <div class="pl-3">
         {#each allColors as {color, name, shades}, i}
           {@html shadesAsCSS($colorNames[i] || name, color, shades, _cssVarPrefix, _varOptCSS)}

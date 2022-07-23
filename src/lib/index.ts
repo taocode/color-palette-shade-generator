@@ -134,6 +134,8 @@ export const schemes = [
   },
 ]
 
+export const cssVarNum = (i) => (i<0) ? '' : (i) ? i+'00' : '50'
+
 const cssColor = (color) => {
   // console.log(`cssColor(${_varOptCSS},${color})`)
   if (_varOptCSS === 'RGBA') {
@@ -157,11 +159,12 @@ export const shadesAsCSS = (name,masterColor,shades,cssPrefix,varOpt) => {
   let varValue = cssColor(masterColor)
   return shades.reduce((p,c,i) => {
       varValue = cssColor(c)
-      return `${p}<div class="pl-3">--${cssPrefix}-${name}-${i+1}00: ${varValue};</div>\n`
+      return `${p}\n<div class="pl-3">--${cssPrefix}-${name}-${cssVarNum(i)}: ${varValue};</div>`
     },`<div class="pl-3">--${cssPrefix ? cssPrefix+'-':''}${name}: ${varValue};</div>`)
 }
-const tailwindColor = (name, color, cssPrefix, n = 0) => {
-  const varName = `--${cssPrefix}-${name}` + ((n < 1) ? '' : `-${n}00` )
+const tailwindColor = (name, color, cssPrefix, n = -1) => {
+  const vn = n < 0 ? '' : '-' + cssVarNum(n)
+  const varName = `--${cssPrefix}-${name}${vn}`
   if (_varOptTailwind === 'varonly')
     return `var(${varName})`
   else if (_varOptTailwind === 'novar') 
@@ -172,9 +175,10 @@ export const shadesAsTailwind = (name,masterColor,shades,cssPrefix,vOptCSS,vOptT
   if (!name || name === '') name = hueName(parseToHsla(masterColor)[0])
   let varValue = tailwindColor(name,masterColor,cssPrefix)
   return shades.reduce((p,c,i) => {
-    varValue = tailwindColor(name,c,cssPrefix,i+1)
-    return `${p}<div class="pl-3">'${i+1}00': '${varValue}',</div>` 
-  },`<div class="pl-3">'DEFAULT': '${varValue}',</div>\n`)
+    varValue = tailwindColor(name,c,cssPrefix,i)
+    const varNum = `${i<1 ? 5 : i+'0'}0`
+    return `${p}\n\t<div class="pl-3">'${varNum}': '${varValue}',</div>` 
+  },`<div class="pl-3">'DEFAULT': '${varValue}',</div>`)
 }
 const shades = (color) => {
   let arr = [toHsla(color)]

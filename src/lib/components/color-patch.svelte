@@ -7,7 +7,7 @@ import Swatch from './swatch.svelte'
 import VarsOutput from './vars-output.svelte'
 // import 
 
-import { dots, hueName } from '$lib'
+import { dots, hueName, notice } from '$lib'
 import { colorNames, varOptCSS, varOptTailwind, cssVarPrefix } from '$lib/stores'
 import SettingVarCss from './setting-var-css.svelte'
 import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
@@ -30,9 +30,29 @@ $: {
   $varOptCSS
   $varOptTailwind
 }
+function copyClick(event,chosen) {
+    const varsOutput = event.srcElement.closest('.color-patch').querySelector('.var-panels .'+chosen)
+    console.log({varsOutput,event},event.srcElement)
+    const text = varsOutput.querySelector('.copyTarget').innerText.trim()
+    const heading = varsOutput.querySelector('h2').innerText.trim()
+    console.log({heading,text,event,varsOutput})
+    if (!navigator.clipboard) {
+      document.execCommand('copy',false,text)
+    } else {
+      navigator.clipboard.writeText(text).then(
+        function() {
+          notice(`copied vars for: <span class="whitespace-nowrap">${heading}</span>`,varsOutput)
+        }
+      ).catch(
+        function(err) {
+          notice(`failed to copy: ${err}`,event.srcElement)
+        }
+      )
+    }
+  }
 </script>
 
-<div class="name" style="
+<div class="color-patch name" style="
 --color-background: {color};
 --color-foreground: {readableColor(lastShade)};
 --color-dark: {lastShade};
@@ -46,15 +66,23 @@ $: {
       style="--color-background:{lastShade};
       --color-foreground: {shades[0]};
       --color-placeholder:{shades[1]};">
+    <button 
+      on:click={(event)=>copyClick(event,'css')}
+      title="Copy CSS variables"
+      class="mx-3 mt-2 inline-flex text-xs" 
+    >
+      <CopyIcon size="1.25x" class="mr-1" /><span class="align-bottom tracking-tighter">CSS</span>
+    </button>
+    <button 
+      on:click={(event)=>copyClick(event,'tailwind')}
+      class="mx-3 mt-2 inline-flex text-xs" 
+      title="Copy Tailwind variables"
+    >
+      <CopyIcon size="1.25x" class="mr-1" /><span class="align-bottom tracking-tighter -mt-0.4 inline-block transform scale-60"><TailwindIcon /></span>
+    </button>
     {#if description}
     <em>({description} = {hue}°)</em>
     {/if}
-    <button class="mx-3 mt-2 inline-flex text-xs" title="Copy CSS variables">
-      <CopyIcon size="1.25x" class="mr-1" /><span class="align-bottom tracking-tighter">CSS</span>
-    </button>
-    <button class="mx-3 mt-2 inline-flex text-xs" title="Copy Tailwind variables">
-      <CopyIcon size="1.25x" class="mr-1" /><span class="align-bottom tracking-tighter -mt-0.4 inline-block transform scale-60"><TailwindIcon /></span>
-    </button>
     <button class="border border-transparent hover:border-current rounded px-1 "
     on:click={() => { hidden = ! hidden }}>{@html dots}</button>
   </div>
@@ -68,7 +96,7 @@ $: {
         style="background-color: {lastShade};
           color: {color}">
           <div class="flex place-items-center">CSS var:</div>
-          <SettingVarCssPrefix label="--" fixedColor={color} />
+          <SettingVarCssPrefix dashDash fixedColor={color} />
           <label for="varname{schemeIndex}" title="var name" class="" style="color: {color}; background-color: {lastShade};">
             -
           </label>
@@ -85,10 +113,10 @@ $: {
         </div>
       </div>
       <div class="var-panels">
-        <div>
+        <div class="css">
           <VarsOutput type="CSS" {name} {color} {shades} />
         </div>
-        <div>
+        <div class="tailwind">
           <VarsOutput type="Tailwind" {name} {color} {shades} />
         </div>
       </div>
@@ -96,8 +124,8 @@ $: {
   </div>
 </div>
 <div class="shades">
-{#each shades as color}
-  <Swatch {color} on:updateColor />
+{#each shades as color, shadeIndex}
+  <Swatch {color} {shadeIndex} on:updateColor />
 {/each}
 </div>
 <style lang="postcss">
