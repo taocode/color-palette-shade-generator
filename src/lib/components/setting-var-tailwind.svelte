@@ -33,15 +33,4 @@
 </div>
 
 <style lang="postcss">
-  .vars {
-    @apply flex flex-col sm:flex-row;
-  }
-  select {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    @apply text-[1.4em];
-  }
-  label {
-    @apply text-[0.8em] mt-2;
-  }
 </style>

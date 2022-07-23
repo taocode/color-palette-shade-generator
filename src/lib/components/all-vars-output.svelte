@@ -3,12 +3,12 @@
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
   import { hueName, notice, shadesAsCSS, shadesAsTailwind } from '$lib'
-  import { colorNames, varOptCSS, varOptTailwind } from '$lib/stores'
-  import SettingVarTailwind from './setting-var-tailwind.svelte'
+  import { colorNames, varOptCSS, varOptTailwind, cssVarPrefix } from '$lib/stores'
+  import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
   import SettingVarCss from './setting-var-css.svelte'
+  import SettingVarTailwind from './setting-var-tailwind.svelte'
 
   export let type = 'CSS'
-  export let name = ''
   export let allColors = []
   export let _varOptCSS = $varOptCSS
   export let _varOptTailwind = $varOptTailwind
@@ -17,6 +17,7 @@
   $: hName = hueName(hue)
   $: _varOptTailwind = $varOptTailwind
   $: _varOptCSS = $varOptCSS
+  $: _cssVarPrefix = $cssVarPrefix
 
   function copyClick(event) {
     const varsOutput = event.srcElement.closest('.all-vars-output')
@@ -39,16 +40,27 @@
   }
 </script>
 <div class="all-vars-output {type.toLocaleLowerCase()}">
-  <button title="Copy" on:click={copyClick} class="inline-block">
-    <h2 class="mr-1">{type}</h2>
-    <CopyIcon size="1x" />
-  </button>
-  {#if type === "CSS"}
-  <SettingVarCss noColor />
-  {/if}
-  {#if type === "Tailwind"}
-  <SettingVarTailwind noColor />
-  {/if}
+  <div class="heading">
+    <button title={`Copy ${type} vars`}  on:click={copyClick} class="flex-grow">
+      <h2 class="mr-2">{type}</h2>
+      <div class="pt-4">
+        <CopyIcon size="1x" />
+      </div>
+    </button>
+    <div class="setting-control">
+      {#if type === "CSS"}
+      <div class="border-1">
+        <SettingVarCssPrefix noColor />
+      </div>
+      <div>
+        <SettingVarCss noColor />
+      </div>
+      {/if}
+      {#if type === "Tailwind"}
+      <SettingVarTailwind noColor />
+      {/if}
+    </div>
+  </div>
   <div class="vars">
     {#if type === "Tailwind"}
     <div class="muted">colors: &lbrace;</div>
@@ -56,8 +68,8 @@
       <div class="pl-3">
         <div class="pl-3">
           {#each allColors as {color, name, shades}, i}
-            <div>{$colorNames[i] || name}: &lbrace;</div>
-            {@html shadesAsTailwind($colorNames[i] || name,color,shades, _varOptCSS, _varOptTailwind)}
+            <div>'{$colorNames[i] || name}': &lbrace;</div>
+            {@html shadesAsTailwind($colorNames[i] || name,color,shades, _cssVarPrefix, _varOptCSS, _varOptTailwind)}
             <div>&rbrace;,</div>
           {/each}
         </div>
@@ -70,7 +82,7 @@
     <div class="copyTarget">
       <div class="pl-3">
         {#each allColors as {color, name, shades}, i}
-          {@html shadesAsCSS($colorNames[i] || name, color, shades, _varOptCSS)}
+          {@html shadesAsCSS($colorNames[i] || name, color, shades, _cssVarPrefix, _varOptCSS)}
         {/each}
       </div>
     </div>
@@ -82,6 +94,15 @@
 <style lang="postcss">
   h2 {
     @apply inline-block my-2 text-xl font-semibold sm:text-2xl;
+  }
+  button {
+    @apply flex mr-4;
+  }
+  .heading {
+    @apply flex;
+  }
+  .setting-control {
+    @apply mt-2 w-w-full text-right flex-grow flex;
   }
   .vars {
     @apply font-mono text-xs;

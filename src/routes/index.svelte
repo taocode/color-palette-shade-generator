@@ -17,6 +17,7 @@
 	import { schemes, schemeColors, unsubs, updateHSLA } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, 
 		factorLightness, factorSaturation, varOptTailwind } from '$lib/stores'
+import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte';
 
 	
 	export let lightnessPercent = $factorLightness*100
@@ -91,11 +92,14 @@ let showAll = false
   <meta name="description" content="Generate a color palette using color theory with multiple shades for use with CSS, Tailwind">
 </svelte:head>
 
-<div class="pt-2 pb-6" style="color: {readable}; background-color: {$primaryColor};">
+<div class="pt-2 pb-6 top-controls" style="color: {readable}; background-color: {$primaryColor};">
 	<h1><ColorPaletteShadeGenerator /></h1>
 	<ColorChoose />
 	<SettingsScheme />
-	<div class="flex justify-center gap-6 mx-auto">
+	<div class="flex justify-center gap-4 mt-4 mx-auto">
+		<div>
+			<SettingVarCssPrefix label="CSS Var Prefix: " />
+		</div>
 		<div>
 				<SettingVarCss withLabel />
 		</div>
@@ -127,8 +131,5 @@ let showAll = false
 <style lang="postcss">
 	h1 {
 		@apply text-3xl text-center p-4 font-semibold;
-	}
-	.muted {
-		@apply opacity-60;
 	}
 </style>

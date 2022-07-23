@@ -14,7 +14,9 @@
   $: color = noColor ? 'white' : (fixedColor || $primaryColor)
 </script>
 <div class="settings vars">
+  {#if withLabel}
   <label for="varsOpt">CSS Notation:</label>
+  {/if}
   <select id="varsOpt"
   bind:value={_varOptCSS}
   on:change={()=>{varOptCSS.set(_varOptCSS)}}
@@ -27,15 +29,4 @@
 </div>
 
 <style lang="postcss">
-  .vars {
-    @apply flex flex-col sm:flex-row;
-  }
-  label {
-    @apply text-[0.8em] mt-2;
-  }
-  select {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    @apply text-[1.4em];
-  }
 </style>

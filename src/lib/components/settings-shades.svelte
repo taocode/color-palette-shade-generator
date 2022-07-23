@@ -65,6 +65,6 @@
 		}
 	}
   input {
-		@apply max-w-[4ch] text-right border-transparent leading-tight flex-shrink;
+		@apply max-w-[4ch] text-right leading-tight flex-shrink;
 	}
 </style>

@@ -3,10 +3,11 @@
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
   import { hueName, notice, shadesAsCSS, shadesAsTailwind } from '$lib'
-  import { varOptTailwind, varOptCSS } from '$lib/stores'
+  import { varOptTailwind, varOptCSS, cssVarPrefix } from '$lib/stores'
 
   import SettingVarTailwind from './setting-var-tailwind.svelte'
   import SettingVarCss from './setting-var-css.svelte'
+  // import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
 
   export let type = 'CSS'
   export let name = ''
@@ -17,6 +18,7 @@
   $: hName = hueName(hue)
   $: _varOptCSS = $varOptCSS
   $: _varOptTailwind = $varOptTailwind
+  $: _cssVarPrefix = $cssVarPrefix
 
   function copyClick(event) {
     const varsOutput = event.srcElement.closest('.vars-output')
@@ -39,23 +41,29 @@
   }
 </script>
 <div class="vars-output {type.toLocaleLowerCase()}">
-  <button title="Copy" on:click={copyClick} class="inline-block">
-    <h2 class="mr-1">{type}</h2>
-    <CopyIcon size="1x" />
-  </button>
-  {#if type === 'CSS'}
-  <SettingVarCss fixedColor={color} />
-  {/if}
-  {#if type === 'Tailwind'}
-  <SettingVarTailwind fixedColor={color} />
-  {/if}
+  <div class="heading">
+    <button title={`Copy ${type} vars`} on:click={copyClick} class="inline-block">
+      <h2 class="mr-2">{type}</h2>
+      <div class="pt-4">
+        <CopyIcon size="1x" />
+      </div>
+    </button>
+    <div class="setting-control">
+      {#if type === 'CSS'}
+      <SettingVarCss fixedColor={color} />
+      {/if}
+      {#if type === 'Tailwind'}
+      <SettingVarTailwind fixedColor={color} />
+      {/if}
+    </div>
+  </div>
   <div class="vars">
     {#if type === "Tailwind"}
     <div class="muted">colors: &lbrace;</div>
     <div class="copyTarget">
       <div class="pl-3">
         '{name || hName}': &lbrace;
-        {@html shadesAsTailwind( name, color, shades, _varOptCSS, _varOptTailwind )}
+        {@html shadesAsTailwind( name, color, shades, _cssVarPrefix, _varOptCSS, _varOptTailwind )}
           &rbrace;,
       </div>
     </div>
@@ -63,7 +71,7 @@
     {:else}
     <div class="muted">::root &lbrace;</div>
     <div class="copyTarget">
-      {@html shadesAsCSS( name, color, shades, _varOptCSS )}
+      {@html shadesAsCSS( name, color, shades, _cssVarPrefix, _varOptCSS )}
     </div>
     <div class="muted">&rbrace;</div>
     {/if}
@@ -79,9 +87,5 @@
   }
   .muted {
     @apply opacity-50 italic;
-  }
-  select {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
   }
 </style>

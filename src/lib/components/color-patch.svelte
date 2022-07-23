@@ -1,13 +1,16 @@
 <script>
-import { darken, lighten, parseToHsla, readableColor, toHsla } from 'color2k'
+import { lighten, darken, parseToHsla, readableColor, desaturate, toHsla } from 'color2k'
 import { XIcon, CopyIcon } from 'svelte-feather-icons'
 import TailwindIcon from '$lib/components/svg/tailwind.svelte'
 import { clickOutside } from 'svelte-use-click-outside'
 import Swatch from './swatch.svelte'
 import VarsOutput from './vars-output.svelte'
+// import 
 
 import { dots, hueName } from '$lib'
-import { colorNames, varOptCSS, varOptTailwind } from '$lib/stores'
+import { colorNames, varOptCSS, varOptTailwind, cssVarPrefix } from '$lib/stores'
+import SettingVarCss from './setting-var-css.svelte'
+import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
 
 export let color = 'black'
 export let description = 'Color'
@@ -21,6 +24,8 @@ $: lastShade = shades[shades.length-1]
 $: inputColor = lighten(color,0.30)
 $: hue = parseToHsla(color)[0].toFixed()
 $: $colorNames[schemeIndex] = name
+$: _cssVarPrefix = $cssVarPrefix
+$: cssVarPrefix.set(_cssVarPrefix)
 $: {
   $varOptCSS
   $varOptTailwind
@@ -29,7 +34,9 @@ $: {
 
 <div class="name" style="
 --color-background: {color};
---color-foreground: {readableColor(color)};
+--color-foreground: {readableColor(lastShade)};
+--color-dark: {lastShade};
+--color-light: {shades[0]};
 ">
   <div class="flex align-middle">
     <input bind:value={name}
@@ -38,28 +45,44 @@ $: {
       class="varName"
       style="--color-background:{lastShade};
       --color-foreground: {shades[0]};
-      --color-placeholder:{shades[2]};">
+      --color-placeholder:{shades[1]};">
     {#if description}
     <em>({description} = {hue}°)</em>
     {/if}
     <button class="mx-3 mt-2 inline-flex text-xs" title="Copy CSS variables">
       <CopyIcon size="1.25x" class="mr-1" /><span class="align-bottom tracking-tighter">CSS</span>
     </button>
+    <button class="mx-3 mt-2 inline-flex text-xs" title="Copy Tailwind variables">
+      <CopyIcon size="1.25x" class="mr-1" /><span class="align-bottom tracking-tighter -mt-0.4 inline-block transform scale-60"><TailwindIcon /></span>
+    </button>
     <button class="border border-transparent hover:border-current rounded px-1 "
     on:click={() => { hidden = ! hidden }}>{@html dots}</button>
   </div>
   <div class="fixed hidden bg-dark-900 bg-opacity-80 inset-0 flex z-10" class:hidden>
-    <div class="details"
+    <div class="details relative"
       use:clickOutside={() => hidden = true}
       style="--color-background: {color}; --color-foreground: {readableColor(color)}">
+      <button title="close" class="close flex absolute top-1 right-1" on:click={() => hidden = true}><XIcon size="1.5x" /></button>
       <div class="var-title">
-        <label class="" style="color: {color}; background-color: {lastShade};">
-          var:
-          <input placeholder={hueName(hue)} bind:value={name} class="border-1 ml-1"
-          size={name?.length || 6}
-          style="--color-placeholder: {darken(color,0.175)}; --color-background: {inputColor}; --color-foreground: {darken(color,0.25)}; border-color: {readableColor(inputColor)};">
-        </label>
-        <button title="close" class="close flex" on:click={() => hidden = true}><XIcon size="1.5x" /></button>
+        <div class="pl-2 flex place-items-center"
+        style="background-color: {lastShade};
+          color: {color}">
+          <div class="flex place-items-center">CSS var:</div>
+          <SettingVarCssPrefix label="--" fixedColor={color} />
+          <label for="varname{schemeIndex}" title="var name" class="" style="color: {color}; background-color: {lastShade};">
+            -
+          </label>
+          <input id="varname{schemeIndex}" 
+            placeholder={hueName(hue)} 
+            bind:value={name} 
+            class="border-1 ml-1"
+            size={name?.length || 6}
+            style="--color-placeholder: {darken(color,0.2)};
+                  --color-background: {inputColor};
+                  --color-foreground: {darken(color,0.2)};
+                  border-color: {readableColor(inputColor)};"
+            >
+        </div>
       </div>
       <div class="var-panels">
         <div>
@@ -81,9 +104,9 @@ $: {
   .name {
 		@apply px-4 py-2;
     --start-percent: 75%;
-    background: var(--color-background);
+    background: var(--color-dark);
     color: var(--color-foreground); 
-    background: linear-gradient(90deg, var(--color-background) var(--start-percent), var(--color-foreground) 100%);
+    background: linear-gradient(90deg, var(--color-dark) var(--start-percent), var(--color-light) 100%);
     @screen xs {
       --start-percent: 66%;
     }
@@ -95,16 +118,17 @@ $: {
     @apply bg-white text-dark-300 rounded-sm float-right;
   }
   label {
-    @apply text-xl p-1 pl-2 inline-block;
+    @apply text-xl p-1 pl-2 flex flex-col;
   }
   input {
     @apply font-500 max-w-30 border-0 pl-2;
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
-  ::placeholder {
-    @apply font-300;
+  input::placeholder {
+    @apply font-100 italic;
     color: var(--color-placeholder);
+    filter: saturate(0.25);
   }
   .varName {
     @apply py-0 leading-0;

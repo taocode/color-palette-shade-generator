@@ -5,9 +5,9 @@ import { hue, saturation, lightness, alpha, primaryColor } from '$lib/stores'
 import { updateHSLA } from '$lib';
 
 $: h = $hue
-$: lP = $lightness*100
-$: sP = $saturation*100
-$: a = $alpha
+$: lP = ($lightness*100).toFixed()
+$: sP = ($saturation*100).toFixed()
+$: a = ($alpha*1).toFixed(1)
 
 $: primaryColor.set( hsla($hue, $saturation, $lightness, $alpha) )
 $: hue.set( h )
@@ -23,13 +23,13 @@ function colorPicked({srcElement}) {
 
 <div class="choose-color">
 	<div class="flex flex-col leading-9 xs:flex-row xs:justify-center" >
-		<div class="xs:justify-end">
+		<div class="xs:justify-end mt-4">
 			<input id="colorpicker"
 				type="color" 
 				colorpick-eyedropper-active="true"
 				value={toHex($primaryColor).substring(0,7)}
 				on:change={colorPicked}
-				class="block w-3/4 h-8 mx-auto xs:w-16"
+				class="block w-3/4 h-8 mx-auto xs:w-20"
 			>
 		</div>
 		<div class="xs:ml-2">
