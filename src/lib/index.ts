@@ -73,10 +73,20 @@ export const updateHSLA = (color, fix=false) => {
   alpha.set(a)
 }
 
-export const describeScheme = ({hues, varName}) => {
-  return hues.reduce((p,c,i) => {
-    return `${p}, ${varName}` + ((hues.length > 1) ? i+1 : '' ) + ` = φ+${c.toFixed()}°`
-  }, 'primary = φ')
+export const describeScheme = ({hues, varName, names, lightnesses}) => {
+  if (hues) {
+    return hues.reduce((p,c,i) => {
+      
+      const shadeName = (names) ? names[i] : varName + (i+1)
+      
+      return `${p}, ${shadeName} = φ${c>0?'+':''}${c.toFixed()}°`
+    }, 'primary = φ')
+  } else if (lightnesses) {
+    return lightnesses?.reduce((p,c,i) => {
+      const shadeName = (names) ? names[i] : varName + (i+1)
+      return `${p}, ${shadeName} = φ${c>0?'+':''}${c.toFixed()}%`
+    }, 'primary = φ')
+  }
 }
 
 export const schemeColors = ({hues,varName},primary) => {
@@ -107,13 +117,19 @@ export const schemeColors = ({hues,varName},primary) => {
 export const dots = '<span class="tracking-widest">•••</span>'
 
 export const schemes = [
-  { id: 0, 
+  { 
     name: `Monochromatic`, 
     hues: [],
     varName: 'mono'
-  }, { id: 1, 
+  }, { 
+    name: `Dark/Light`,
+    lightnesses: [33,-33],
+    names: ['light','dark'],
+    varName: 'darklight'
+  }, { 
     name: `Complementary`,
     hues: [180],
+    names: ['complementary'],
     varName: 'complementary'
   }, { id: 2, 
     name: `Analogous`, 

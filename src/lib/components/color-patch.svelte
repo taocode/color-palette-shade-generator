@@ -1,6 +1,7 @@
 <script>
-import { lighten, darken, parseToHsla, readableColor, desaturate, toHsla } from 'color2k'
+import { lighten, darken, parseToHsla, readableColor, desaturate, toHsla, readableColorIsBlack, opacify } from 'color2k'
 import { XIcon, CopyIcon } from 'svelte-feather-icons'
+import { browser } from '$app/env'
 import TailwindIcon from '$lib/components/svg/tailwind.svelte'
 import { clickOutside } from 'svelte-use-click-outside'
 import Swatch from './swatch.svelte'
@@ -18,7 +19,7 @@ export let shades = ['white']
 export let schemeIndex = 0
 export let name = $colorNames[schemeIndex]
 
-let hidden = false
+let hidden = true
 
 $: lastShade = shades[shades.length-1]
 $: inputColor = lighten(color,0.30)
@@ -30,6 +31,20 @@ $: {
   $varOptCSS
   $varOptTailwind
 }
+if (browser) {
+  document.addEventListener('keydown', (event) => {
+        
+        if (event.key === 'Escape') {
+         //if esc key was not pressed in combination with ctrl or alt or shift
+            const isNotCombinedKey = !(event.ctrlKey || event.altKey || event.shiftKey);
+            if (isNotCombinedKey) {
+                console.log('Escape key was pressed with out any group keys')
+              hidden = true
+            }
+        }
+    });
+}
+
 function copyClick(event,chosen) {
     const varsOutput = event.srcElement.closest('.color-patch').querySelector('.var-panels .'+chosen)
     console.log({varsOutput,event},event.srcElement)
@@ -53,7 +68,8 @@ function copyClick(event,chosen) {
 </script>
 
 <div class="color-patch name" style="
---color-background: {color};
+--color-primary: {color};
+--color-background: {lastShade};
 --color-foreground: {readableColor(lastShade)};
 --color-dark: {lastShade};
 --color-light: {shades[0]};
@@ -88,13 +104,23 @@ function copyClick(event,chosen) {
   <div class="fixed hidden bg-dark-900 bg-opacity-80 inset-0 flex z-10" class:hidden>
     <div class="details relative"
       use:clickOutside={() => hidden = true}
-      style="--color-background: {color}; --color-foreground: {readableColor(color)}">
-      <button title="close" class="close flex absolute top-1 right-1" on:click={() => hidden = true}><XIcon size="1.5x" /></button>
-      <div class="var-title">
-        <div class="pl-2 flex place-items-center"
+      style="--color-background: {color}; 
+        --color-foreground: {readableColor(color)};
+        --color-desaturated: {lighten(desaturate(color,0.3),0.15)};"
+      >
+      <button title="close" class="close" on:click={() => hidden = true}
+        style="
+        --color-foreground: var(--color-light);
+        --color-background: var(--color-dark);
+        "><XIcon size="1.5x" /></button>
+      <div class="var-title"
+        style="
+        --color-background: {lastShade};
+        --color-foreground: {readableColor(lastShade)}">
+        <div class="flex place-items-center font-mono"
         style="">
           <div class="flex place-items-center mr-1">CSS var:</div>
-          <SettingVarCssPrefix dashDash fixedColor={color} />
+          <SettingVarCssPrefix dashDash fixedColor={lastShade} />
           {#if _cssVarPrefix}
           <label for="varname{schemeIndex}" title="var name" class="">
             -
@@ -103,9 +129,9 @@ function copyClick(event,chosen) {
           <input id="varname{schemeIndex}" 
             placeholder={hueName(hue)} 
             bind:value={name} 
-            class="border-1 ml-1"
+            class=""
             size={name?.length || 6}
-            style="--color-placeholder: {darken(color,0.3)};
+            style="--color-placeholder: {desaturate(lighten(color,0.2),0.1)};
                   border-color: var(--color-dark);"
             >
         </div>
@@ -141,7 +167,10 @@ function copyClick(event,chosen) {
     }
 	}
   .close {
-    @apply bg-white text-dark-300 rounded-sm float-right;
+    @apply flex absolute top-2 right-2 rounded-sm float-right border-1;
+    color: var(--color-foreground);
+    background-color: var(--color-background);
+    border-color: var(--color-foreground);
   }
   label {
     @apply text-xl p-1 pl-2 flex flex-col;
@@ -168,6 +197,14 @@ function copyClick(event,chosen) {
     max-h-[90vh] max-w-[95vw] overflow-auto
     ;
     background-color: var(--color-background);
+    color: var(--color-foreground);
+    input {
+      @apply py-0.5 font-mono pl-2;
+    }
+  }
+  .var-title {
+    @apply -m-2 pl-3 py-1;
+    background-color: var(--color-dark);
     color: var(--color-foreground);
   }
   .var-panels {

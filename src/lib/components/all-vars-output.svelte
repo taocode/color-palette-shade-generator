@@ -68,13 +68,12 @@
       <div class="pl-3">
         <div class="pl-3">
 {#each allColors as {color, name, shades}, i}
-<div>'{$colorNames[i] || name}': &lbrace;</div>
+<div>{$colorNames[i] || name}: &lbrace;</div>
 {@html shadesAsTailwind($colorNames[i] || name,color,shades, _cssVarPrefix, _varOptCSS, _varOptTailwind)}
 <div>&rbrace;,</div>
 {/each}
         </div>
       </div>
-&rbrace;,
     </div>
     <div class="muted">&rbrace;,</div>
     {:else}

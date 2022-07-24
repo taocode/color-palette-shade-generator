@@ -40,6 +40,7 @@
     @apply flex flex-col text-xl;
   }
   input {
+    @apply pl-1;
     color: var(--color-foreground);
     background-color: var(--color-background);
   }

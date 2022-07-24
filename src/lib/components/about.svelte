@@ -1,6 +1,6 @@
 <script>
 import { describeScheme, schemes } from '$lib'
-import { scheme } from '$lib/stores'
+import { lightness, scheme } from '$lib/stores'
 import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
 
 </script>
@@ -13,7 +13,13 @@ import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
 		<li>
 			<span>
 			<button class="font-bold" on:click={()=>scheme.set(i)}>{s.name}</button>
-				<em>({1+s.hues.length} color{#if s.hues.length > 0}s{/if})</em>: {describeScheme(s)}
+				<em>
+					{#if s.hues}
+					({1+s.hues.length} color{#if s.hues.length > 0}s{/if})
+					{:else if s.lightnesses}
+					({1+s.lightnesses.length} shade{#if s.lightnesses.length > 0}s{/if})
+					{/if}
+				</em>: {describeScheme(s)}
 		</span>
 		</li>
 		{/each}
