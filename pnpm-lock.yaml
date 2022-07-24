@@ -1,6 +1,9 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@smui/button': ^6.0.0
+  '@smui/dialog': ^6.0.0
+  '@smui/snackbar': ^6.0.0
   '@sveltejs/adapter-auto': next
   '@sveltejs/adapter-static': next
   '@sveltejs/kit': next
@@ -17,9 +20,12 @@ specifiers:
   vite-plugin-windicss: ^1.8.7
 
 devDependencies:
+  '@smui/button': 6.0.0_lvfi2wesz6u4l5rfbnetbucfmm
+  '@smui/dialog': 6.0.0_lvfi2wesz6u4l5rfbnetbucfmm
+  '@smui/snackbar': 6.0.0_lvfi2wesz6u4l5rfbnetbucfmm
   '@sveltejs/adapter-auto': 1.0.0-next.63
   '@sveltejs/adapter-static': 1.0.0-next.38
-  '@sveltejs/kit': 1.0.0-next.391_svelte@3.48.0+vite@3.0.2
+  '@sveltejs/kit': 1.0.0-next.392_svelte@3.48.0+vite@3.0.2
   color2k: 2.0.0
   prettier: 2.7.1
   prettier-plugin-svelte: 2.7.0_nakrehnrzdf7fdea5k3a4dfy4m
@@ -80,6 +86,175 @@ packages:
       - supports-color
     dev: true
 
+  /@material/animation/13.0.0:
+    resolution: {integrity: sha512-YR0/u4u56qXDjKYolQ7F+IvlPkaSBhMl/dZv8DK0FbD6PH4ckOPd3bEXNRndXtprsxwknQQP2pttjPImylkl0g==}
+    dependencies:
+      tslib: 2.4.0
+    dev: true
+
+  /@material/base/13.0.0:
+    resolution: {integrity: sha512-vFx0JryRfcvUNX3cZ2u32wUMvxzd+c/YW0LFOXNgqCDWlubHcMm0Y6Wz371LhfQo80/NE69u+/4Joo99yKnVeg==}
+    dependencies:
+      tslib: 2.4.0
+    dev: true
+
+  /@material/button/13.0.0:
+    resolution: {integrity: sha512-lYorht6fcEd4P+dsLVp2BGtaY5cGYNp71LMajuDe71GZX3dZPoKeVvb+Ie1S7vcB+o+WLTeaisMk9/vA4gfi8A==}
+    dependencies:
+      '@material/density': 13.0.0
+      '@material/dom': 13.0.0
+      '@material/elevation': 13.0.0
+      '@material/feature-targeting': 13.0.0
+      '@material/ripple': 13.0.0
+      '@material/rtl': 13.0.0
+      '@material/shape': 13.0.0
+      '@material/theme': 13.0.0
+      '@material/tokens': 13.0.0
+      '@material/touch-target': 13.0.0
+      '@material/typography': 13.0.0
+      tslib: 2.4.0
+    dev: true
+
+  /@material/density/13.0.0:
+    resolution: {integrity: sha512-ppJTzOsuhjQam5GvHaq/XZocZNUr+41XQ2sd5nONAmQ0wwzXgqG0FaxtF1EXqK3uZFadz+vAu6enagre9DXhTA==}
+    dependencies:
+      tslib: 2.4.0
+    dev: true
+
+  /@material/dialog/13.0.0:
+    resolution: {integrity: sha512-1Ggo9Bid94F1ttZJKSjIcgMvkVQtKsqwbqLs5cWlleaiwtAcwUE12XA2B1MNj8xM9ajU3BJm4GigupBOK1jGHQ==}
+    dependencies:
+      '@material/animation': 13.0.0
+      '@material/base': 13.0.0
+      '@material/button': 13.0.0
+      '@material/dom': 13.0.0
+      '@material/elevation': 13.0.0
+      '@material/feature-targeting': 13.0.0
+      '@material/icon-button': 13.0.0
+      '@material/ripple': 13.0.0
+      '@material/rtl': 13.0.0
+      '@material/shape': 13.0.0
+      '@material/theme': 13.0.0
+      '@material/tokens': 13.0.0
+      '@material/touch-target': 13.0.0
+      '@material/typography': 13.0.0
+      tslib: 2.4.0
+    dev: true
+
+  /@material/dom/13.0.0:
+    resolution: {integrity: sha512-M9HLAYBZtkTUvf66FL+jAEvUOdhji1HkGA1mV6oyE+HY9gkCkmso+mngvzlLd5+uaAVE9I3WQFhSb9gp0cpXnw==}
+    dependencies:
+      '@material/feature-targeting': 13.0.0
+      tslib: 2.4.0
+    dev: true
+
+  /@material/elevation/13.0.0:
+    resolution: {integrity: sha512-hzdblgamVRbC0UwKafcvUVDvKzMiOSveDiwGgFk+EAg/tZRdwMlQPyf/9I6Lr8Cw/pNGnEOPhmCDOYPOHimr0w==}
+    dependencies:
+      '@material/animation': 13.0.0
+      '@material/base': 13.0.0
+      '@material/feature-targeting': 13.0.0
+      '@material/rtl': 13.0.0
+      '@material/theme': 13.0.0
+      tslib: 2.4.0
+    dev: true
+
+  /@material/feature-targeting/13.0.0:
+    resolution: {integrity: sha512-QJClfeaA4EMyAxKJy9WR0Nx+/VwSZCkhGLUVBG9NhxqYGfl/LtaeaidrNm32vYEoNZAofN92VD2RwQTRwp/dMQ==}
+    dependencies:
+      tslib: 2.4.0
+    dev: true
+
+  /@material/icon-button/13.0.0:
+    resolution: {integrity: sha512-SdxFytWvbfN0fj7jHFq3DqK5/Zoms+Ipuv6fI8AzwgDFe7mXJ2euPahN+3XcmJ3BaSMyfYsdbcYdCWs8bgHW1w==}
+    dependencies:
+      '@material/base': 13.0.0
+      '@material/density': 13.0.0
+      '@material/elevation': 13.0.0
+      '@material/feature-targeting': 13.0.0
+      '@material/ripple': 13.0.0
+      '@material/rtl': 13.0.0
+      '@material/theme': 13.0.0
+      '@material/touch-target': 13.0.0
+      tslib: 2.4.0
+    dev: true
+
+  /@material/ripple/13.0.0:
+    resolution: {integrity: sha512-hx4B40hB2rRfsGwf1jwo2GGlYDq0yUQjcMcMmXfQipPJNpQhy8ylmXKc1DBjmWf7EQ/MgbfCSYwPrYXrbGP31w==}
+    dependencies:
+      '@material/animation': 13.0.0
+      '@material/base': 13.0.0
+      '@material/dom': 13.0.0
+      '@material/feature-targeting': 13.0.0
+      '@material/rtl': 13.0.0
+      '@material/theme': 13.0.0
+      tslib: 2.4.0
+    dev: true
+
+  /@material/rtl/13.0.0:
+    resolution: {integrity: sha512-nFGy3iQg7k+xLs67eb86mRFVLwa0yi7MusqRK4OM8DXcLO5yoVfUTPKpdSykcbRryp9imVHsxutox2tZawR4og==}
+    dependencies:
+      '@material/theme': 13.0.0
+      tslib: 2.4.0
+    dev: true
+
+  /@material/shape/13.0.0:
+    resolution: {integrity: sha512-exk96+iCjzCujk3aSrvIMhmW773s1Tc0h+MbQKbt6Iv3nHJCyLSiRbxclCHXWHrVwG/9KZRkrt/g2qk7P3VRBg==}
+    dependencies:
+      '@material/feature-targeting': 13.0.0
+      '@material/rtl': 13.0.0
+      '@material/theme': 13.0.0
+      tslib: 2.4.0
+    dev: true
+
+  /@material/snackbar/13.0.0:
+    resolution: {integrity: sha512-z59aYCeMWWEbsUU04QDZN4CxzCCOp3OIc5tzrdqnY3qRq4wwApxncf7RKKKSU2K6WTEWfdHHOc7aNX8kqlDmUg==}
+    dependencies:
+      '@material/animation': 13.0.0
+      '@material/base': 13.0.0
+      '@material/button': 13.0.0
+      '@material/dom': 13.0.0
+      '@material/elevation': 13.0.0
+      '@material/feature-targeting': 13.0.0
+      '@material/icon-button': 13.0.0
+      '@material/ripple': 13.0.0
+      '@material/rtl': 13.0.0
+      '@material/shape': 13.0.0
+      '@material/theme': 13.0.0
+      '@material/typography': 13.0.0
+      tslib: 2.4.0
+    dev: true
+
+  /@material/theme/13.0.0:
+    resolution: {integrity: sha512-KAe1s0MvvfCGAwJliDVTvgAKuD3ESwhl7F7br4Iam4IPdqME2rWl8NPhKHFfaWqTG7PyCgMMngYEYuA8cLNTsA==}
+    dependencies:
+      '@material/feature-targeting': 13.0.0
+      tslib: 2.4.0
+    dev: true
+
+  /@material/tokens/13.0.0:
+    resolution: {integrity: sha512-t55CKVeAjABdSQCKjsvYvqrA6Z4f5varLpLloai8ZQU0giSl7qbUczV1i8y2pSOzpRTswD5JKM7a19qfsl/TCA==}
+    dependencies:
+      '@material/elevation': 13.0.0
+    dev: true
+
+  /@material/touch-target/13.0.0:
+    resolution: {integrity: sha512-2BMjj+nwKIYG7cZZGcNuRSKo53knqDu9ksv9wLidxjLgzqXBd1v9gdXsqMRQXepoOqftWGmYMaRYI0xMnxt6lA==}
+    dependencies:
+      '@material/base': 13.0.0
+      '@material/feature-targeting': 13.0.0
+      '@material/rtl': 13.0.0
+      tslib: 2.4.0
+    dev: true
+
+  /@material/typography/13.0.0:
+    resolution: {integrity: sha512-UfaK4vT3LmGiiySf2RVIrf7fJZa6EJadFwo4YUMJx9bvUMRlBm1oI8Vo9fYpKdLfuSTeA+2BlgbwYVObj3laFw==}
+    dependencies:
+      '@material/feature-targeting': 13.0.0
+      '@material/theme': 13.0.0
+      tslib: 2.4.0
+    dev: true
+
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -107,6 +282,87 @@ packages:
     dependencies:
       estree-walker: 2.0.2
       picomatch: 2.3.1
+    dev: true
+
+  /@smui/button/6.0.0_lvfi2wesz6u4l5rfbnetbucfmm:
+    resolution: {integrity: sha512-YYhT9iOTPCJi+fElOBf2GOP/Akbz+AAYg342A3aBGDqwCI9AxtzdNPrrZ7hKyTsFq+ZMk3rgkyaITe//PCWdIA==}
+    dependencies:
+      '@material/button': 13.0.0
+      '@material/elevation': 13.0.0
+      '@material/feature-targeting': 13.0.0
+      '@material/ripple': 13.0.0
+      '@material/theme': 13.0.0
+      '@smui/common': 6.0.0_lvfi2wesz6u4l5rfbnetbucfmm
+      '@smui/ripple': 6.0.0_lvfi2wesz6u4l5rfbnetbucfmm
+      svelte2tsx: 0.5.12_lvfi2wesz6u4l5rfbnetbucfmm
+    transitivePeerDependencies:
+      - svelte
+      - typescript
+    dev: true
+
+  /@smui/common/6.0.0_lvfi2wesz6u4l5rfbnetbucfmm:
+    resolution: {integrity: sha512-FU9e/1+KnocxjNfOl3Cdpb+nJEXXnvyfTDUPsBV5bJ0tfOVhfEf3wb0maIGx2wZF1hWyRXlkrk8cU0coBwfGjQ==}
+    dependencies:
+      '@material/dom': 13.0.0
+      '@tsconfig/svelte': 3.0.0
+      svelte2tsx: 0.5.12_lvfi2wesz6u4l5rfbnetbucfmm
+    transitivePeerDependencies:
+      - svelte
+      - typescript
+    dev: true
+
+  /@smui/dialog/6.0.0_lvfi2wesz6u4l5rfbnetbucfmm:
+    resolution: {integrity: sha512-iBG8Qy+T74cf3ALxwgsohvK8Zc7zZ8WvNH0xJlkxippbtU/NBT1tCsPHnUpdaD7H91oRmyjozLV08adWsZw85A==}
+    dependencies:
+      '@material/button': 13.0.0
+      '@material/dialog': 13.0.0
+      '@material/dom': 13.0.0
+      '@smui/common': 6.0.0_lvfi2wesz6u4l5rfbnetbucfmm
+      svelte2tsx: 0.5.12_lvfi2wesz6u4l5rfbnetbucfmm
+    transitivePeerDependencies:
+      - svelte
+      - typescript
+    dev: true
+
+  /@smui/icon-button/6.0.0_lvfi2wesz6u4l5rfbnetbucfmm:
+    resolution: {integrity: sha512-UgxPpBTM6BrJyF2hSI58+twNdJp7pD4cEnHoAhY0uZg7Ff1DgsiJityaPzvH9RsnqgD5QQXRbkmsYd+EjpbwBA==}
+    dependencies:
+      '@material/density': 13.0.0
+      '@material/icon-button': 13.0.0
+      '@smui/common': 6.0.0_lvfi2wesz6u4l5rfbnetbucfmm
+      '@smui/ripple': 6.0.0_lvfi2wesz6u4l5rfbnetbucfmm
+      svelte2tsx: 0.5.12_lvfi2wesz6u4l5rfbnetbucfmm
+    transitivePeerDependencies:
+      - svelte
+      - typescript
+    dev: true
+
+  /@smui/ripple/6.0.0_lvfi2wesz6u4l5rfbnetbucfmm:
+    resolution: {integrity: sha512-fFJcBcZX5wtTm95xRL92iNfdJ9jk8S/puxODS+7BI+GizVlDeiGE3gmQIPsIXxpmGicWQCobjEAKdCXj37fr4w==}
+    dependencies:
+      '@material/dom': 13.0.0
+      '@material/ripple': 13.0.0
+      '@smui/common': 6.0.0_lvfi2wesz6u4l5rfbnetbucfmm
+      svelte2tsx: 0.5.12_lvfi2wesz6u4l5rfbnetbucfmm
+    transitivePeerDependencies:
+      - svelte
+      - typescript
+    dev: true
+
+  /@smui/snackbar/6.0.0_lvfi2wesz6u4l5rfbnetbucfmm:
+    resolution: {integrity: sha512-qcLyU/cNtD6xVG1Pl6FYnoVgKg83nmYVyRv36cX3BLI31mTd2cnlupalfq4Qr+gkppfpeeM/wzFDCA3bShwiVA==}
+    dependencies:
+      '@material/dom': 13.0.0
+      '@material/feature-targeting': 13.0.0
+      '@material/snackbar': 13.0.0
+      '@smui/button': 6.0.0_lvfi2wesz6u4l5rfbnetbucfmm
+      '@smui/common': 6.0.0_lvfi2wesz6u4l5rfbnetbucfmm
+      '@smui/icon-button': 6.0.0_lvfi2wesz6u4l5rfbnetbucfmm
+      '@smui/ripple': 6.0.0_lvfi2wesz6u4l5rfbnetbucfmm
+      svelte2tsx: 0.5.12_lvfi2wesz6u4l5rfbnetbucfmm
+    transitivePeerDependencies:
+      - svelte
+      - typescript
     dev: true
 
   /@sveltejs/adapter-auto/1.0.0-next.63:
@@ -153,8 +409,8 @@ packages:
       - supports-color
     dev: true
 
-  /@sveltejs/kit/1.0.0-next.391_svelte@3.48.0+vite@3.0.2:
-    resolution: {integrity: sha512-2KWIPF7YjVCFldXRuMcSmv3tliTf92kkJaws/hxJ+MioTJx9QwYB/V+JYzIEMRMcddZDb+Rp1ko3vrQ95c1vmg==}
+  /@sveltejs/kit/1.0.0-next.392_svelte@3.48.0+vite@3.0.2:
+    resolution: {integrity: sha512-od4rDJ/Soq0I7mda7sTbAnNKERHSDEGNa7QBpLA859xgBkwC1JnEIymYOh9dm+hMyHhB0bUoRoaur0qxKLqOOw==}
     engines: {node: '>=16.9'}
     hasBin: true
     peerDependencies:
@@ -192,6 +448,10 @@ packages:
       vite: 3.0.2
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@tsconfig/svelte/3.0.0:
+    resolution: {integrity: sha512-pYrtLtOwku/7r1i9AMONsJMVYAtk3hzOfiGNekhtq5tYBGA7unMve8RvUclKLMT3PrihvJqUmzsRGh0RP84hKg==}
     dev: true
 
   /@types/node/18.0.0:
@@ -421,6 +681,10 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
+    dev: true
+
+  /dedent-js/1.0.1:
+    resolution: {integrity: sha512-OUepMozQULMLUmhxS95Vudo0jb0UchLimi3+pQ2plj61Fcy8axbP9hbiD4Sz6DPqn6XG3kfmziVfQ1rSys5AJQ==}
     dev: true
 
   /deep-extend/0.6.0:
@@ -909,6 +1173,12 @@ packages:
     resolution: {integrity: sha512-lxpCM3HTvquGxKGzHeknB/sUjuVoUElLlfYnXZT73K8geR9jQbroGlSCFBax9/0mpGoD3kzcMLnOlGQPJJNyqQ==}
     dev: true
 
+  /lower-case/2.0.2:
+    resolution: {integrity: sha512-7fm3l3NAF9WfN6W3JOmf5drwpVqX78JtoGJ3A6W0a6ZnldM41w2fV5D490psKFTpMds8TJse/eHLFFsNHHjHgg==}
+    dependencies:
+      tslib: 2.4.0
+    dev: true
+
   /lru-cache/6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
     engines: {node: '>=10'}
@@ -1039,6 +1309,13 @@ packages:
       sax: 1.2.4
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /no-case/3.0.4:
+    resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
+    dependencies:
+      lower-case: 2.0.2
+      tslib: 2.4.0
     dev: true
 
   /node-fetch/2.6.7:
@@ -1172,6 +1449,13 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       callsites: 3.1.0
+    dev: true
+
+  /pascal-case/3.1.2:
+    resolution: {integrity: sha512-uWlGT3YSnK9x3BQJaOdcZwrnV6hPpd8jFH1/ucpiLRPh/2zCVJKS19E4GvYHvaCcACn3foXZ0cLB9Wrx1KGe5g==}
+    dependencies:
+      no-case: 3.0.4
+      tslib: 2.4.0
     dev: true
 
   /path-is-absolute/1.0.1:
@@ -1571,6 +1855,18 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
+  /svelte2tsx/0.5.12_lvfi2wesz6u4l5rfbnetbucfmm:
+    resolution: {integrity: sha512-43ayMivmh1IDCgb+4YDf54YuOJZGCUKFpp37RbfjGgNU+Pmb9HhP+zRXa1pMh4mwSTBfqZS0FbJZP3Q8CSxvvg==}
+    peerDependencies:
+      svelte: ^3.24
+      typescript: ^4.1.2
+    dependencies:
+      dedent-js: 1.0.1
+      pascal-case: 3.1.2
+      svelte: 3.48.0
+      typescript: 4.7.4
+    dev: true
+
   /sveltekit-autoimport/1.6.8:
     resolution: {integrity: sha512-hHL+ectHeQP3pfxMH0ryiJEE0cfyIHiSgUu1XGecVDBZlBoyRtRaXr0bAmq+sSWDbJdMxamzI57kVorPzUJiDg==}
     dependencies:
@@ -1621,6 +1917,10 @@ packages:
 
   /tr46/0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
+    dev: true
+
+  /tslib/2.4.0:
+    resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
     dev: true
 
   /typescript/4.7.4:
