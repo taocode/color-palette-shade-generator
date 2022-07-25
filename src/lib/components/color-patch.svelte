@@ -9,7 +9,7 @@ import VarsOutput from './vars-output.svelte'
 // import 
 
 import { dots, hueName, notice } from '$lib'
-import { colorNames, varOptCSS, varOptTailwind, cssVarPrefix } from '$lib/stores'
+import { colorNames, varOptCSS, varOptTailwind, cssVarPrefix, primaryColor } from '$lib/stores'
 import SettingVarCss from './setting-var-css.svelte'
 import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
 
@@ -23,6 +23,7 @@ let hidden = true
 
 $: lastShade = shades[shades.length-1]
 $: inputColor = lighten(color,0.30)
+$: primaryHue = parseToHsla($primaryColor)[0].toFixed()
 $: hue = parseToHsla(color)[0].toFixed()
 $: $colorNames[schemeIndex] = name
 $: _cssVarPrefix = $cssVarPrefix
@@ -96,7 +97,11 @@ function copyClick(event,chosen) {
       <CopyIcon size="1.25x" class="mr-1" /><span class="align-bottom tracking-tighter -mt-0.4 inline-block transform scale-60"><TailwindIcon /></span>
     </button>
     {#if description}
-    <em>({description} = {hue}°)</em>
+    <em>({description} = 
+      {#if schemeIndex < 1 || hue !== primaryHue}{hue}°)
+      {:else}{(parseToHsla(color)[2]*100).toFixed()}%Lv)
+      {/if}
+    </em>
     {/if}
     <button class="border border-transparent hover:border-current rounded px-1 "
     on:click={() => { hidden = ! hidden }}>{@html dots}</button>

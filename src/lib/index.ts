@@ -89,9 +89,9 @@ export const describeScheme = ({hues, varName, names, lightnesses}) => {
   }
 }
 
-export const schemeColors = ({hues,varName},primary) => {
+export const schemeColors = ({hues,lightnesses,varName},primary) => {
   const primaryH = parseToHsla(primary)[0].toFixed()
-  const colors = hues.map((hue,i,a) => {
+  const hueShades = (! hues) ? [] : hues.map((hue,i,a) => {
     const color = adjustHue(primary,(hue < 0) ? 360+hue : hue)
     const plus = (hue > 0) ? '+' : ''
     // console.log('schemeColors',{a})
@@ -104,6 +104,18 @@ export const schemeColors = ({hues,varName},primary) => {
       shades: shades(color)
     }
   })
+  const lightShades = (! lightnesses) ? [] : lightnesses.map((lV,i,a)=>{
+    const color = lighten(primary,lV*0.01)
+    const plus = (lV > 0) ? '+' : ''
+    return {
+      color,
+      name: lV > 0 ? 'light' : 'dark',
+      lightValue: lV,
+      description: `φ${plus}${lV}%`,
+      shades: shades(color)
+    }
+  })
+  const colors = hues ? hueShades : lightShades
   colors.unshift({
     color: primary,
     name: hueName(primaryH),
@@ -123,7 +135,7 @@ export const schemes = [
     varName: 'mono'
   }, { 
     name: `Dark/Light`,
-    lightnesses: [33,-33],
+    lightnesses: [15,-15],
     names: ['light','dark'],
     varName: 'darklight'
   }, { 
