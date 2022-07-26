@@ -16,11 +16,9 @@ import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
 export let color = 'black'
 export let description = 'Color'
 export let schemeIndex = 0
-export let names = []
 export let name = $colorNames[schemeIndex]
 let primaryHue = parseToHsla(color)[0].toFixed()
-export let placeholder = names?.length > schemeIndex ? 
-  names[schemeIndex] : hueName(primaryHue)
+export let placeholder = hueName(primaryHue)
 
 export let shades = colorShades(color,$steps,$factorLightness,$factorSaturation)
 

@@ -14,7 +14,7 @@
 	import SettingVarTailwind from '$lib/components/setting-var-tailwind.svelte'
 	import SettingVarCss from '$lib/components/setting-var-css.svelte'
 
-	import { schemes, schemeColors, updateHSLA, colorShades } from '$lib'
+	import { schemes, schemeColors, updateHSLA, colorShades, hueName } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, 
 		factorLightness, factorSaturation, varOptTailwind, defaults } from '$lib/stores'
 import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte';
@@ -115,8 +115,13 @@ let showAll = false
 		<SettingsShades />
 	</div>
 </div>
-{#each allColors as {color, description, names}, i}
-	<ColorPatch {color} {names} {description} schemeIndex={i}
+{#each allColors as {color, description, name}, i}
+	<ColorPatch {color} 
+	name={$colorNames[i]}
+	placeholder={
+		((name && $colorNames[0]) ? $colorNames[0] : hueName(parseToHsla(color)[0])) + 
+		((!name) ? '' : `-${name}`)} 
+	{description} schemeIndex={i}
 	shades={colorShades(color,$steps, ($scheme === 1) ? $factorLightness/3 : $factorLightness, $factorSaturation)}
 	on:updateColor={updateColor} />
 {/each}

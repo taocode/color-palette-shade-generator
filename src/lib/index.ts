@@ -71,8 +71,8 @@ export const schemes = [
     varName: 'mono'
   }, {
     name: `Dark/Light`,
-    lightnesses: [20,-20],
-    names: ['light','dark'],
+    lightnesses: [-15,15],
+    names: ['dark','light'],
     varName: 'darklight'
   }, {
     name: `Complementary`,
@@ -127,7 +127,6 @@ export const schemeColors = ({hues,lightnesses,varName,names},primary) => {
   const colors = hues ? hueShades : lightShades
   colors.unshift({
     color: primary,
-    name: varName,
     description: 'φ'
   })
   return colors
