@@ -1,20 +1,34 @@
 import { toHsla } from "color2k"
 import { writable } from "svelte/store"
 
-export const steps = writable(10)
-export const factorLightness = writable(0.075)
-export const factorSaturation = writable(0)
+export const defaults = {
+  hue: 240,
+  saturation: 0.65,
+  lightness: 0.45,
+  alpha: 1,
+  scheme: 0,
+  steps: 10,
+  factorLightness: 0.075,
+  factorSaturation: 0,
+  cssVarPrefix: 'color',
+  varOptTailwind: 'novar',
+  varOptCSS: 'HSLA',
+  colorNames: []
+}
+export const steps = writable(defaults.steps)
+export const factorLightness = writable(defaults.factorLightness)
+export const factorSaturation = writable(defaults.factorSaturation)
 
-export const scheme = writable(0)
-export const primaryColor = writable(toHsla('hsl(250,65%,45%)'))
+export const scheme = writable(defaults.scheme)
+export const primaryColor = writable(toHsla('hsl(240,65%,45%)'))
 
-export const hue = writable(250)
-export const saturation = writable(0.65)
-export const lightness = writable(0.45)
-export const alpha = writable(1)
+export const hue = writable(defaults.hue)
+export const saturation = writable(defaults.saturation)
+export const lightness = writable(defaults.lightness)
+export const alpha = writable(defaults.alpha)
 
-export const colorNames = writable([])
-export const cssVarPrefix = writable('color')
+export const colorNames = writable(defaults.colorNames)
+export const cssVarPrefix = writable(defaults.cssVarPrefix)
 
-export const varOptTailwind = writable('novar')
-export const varOptCSS = writable('HSLA')
+export const varOptCSS = writable(defaults.varOptCSS)
+export const varOptTailwind = writable(defaults.varOptTailwind)
