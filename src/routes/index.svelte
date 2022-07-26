@@ -27,7 +27,10 @@ import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte';
 		// console.log("onMount()",{browser})
 		if (browser) {
 			const searchParams = $page.url.searchParams
-			if (searchParams.has('color')) updateHSLA(toHsla('#'+searchParams.get('color')),true)
+			if (searchParams.has('h')) hue.set(parseInt(searchParams.get('h')))
+			if (searchParams.has('s')) saturation.set(0.01*parseFloat(searchParams.get('s')))
+			if (searchParams.has('l')) lightness.set(0.01*parseFloat(searchParams.get('l')))
+			if (searchParams.has('a')) alpha.set(parseFloat(searchParams.get('a')))
 			if (searchParams.has('scheme')) scheme.set( parseInt(searchParams.get('scheme')) )
 			if (searchParams.has('steps')) steps.set( parseInt(searchParams.get('steps')) )
 			if (searchParams.has('pL')) factorLightness.set( 0.01 * parseFloat(searchParams.get('pL')) )
@@ -62,13 +65,16 @@ import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte';
 		allColors = schemeColors(schemes[$scheme],$primaryColor)
 		// console.log('colors vs',{allColors},schemeColors(schemes[scheme],color))
 		if (browser) {
-			const state = {
-				color: toHex($primaryColor).substring(1),
-			}
+			const state = {}
+			if ($hue != defaults.hue) state.h = $hue
+			if ($saturation != defaults.saturation) state.s = $saturation*100
+			if ($lightness != defaults.lightness) state.l = $lightness*100
+			if ($alpha != defaults.alpha) state.a = $alpha
+
 			if ($scheme != defaults.scheme) state.scheme = $scheme
 			if ($steps != defaults.steps) state.steps = $steps
 			if ($factorLightness != defaults.factorLightness) state.pL = $factorLightness*100
-			if ($factorSaturation != defaults.factorSaturation) state.pS = $factorSaturation*100,
+			if ($factorSaturation != defaults.factorSaturation) state.pS = $factorSaturation*100
 
 			$colorNames.forEach((name,i) => {
 				if (name && name !== '') {
@@ -78,7 +84,8 @@ import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte';
 			// console.log('colornames:',{$colorNames,state})
 			const params = new URLSearchParams(state)
 			// console.log(params.toString(),{params})
-			history.replaceState(state,'',`?${params}`)
+			const strParams = (params.toString() !== '') ? `/?${params}` : '/'
+			history.replaceState(state,'',strParams)
 		}
 	}
 let showAll = false
