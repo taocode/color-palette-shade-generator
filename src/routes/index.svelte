@@ -16,7 +16,7 @@
 
 	import { schemes, schemeColors, updateHSLA, colorShades } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, 
-		factorLightness, factorSaturation, varOptTailwind } from '$lib/stores'
+		factorLightness, factorSaturation, varOptTailwind, defaults } from '$lib/stores'
 import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte';
 
 	
@@ -64,11 +64,12 @@ import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte';
 		if (browser) {
 			const state = {
 				color: toHex($primaryColor).substring(1),
-				scheme: $scheme,
-				steps: $steps,
-				pL: $factorLightness*100,
-				pS: $factorSaturation*100,
 			}
+			if ($scheme != defaults.scheme) state.scheme = $scheme
+			if ($steps != defaults.steps) state.steps = $steps
+			if ($factorLightness != defaults.factorLightness) state.pL = $factorLightness*100
+			if ($factorSaturation != defaults.factorSaturation) state.pS = $factorSaturation*100,
+
 			$colorNames.forEach((name,i) => {
 				if (name && name !== '') {
 					state[`c${i}`] = name
@@ -108,7 +109,7 @@ let showAll = false
 	</div>
 </div>
 {#each allColors as {color, description, names}, i}
-	<ColorPatch {color} name={names?names[i]:$colorNames[i]} {names} {description} schemeIndex={i}
+	<ColorPatch {color} {names} {description} schemeIndex={i}
 	shades={colorShades(color,$steps, ($scheme === 1) ? $factorLightness/3 : $factorLightness, $factorSaturation)}
 	on:updateColor={updateColor} />
 {/each}

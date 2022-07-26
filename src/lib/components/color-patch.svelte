@@ -16,8 +16,11 @@ import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
 export let color = 'black'
 export let description = 'Color'
 export let schemeIndex = 0
-export let names = ['default']
-export let name = $colorNames[schemeIndex] || names[schemeIndex]
+export let names = []
+export let name = $colorNames[schemeIndex]
+let primaryHue = parseToHsla(color)[0].toFixed()
+export let placeholder = names?.length > schemeIndex ? 
+  names[schemeIndex] : hueName(primaryHue)
 
 export let shades = colorShades(color,$steps,$factorLightness,$factorSaturation)
 
@@ -25,7 +28,7 @@ let hidden = true
 let _scheme = schemes[schemeIndex]
 
 $: lastShade = shades[shades.length-1]
-$: primaryHue = parseToHsla($primaryColor)[0].toFixed()
+$: primaryHue = parseToHsla(color)[0].toFixed()
 $: hue = parseToHsla(color)[0].toFixed()
 $: $colorNames[schemeIndex] = name
 $: _cssVarPrefix = $cssVarPrefix
@@ -80,7 +83,7 @@ function copyClick(event,chosen) {
   <div class="flex align-middle">
     <input id="varName" 
       bind:value={name}
-      placeholder={hueName(hue)}
+      {placeholder}
       size={name?.length || 6}
       class="varName"
       >
@@ -134,7 +137,7 @@ function copyClick(event,chosen) {
           </label>
           {/if}
           <input id="varname{schemeIndex}" 
-            placeholder={hueName(hue)} 
+            {placeholder}
             bind:value={name} 
             class=""
             size={name?.length || 6}
