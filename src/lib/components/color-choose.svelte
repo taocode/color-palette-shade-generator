@@ -33,7 +33,7 @@ function colorPicked({srcElement}) {
 			>
 		</div>
 		<div class="xs:ml-2">
-			<label for="colorpicker">hsla(
+			<label for="colorpicker">HSLA(
 				<input id="hue"
 					placeholder="Hue"
 					type="number" 
