@@ -2,8 +2,8 @@
   import { parseToHsla, toHsla } from 'color2k'
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
-  import { hueName, notice, shadesAsCSS, shadesAsTailwind } from '$lib'
-  import { colorNames, varOptCSS, varOptTailwind, cssVarPrefix } from '$lib/stores'
+  import { colorShades, hueName, notice, shadesAsCSS, shadesAsTailwind } from '$lib'
+  import { colorNames, varOptCSS, varOptTailwind, cssVarPrefix, steps, factorLightness, factorSaturation, scheme } from '$lib/stores'
   import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
   import SettingVarCss from './setting-var-css.svelte'
   import SettingVarTailwind from './setting-var-tailwind.svelte'
@@ -67,9 +67,9 @@
     <div id="all-vars-tailwind" class="copyTarget">
       <div class="pl-3">
         <div class="pl-3">
-{#each allColors as {color, name, shades}, i}
+{#each allColors as {color, name}, i}
 <div>{$colorNames[i] || name}: &lbrace;</div>
-{@html shadesAsTailwind($colorNames[i] || name,color,shades, _cssVarPrefix, _varOptCSS, _varOptTailwind)}
+{@html shadesAsTailwind($colorNames[i] || name, color, colorShades(color,$steps,($scheme === 1) ? $factorLightness / 3 : $factorLightness, $factorSaturation), _cssVarPrefix, _varOptCSS, _varOptTailwind)}
 <div>&rbrace;,</div>
 {/each}
         </div>
@@ -81,7 +81,7 @@
     <div id="all-vars-css" class="copyTarget">
       <div class="pl-3">
         {#each allColors as {color, name, shades}, i}
-          {@html shadesAsCSS($colorNames[i] || name, color, shades, _cssVarPrefix, _varOptCSS)}
+          {@html shadesAsCSS($colorNames[i] || name, color, colorShades(color,$steps,($scheme === 1) ? $factorLightness / 3 : $factorLightness,$factorSaturation), _cssVarPrefix, _varOptCSS)}
         {/each}
       </div>
     </div>

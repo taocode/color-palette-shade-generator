@@ -14,7 +14,7 @@
 	import SettingVarTailwind from '$lib/components/setting-var-tailwind.svelte'
 	import SettingVarCss from '$lib/components/setting-var-css.svelte'
 
-	import { schemes, schemeColors, unsubs, updateHSLA } from '$lib'
+	import { schemes, schemeColors, updateHSLA, colorShades } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, 
 		factorLightness, factorSaturation, varOptTailwind } from '$lib/stores'
 import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte';
@@ -40,10 +40,6 @@ import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte';
 			allColors = schemeColors(schemes[$scheme],$primaryColor)
 		}
 	})
-	// onDestroy(() => {
-	// 	console.log('lib:onDestroy()',unsubs)
-	// 	unsubs.forEach((unsub) => {unsub()})
-	// })
 
 	$: primaryColor.set($hue, $saturation, $lightness, $alpha)
 	
@@ -111,8 +107,9 @@ let showAll = false
 		<SettingsShades />
 	</div>
 </div>
-{#each allColors as {color, shades, description}, i}
-	<ColorPatch {color} name={$colorNames[i]} {description} {shades} schemeIndex={i}
+{#each allColors as {color, description, names}, i}
+	<ColorPatch {color} name={names?names[i]:$colorNames[i]} {names} {description} schemeIndex={i}
+	shades={colorShades(color,$steps, ($scheme === 1) ? $factorLightness/3 : $factorLightness, $factorSaturation)}
 	on:updateColor={updateColor} />
 {/each}
 <div class="text-center my-6"><button class="py-2 px-6"

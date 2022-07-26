@@ -2,8 +2,8 @@
   import { parseToHsla, readableColor, toHsla } from 'color2k'
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
-  import { hueName, notice, shadesAsCSS, shadesAsTailwind } from '$lib'
-  import { varOptTailwind, varOptCSS, cssVarPrefix } from '$lib/stores'
+  import { colorShades, hueName, notice, shadesAsCSS, shadesAsTailwind } from '$lib'
+  import { varOptTailwind, varOptCSS, cssVarPrefix, steps, factorLightness, factorSaturation } from '$lib/stores'
 
   import SettingVarTailwind from './setting-var-tailwind.svelte'
   import SettingVarCss from './setting-var-css.svelte'
@@ -12,7 +12,7 @@
   export let type = 'CSS'
   export let name = ''
   export let color = 'black'
-  export let shades = ['white']
+  export let shades = colorShades(color,$steps,$factorLightness,$factorSaturation)
 
   $: hue = parseToHsla(color)[0]
   $: hName = hueName(hue)

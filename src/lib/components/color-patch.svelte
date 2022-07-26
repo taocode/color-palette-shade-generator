@@ -8,21 +8,23 @@ import Swatch from './swatch.svelte'
 import VarsOutput from './vars-output.svelte'
 // import 
 
-import { dots, hueName, notice } from '$lib'
-import { colorNames, varOptCSS, varOptTailwind, cssVarPrefix, primaryColor } from '$lib/stores'
+import { dots, hueName, notice, schemes, colorShades } from '$lib'
+import { colorNames, varOptCSS, varOptTailwind, cssVarPrefix, primaryColor, scheme, steps, factorLightness, factorSaturation } from '$lib/stores'
 import SettingVarCss from './setting-var-css.svelte'
 import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
 
 export let color = 'black'
 export let description = 'Color'
-export let shades = ['white']
 export let schemeIndex = 0
-export let name = $colorNames[schemeIndex]
+export let names = ['default']
+export let name = $colorNames[schemeIndex] || names[schemeIndex]
+
+export let shades = colorShades(color,$steps,$factorLightness,$factorSaturation)
 
 let hidden = true
+let _scheme = schemes[schemeIndex]
 
 $: lastShade = shades[shades.length-1]
-$: inputColor = lighten(color,0.30)
 $: primaryHue = parseToHsla($primaryColor)[0].toFixed()
 $: hue = parseToHsla(color)[0].toFixed()
 $: $colorNames[schemeIndex] = name
@@ -98,9 +100,9 @@ function copyClick(event,chosen) {
     </button>
     {#if description}
     <em>({description} = 
-      {#if schemeIndex < 1 || hue !== primaryHue}{hue}°)
-      {:else}{(parseToHsla(color)[2]*100).toFixed()}%Lv)
+      {#if schemeIndex < 1 || hue !== primaryHue}{hue}°,
       {/if}
+      {(parseToHsla(color)[2]*100).toFixed()}%Lv)
     </em>
     {/if}
     <button class="border border-transparent hover:border-current rounded px-1 "

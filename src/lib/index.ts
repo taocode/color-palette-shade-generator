@@ -2,33 +2,7 @@ import { adjustHue, darken, lighten, parseToHsla, parseToRgba, saturate, toHex, 
 
 import { steps, factorLightness, factorSaturation, hue, saturation, lightness, alpha, varOptCSS, varOptTailwind } from '$lib/stores'
 
-let _steps
-let _stepFactorLightness
-let _stepFactorSaturation
-let _varOptCSS
-let _varOptTailwind
 
-export const unsubs = []
-
-unsubs.push(steps.subscribe(value => {
-  _steps = value
-}))
-
-unsubs.push(factorLightness.subscribe(value => {
-  _stepFactorLightness = value
-}))
-
-unsubs.push(factorSaturation.subscribe(value => {
-  _stepFactorSaturation = value
-}))
-
-unsubs.push(varOptCSS.subscribe(value => {
-  _varOptCSS = value
-}))
-
-unsubs.push(varOptTailwind.subscribe(value => {
-  _varOptTailwind = value
-}))
 
 export const hueNames = [
   {red:0},
@@ -89,134 +63,136 @@ export const describeScheme = ({hues, varName, names, lightnesses}) => {
   }
 }
 
-export const schemeColors = ({hues,lightnesses,varName},primary) => {
-  const primaryH = parseToHsla(primary)[0].toFixed()
-  const hueShades = (! hues) ? [] : hues.map((hue,i,a) => {
-    const color = adjustHue(primary,(hue < 0) ? 360+hue : hue)
-    const plus = (hue > 0) ? '+' : ''
-    // console.log('schemeColors',{a})
-    const h = parseToHsla(color)[0].toFixed()
-    return {
-      color,
-      name: hueName(h),
-      hue: h,
-      description: `φ${plus}${hue}°`,
-      shades: shades(color)
-    }
-  })
-  const lightShades = (! lightnesses) ? [] : lightnesses.map((lV,i,a)=>{
-    const color = lighten(primary,lV*0.01)
-    const plus = (lV > 0) ? '+' : ''
-    return {
-      color,
-      name: lV > 0 ? 'light' : 'dark',
-      lightValue: lV,
-      description: `φ${plus}${lV}%`,
-      shades: shades(color)
-    }
-  })
-  const colors = hues ? hueShades : lightShades
-  colors.unshift({
-    color: primary,
-    name: hueName(primaryH),
-    hue: primaryH,
-    description: 'φ', 
-    shades: shades(primary)
-  })
-  return colors
-}
-
-export const dots = '<span class="tracking-widest">•••</span>'
 
 export const schemes = [
-  { 
+  {
     name: `Monochromatic`, 
     hues: [],
     varName: 'mono'
-  }, { 
+  }, {
     name: `Dark/Light`,
-    lightnesses: [15,-15],
+    lightnesses: [20,-20],
     names: ['light','dark'],
     varName: 'darklight'
-  }, { 
+  }, {
     name: `Complementary`,
     hues: [180],
     names: ['complementary'],
     varName: 'complementary'
-  }, { id: 2, 
+  }, { 
     name: `Analogous`, 
     hues: [-30,30],
     varName: 'analogous'
-  }, { id: 3, 
+  }, {
     name: `Split Complementary`,
     hues: [150,210],
     varName: 'split'
-  }, { id: 4, 
+  }, {
     name: `Triadic`, 
     hues: [120,240],
     varName: 'triadic'
-  }, { id: 5, 
+  }, {
     name: `Tetradic`,
     hues: [60,180,240],
     varName: 'tetradic'
   },
 ]
 
-export const cssVarNum = (i) => (i<0) ? '' : (i) ? i+'00' : '50'
+export const schemeColors = ({hues,lightnesses,varName,names},primary) => {
+  const primaryH = parseToHsla(primary)[0].toFixed()
+  const hueShades = (hues || []).map((hueShift,i,a) => {
+    const color = adjustHue(primary,(hueShift < 0) ? 360+hueShift : hueShift)
+    const plus = (hueShift > 0) ? '+' : ''
+    // console.log('schemeColors',{a})
+    const hue = parseToHsla(color)[0].toFixed()
+    // console.log('isArray?',Array.isArray(names),names?.length)
+    const name = (Array.isArray(names) && names.length > i) ? 'n_'+names[i] : ''
+    return {
+      color,
+      name,
+      description: `φ${plus}${hue}°`
+    }
+  })
+  const lightShades = (! lightnesses) ? [] : lightnesses.map((lV,i,a)=>{
+    const color = lighten(primary,lV*0.01)
+    const plus = (lV > 0) ? '+' : ''
+    const name = lV > 0 ? 'light' : 'dark'
+    return {
+      color,
+      name,
+      lightValue: lV,
+      description: `φ${plus}${lV}%`
+    }
+  })
+  const colors = hues ? hueShades : lightShades
+  colors.unshift({
+    color: primary,
+    name: varName,
+    description: 'φ'
+  })
+  return colors
+}
 
-const cssColor = (color) => {
+export const dots = '<span class="tracking-widest">•••</span>'
+
+
+export const cssVarNum = (n: number): string => (n<0) ? '' : (n) ? n+'00' : '50'
+
+const cssColor = (color,optCSS) => {
   // console.log(`cssColor(${_varOptCSS},${color})`)
-  if (_varOptCSS === 'RGBA') {
+  if (optCSS === 'RGBA') {
     return toRgba(color)
-  } else if (_varOptCSS === '#HexA') {
+  } else if (optCSS === '#HexA') {
     return toHex(color)
-  } else if (_varOptCSS === '#Hex') {
+  } else if (optCSS === '#Hex') {
     return toHex(color).substring(0,7)
-  } else if (_varOptCSS === 'HSL') {
+  } else if (optCSS === 'HSL') {
     const hsl = parseToHsla(color)
     return `hsl(${hsl[0].toFixed()}, ${(100*hsl[1]).toFixed()}%, ${(100*hsl[2]).toFixed()}%)`
-  } else if (_varOptCSS === 'RGB') {
+  } else if (optCSS === 'RGB') {
     const rgb = parseToRgba(color)
     return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`
   }
   return toHsla(color)
 }
 
-export const shadesAsCSS = (name,masterColor,shades,cssPrefix,varOpt) => {
+export const shadesAsCSS = (name,masterColor,shades,cssPrefix,vOptCSS) => {
   if (!name || name === '') name = hueName(parseToHsla(masterColor)[0])
-  let varValue = cssColor(masterColor)
+  const cssPre = (cssPrefix && cssPrefix !== '') ? `${cssPrefix}-` : ''
+  let varValue = cssColor(masterColor,vOptCSS)
   return shades.reduce((p,c,i) => {
-      varValue = cssColor(c)
-      return `${p}\n<div class="pl-3">--${cssPrefix}-${name}-${cssVarNum(i)}: ${varValue};</div>`
-    },`<div class="pl-3">--${cssPrefix ? cssPrefix+'-':''}${name}: ${varValue};</div>`)
+      varValue = cssColor(c,vOptCSS)
+      return `${p}\n<div class="pl-3">--${cssPre}${name}-${cssVarNum(i)}: ${varValue};</div>`
+    },`<div class="pl-3">--${cssPre}${name}: ${varValue};</div>`)
 }
-const tailwindColor = (name, color, cssPrefix, n = -1) => {
+const tailwindColor = (name, color, cssPrefix, vOptCSS, vOptTailwind, n = -1) => {
   const vn = n < 0 ? '' : '-' + cssVarNum(n)
-  const varName = `--${cssPrefix}-${name}${vn}`
-  if (_varOptTailwind === 'varonly')
+  const cssPre = cssPrefix ? `${cssPrefix}-` : ''
+  const varName = `--${cssPre}${name}${vn}`
+  if (vOptTailwind === 'varonly')
     return `var(${varName})`
-  else if (_varOptTailwind === 'novar') 
-    return `${cssColor(color)}`
-  return `var(${varName}, ${cssColor(color)})`
+  else if (vOptTailwind === 'novar') 
+    return `${cssColor(color,vOptCSS)}`
+  return `var(${varName}, ${cssColor(color,vOptCSS)})`
 }
 export const shadesAsTailwind = (name,masterColor,shades,cssPrefix,vOptCSS,vOptTailwind) => {
   if (!name || name === '') name = hueName(parseToHsla(masterColor)[0])
-  let varValue = tailwindColor(name,masterColor,cssPrefix)
+  let varValue = tailwindColor(name,masterColor,cssPrefix,vOptCSS,vOptTailwind)
   return shades.reduce((p,c,i) => {
-    varValue = tailwindColor(name,c,cssPrefix,i)
-    const varNum = `${i<1 ? 5 : i+'0'}0`
+    varValue = tailwindColor(name,c,cssPrefix,vOptCSS,vOptTailwind,i)
+    const varNum = i<1 ? '50' : `${i}00`
     return `${p}\n\t<div class="pl-3">'${varNum}': '${varValue}',</div>` 
   },`<div class="pl-3">DEFAULT: '${varValue}',</div>`)
 }
-const shades = (color) => {
+export const colorShades = (color,steps,stepFactorLightness,stepFactorSaturation) => {
   let arr = [toHsla(color)]
-  for (let i = 1; i < _steps; i++) {
+  for (let i = 1; i < steps; i++) {
     if (i % 2) {
-      const lighter = lighten(color,(i+1)/2*_stepFactorLightness)
-      arr.unshift(saturate(lighter,(i+1)/2*_stepFactorSaturation))
+      const lighter = lighten(color,(i+1)/2*stepFactorLightness)
+      arr.unshift(saturate(lighter,(i+1)/2*stepFactorSaturation))
     } else {
-      const darker = darken(color,i/2*_stepFactorLightness)
-      arr.push(saturate(darker,i/2*_stepFactorSaturation))
+      const darker = darken(color,i/2*stepFactorLightness)
+      arr.push(saturate(darker,i/2*stepFactorSaturation))
     }
   }
   return arr
