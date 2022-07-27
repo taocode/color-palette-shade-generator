@@ -35,7 +35,7 @@ import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte';
 			if (searchParams.has('steps')) steps.set( parseInt(searchParams.get('steps')) )
 			if (searchParams.has('pL')) factorLightness.set( 0.01 * parseFloat(searchParams.get('pL')) )
 			if (searchParams.has('pS')) factorSaturation.set( 0.01 * parseFloat(searchParams.get('pS')) )
-			const colorNamesSP = new Array(3).fill('c')
+			const colorNamesSP = new Array(4).fill('c')
 				.map((c,i) => searchParams.has(c+i) ? searchParams.get(c+i) : '')
 			// console.log('onMount(colorNamesSearchParams)',{colorNamesSP,searchParams})
 			colorNames.set(colorNamesSP)
