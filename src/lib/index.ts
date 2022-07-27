@@ -2,8 +2,6 @@ import { adjustHue, darken, lighten, parseToHsla, parseToRgba, saturate, toHex, 
 
 import { steps, factorLightness, factorSaturation, hue, saturation, lightness, alpha, varOptCSS, varOptTailwind } from '$lib/stores'
 
-
-
 export const hueNames = [
   {red:0},
   {orangered:15},
@@ -33,7 +31,35 @@ export const hueName = (hue) => {
     return (hue < h && hue >= ph) ? `${p}${prev}` : `${p}`
   },'')
 }
-
+export const cssSchemes = [
+  {
+    id: 'HSLA',
+    description: 'Hue Saturation Lightness Alpha',
+    sample: 'hsla(240, 75%, 50%, 0.9)',
+  }, {
+    id: 'RGBA',
+    description: 'Red Green Blue Alpha',
+    sample: 'rgba(32, 32, 223, 0.9)',
+  }, {
+    id: 'HexA',
+    name: '#HexA',
+    description: 'Hexadecimal with alpha',
+    sample: '#2020dfe6',
+  }, {
+    id: 'HSL',
+    description: 'Hue Saturation Lightness',
+    sample: 'hsl(240, 75%, 50%)',
+  }, {
+    id: 'RGB',
+    description: 'Red Green Blue - rgb()',
+    sample: 'rgb(32, 32, 223)',
+  }, {
+    id: 'Hex',
+    name: '#Hex',
+    description: 'Hexadecimal',
+    sample: '#2020df'
+  }
+]
 export const updateHSLA = (color, fix=false) => {	
   let [h,s,l,a] = parseToHsla(color)
   if (fix) {
@@ -47,7 +73,9 @@ export const updateHSLA = (color, fix=false) => {
   lightness.set(l)
   alpha.set(a)
 }
-
+export const describeCssScheme = ({id,name,description}) => {
+  return (name ? name : id) + (description ? ` - ${description}` : '')
+}
 export const describeScheme = ({hues, varName, names, lightnesses}) => {
   if (hues) {
     return hues.reduce((p,c,i) => {
