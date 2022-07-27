@@ -23,7 +23,6 @@ export let placeholder = hueName(primaryHue)
 export let shades = colorShades(color,$steps,$factorLightness,$factorSaturation)
 
 let hidden = true
-let _scheme = schemes[schemeIndex]
 
 $: lastShade = shades[shades.length-1]
 $: primaryHue = parseToHsla(color)[0].toFixed()
@@ -82,7 +81,7 @@ function copyClick(event,chosen) {
     <input id="varName" 
       bind:value={name}
       {placeholder}
-      size={name?.length || 6}
+      size={name?.length || placeholder?.length || 6}
       class="varName"
       >
     <button 
@@ -136,9 +135,9 @@ function copyClick(event,chosen) {
           {/if}
           <input id="varname{schemeIndex}" 
             {placeholder}
-            bind:value={name} 
+            bind:value={name}
             class=""
-            size={name?.length || 6}
+            size={name?.length || placeholder?.length || 6}
             style="--color-placeholder: {desaturate(lighten(color,0.2),0.1)};
                   border-color: var(--color-dark);"
             >
@@ -146,10 +145,10 @@ function copyClick(event,chosen) {
       </div>
       <div class="var-panels">
         <div class="css">
-          <VarsOutput type="CSS" {name} {color} {shades} />
+          <VarsOutput type="CSS" {name} {placeholder} {color} {shades} />
         </div>
         <div class="tailwind">
-          <VarsOutput type="Tailwind" {name} {color} {shades} />
+          <VarsOutput type="Tailwind" {name} {placeholder} {color} {shades} />
         </div>
       </div>
     </div>
@@ -189,7 +188,7 @@ function copyClick(event,chosen) {
     color: var(--color-foreground);
   }
   input::placeholder {
-    @apply font-100 italic;
+    @apply font-100 italic text-sm;
     color: var(--color-placeholder);
     filter: saturate(0.25);
   }

@@ -106,17 +106,17 @@ export const schemeColors = ({hues,lightnesses,varName,names},primary) => {
     // console.log('schemeColors',{a})
     const hue = parseToHsla(color)[0].toFixed()
     // console.log('isArray?',Array.isArray(names),names?.length)
-    const name = (Array.isArray(names) && names.length > i) ? 'n_'+names[i] : ''
+    const name = (Array.isArray(names) && names.length > i) ? names[i] : ''
     return {
       color,
       name,
       description: `φ${plus}${hue}°`
     }
   })
-  const lightShades = (! lightnesses) ? [] : lightnesses.map((lV,i,a)=>{
+  const lightShades = (lightnesses || []).map((lV,i,a)=>{
     const color = lighten(primary,lV*0.01)
     const plus = (lV > 0) ? '+' : ''
-    const name = lV > 0 ? 'light' : 'dark'
+    const name = (Array.isArray(names) && names.length > i) ? names[i] : ''
     return {
       color,
       name,
@@ -155,8 +155,8 @@ const cssColor = (color,optCSS) => {
   return toHsla(color)
 }
 
-export const shadesAsCSS = (name,masterColor,shades,cssPrefix,vOptCSS) => {
-  if (!name || name === '') name = hueName(parseToHsla(masterColor)[0])
+export const shadesAsCSS = (name,placeholder,masterColor,shades,cssPrefix,vOptCSS) => {
+  if (!name || name === '') name = placeholder
   const cssPre = (cssPrefix && cssPrefix !== '') ? `${cssPrefix}-` : ''
   let varValue = cssColor(masterColor,vOptCSS)
   return shades.reduce((p,c,i) => {
@@ -174,8 +174,8 @@ const tailwindColor = (name, color, cssPrefix, vOptCSS, vOptTailwind, n = -1) =>
     return `${cssColor(color,vOptCSS)}`
   return `var(${varName}, ${cssColor(color,vOptCSS)})`
 }
-export const shadesAsTailwind = (name,masterColor,shades,cssPrefix,vOptCSS,vOptTailwind) => {
-  if (!name || name === '') name = hueName(parseToHsla(masterColor)[0])
+export const shadesAsTailwind = (name,placeholder,masterColor,shades,cssPrefix,vOptCSS,vOptTailwind) => {
+  if (!name || name === '') name = placeholder
   let varValue = tailwindColor(name,masterColor,cssPrefix,vOptCSS,vOptTailwind)
   return shades.reduce((p,c,i) => {
     varValue = tailwindColor(name,c,cssPrefix,vOptCSS,vOptTailwind,i)

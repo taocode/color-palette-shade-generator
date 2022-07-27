@@ -11,7 +11,8 @@
 
   export let type = 'CSS'
   export let name = ''
-  export let color = 'black'
+  export let placeholder = ''
+  export let color = 'gray'
   export let shades = colorShades(color,$steps,$factorLightness,$factorSaturation)
 
   $: hue = parseToHsla(color)[0]
@@ -62,8 +63,8 @@
     <div class="muted">colors: &lbrace;</div>
     <div class="copyTarget">
       <div class="pl-3">
-        '{name || hName}': &lbrace;
-        {@html shadesAsTailwind( name, color, shades, _cssVarPrefix, _varOptCSS, _varOptTailwind )}
+        {name || placeholder}: &lbrace;
+        {@html shadesAsTailwind( name, placeholder, color, shades, _cssVarPrefix, _varOptCSS, _varOptTailwind )}
           &rbrace;,
       </div>
     </div>
@@ -71,7 +72,7 @@
     {:else}
     <div class="muted">::root &lbrace;</div>
     <div class="copyTarget">
-      {@html shadesAsCSS( name, color, shades, _cssVarPrefix, _varOptCSS )}
+      {@html shadesAsCSS( name, placeholder, color, shades, _cssVarPrefix, _varOptCSS )}
     </div>
     <div class="muted">&rbrace;</div>
     {/if}

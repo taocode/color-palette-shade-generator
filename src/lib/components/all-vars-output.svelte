@@ -2,7 +2,7 @@
   import { parseToHsla, toHsla } from 'color2k'
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
-  import { colorShades, hueName, notice, shadesAsCSS, shadesAsTailwind } from '$lib'
+  import { colorShades, hueName, notice, schemes, shadesAsCSS, shadesAsTailwind } from '$lib'
   import { colorNames, varOptCSS, varOptTailwind, cssVarPrefix, steps, factorLightness, factorSaturation, scheme } from '$lib/stores'
   import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
   import SettingVarCss from './setting-var-css.svelte'
@@ -19,6 +19,13 @@
   $: _varOptCSS = $varOptCSS
   $: _cssVarPrefix = $cssVarPrefix
 
+  $: _scheme = schemes[$scheme]
+  
+  const placeholder = (i, currentColor) => {
+    return Array.isArray(_scheme.names) && _scheme.names.length >= i 
+            ? ($colorNames[0] || hName) + '-'+ _scheme.names[i-1] 
+            : hueName(parseToHsla(currentColor)[0])
+  }
   function copyClick(event) {
     const varsOutput = event.srcElement.closest('.all-vars-output')
     const text = varsOutput.querySelector('.copyTarget').innerText.trim()
@@ -68,8 +75,8 @@
       <div class="pl-3">
         <div class="pl-3">
 {#each allColors as {color, name}, i}
-<div>{$colorNames[i] || name}: &lbrace;</div>
-{@html shadesAsTailwind($colorNames[i] || name, color, colorShades(color,$steps,($scheme === 1) ? $factorLightness / 3 : $factorLightness, $factorSaturation), _cssVarPrefix, _varOptCSS, _varOptTailwind)}
+<div>{$colorNames[i] || placeholder(i,color)}: &lbrace;</div>
+{@html shadesAsTailwind($colorNames[i], placeholder(i,color), color, colorShades(color,$steps,($scheme === 1) ? $factorLightness / 3 : $factorLightness, $factorSaturation), _cssVarPrefix, _varOptCSS, _varOptTailwind)}
 <div>&rbrace;,</div>
 {/each}
         </div>
@@ -81,7 +88,8 @@
     <div id="all-vars-css" class="copyTarget">
       <div class="pl-3">
         {#each allColors as {color, name, shades}, i}
-          {@html shadesAsCSS($colorNames[i] || name, color, colorShades(color,$steps,($scheme === 1) ? $factorLightness / 3 : $factorLightness,$factorSaturation), _cssVarPrefix, _varOptCSS)}
+          {@html shadesAsCSS($colorNames[i], placeholder(i,color), color, 
+            colorShades(color,$steps,($scheme === 1) ? $factorLightness / 3 : $factorLightness,$factorSaturation), _cssVarPrefix, _varOptCSS)}
         {/each}
       </div>
     </div>
