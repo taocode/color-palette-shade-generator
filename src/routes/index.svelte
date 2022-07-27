@@ -73,8 +73,8 @@ import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte';
 
 			if ($scheme != defaults.scheme) state.scheme = $scheme
 			if ($steps != defaults.steps) state.steps = $steps
-			if ($factorLightness != defaults.factorLightness) state.pL = $factorLightness*100
-			if ($factorSaturation != defaults.factorSaturation) state.pS = $factorSaturation*100
+			if ($factorLightness != defaults.factorLightness) state.pL = ($factorLightness*100).toFixed()
+			if ($factorSaturation != defaults.factorSaturation) state.pS = ($factorSaturation*100).toFixed()
 
 			$colorNames.forEach((name,i) => {
 				if (name && name !== '') {
