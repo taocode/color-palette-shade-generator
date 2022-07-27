@@ -121,7 +121,7 @@ export const schemeColors = ({hues,lightnesses,varName,names},primary) => {
       color,
       name,
       lightValue: lV,
-      description: `φ${plus}${lV}%`
+      description: `φ${plus}${lV}%L`
     }
   })
   const colors = hues ? hueShades : lightShades
