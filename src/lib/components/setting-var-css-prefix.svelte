@@ -13,12 +13,12 @@
   $: color = noColor ? 'white' : (fixedColor || $primaryColor)
 
 </script>
-<div class="flex ml-2">
+<div class="settings vars">
   {#if dashDash}
   <label for="css-var-prefix" title="prefix" class="dash-dash" style="color: {readableColor(color)};">
     --
   </label>
-  {/if}
+  {/if} 
   {#if label}
   <label for="css-var-prefix" class="label" style="color: {readableColor(color)};">
     {label}

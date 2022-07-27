@@ -92,8 +92,19 @@
 .nav-link {
   @apply inline-block py-1 md:px-2;
 }
+.icon-tailwind {
+  @apply align-bottom tracking-tighter -mt-0.4 inline-block transform scale-60;
+}
 .settings {
-  @apply max-w-prose mx-auto text-center flex justify-center;
+  @apply max-w-3/4  mx-auto my-2 text-center flex flex-col align-end justify-center gap-x-3 gap-y-1 
+  xs:(flex-row max-w-none)
+  md:max-w-screen-lg;
+  &.vars {
+    @apply flex-col sm:flex-row;
+    >div {
+      @apply px-3;
+    }
+  }
 }
 .vars-output .heading {
   @apply flex;
@@ -118,8 +129,11 @@
       @apply text-sm;
     }
   }
-  .vars {
-    @apply flex flex-col sm:flex-row;
+  .vars-body {
+    @apply flex flex-col sm:flex-row text-left gap-6;
+    >div {
+      @apply mx-4
+    }
   }
   label {
     @apply text-[0.8em] mt-2 mr-1;

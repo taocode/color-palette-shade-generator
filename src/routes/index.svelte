@@ -1,5 +1,6 @@
 <script>
-	import { readableColor, hsla, toHex, toHsla, parseToHsla } from 'color2k'
+	import { readableColor, hsla, toHex, toHsla, parseToHsla, adjustHue } from 'color2k'
+	import { EyeOffIcon, EyeIcon, CopyIcon } from 'svelte-feather-icons'
 	import { browser } from '$app/env'
 	import { page } from '$app/stores'
 	import { onMount, onDestroy } from 'svelte'
@@ -17,7 +18,8 @@
 	import { schemes, schemeColors, updateHSLA, colorShades, hueName } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, 
 		factorLightness, factorSaturation, varOptTailwind, defaults } from '$lib/stores'
-import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte';
+	import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte'
+import Tailwind from '$lib/components/svg/tailwind.svelte'
 
 	
 	export let lightnessPercent = $factorLightness*100
@@ -66,7 +68,7 @@ import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte';
 		// console.log('colors vs',{allColors},schemeColors(schemes[scheme],color))
 		if (browser) {
 			const state = {}
-			if ($hue != defaults.hue) state.H = $hue.toFixed(1)
+			if ($hue != defaults.hue) state.H = ($hue*1).toFixed(1)
 			if ($saturation != defaults.saturation) state.S = ($saturation*100).toFixed()
 			if ($lightness != defaults.lightness) state.L = ($lightness*100).toFixed()
 			if ($alpha != defaults.alpha) state.A = $alpha.toFixed(2)
@@ -88,7 +90,30 @@ import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte';
 			history.replaceState(state,'',strParams)
 		}
 	}
-let showAll = false
+	$: buttonColor = adjustHue($primaryColor,90)
+	let showVars = false
+	let showSettings = false
+
+	const copyVars = (type) => {
+		const allVars = document.getElementById(`all-vars-${type}`)
+		const varsOutput = allVars?.closest('.all-vars-output')
+		const heading = varsOutput.querySelector('h2').innerText.trim()
+		const text = allVars.innerText.trim()
+		console.log({text,type,varsOutput})
+		if (!navigator.clipboard) {
+			document.execCommand('copy',false,text)
+		} else {
+			navigator.clipboard.writeText(text).then(
+				function() {
+					notice(`copied vars for: <span class="whitespace-nowrap">${heading}</span>`,varsOutput)
+				}
+			).catch(
+				function(err) {
+					notice(`failed to copy: ${err}`,event.srcElement)
+				}
+			)
+		}
+	}
 </script>
 
 <svelte:head>
@@ -100,19 +125,59 @@ let showAll = false
 	<h1><ColorPaletteShadeGenerator /></h1>
 	<ColorChoose />
 	<SettingsScheme />
-	<div class="flex justify-center gap-4 mt-4 mx-auto">
-		<div>
-			<SettingVarCssPrefix label="CSS Var Prefix: " />
+	<div class="panel-settings" class:showing={showSettings}>
+		<div class="varopts settings">
+			<div>
+				<SettingVarCssPrefix label="CSS Var Prefix: " />
+			</div>
+			<div>
+					<SettingVarCss withLabel />
+			</div>
+			<div>
+					<SettingVarTailwind withLabel />
+			</div>
 		</div>
-		<div>
-				<SettingVarCss withLabel />
-		</div>
-		<div>
-				<SettingVarTailwind withLabel />
+		<div class="my-3">
+			<SettingsShades />
 		</div>
 	</div>
-	<div class="my-3">
-		<SettingsShades />
+	<div class="allvars">
+		<div>
+			<button class=""
+				on:click={() => showSettings = ! showSettings }
+				style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
+				<span class="icon">{#if showSettings}<EyeOffIcon size="1.25x" title="Hide" />{:else}<EyeIcon size="1.25x" title="Show" />{/if}</span>
+				Settings
+		 </button>
+			<button class=""
+			on:click={() => showVars = ! showVars }
+			style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
+		 	<span class="icon">{#if showVars}<EyeOffIcon size="1.25x" title="Hide" />{:else}<EyeIcon size="1.25x" title="Show" />{/if}</span>
+			 Vars
+			</button>
+			<button title="Copy CSS Vars"
+				on:click={() => copyVars('css') }
+				style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
+					<span class="icon"><CopyIcon size="1x" /></span>
+					CSS
+			</button>
+			<button title="Copy Tailwind Vars"
+				on:click={() => copyVars('tailwind') }
+				style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
+					<span class="icon"><CopyIcon size="1x" /></span>
+					<span class="icon-tailwind">
+						<Tailwind />
+					</span>
+			</button>
+		</div>
+		 <div class="allvars-outputs" class:showing={showVars}>
+			<div>
+				<AllVarsOutput type="CSS" {allColors} />
+			</div>
+			<div>
+				<AllVarsOutput type="Tailwind" {allColors} />
+			</div>
+		</div>
 	</div>
 </div>
 {#each allColors as {color, description, name}, i}
@@ -125,15 +190,6 @@ let showAll = false
 	shades={colorShades(color,$steps, ($scheme === 1) ? $factorLightness/3 : $factorLightness, $factorSaturation)}
 	on:updateColor={updateColor} />
 {/each}
-<div class="text-center my-6"><button class="py-2 px-6"
-	 on:click={() => showAll = ! showAll }
-	 style="background-color:{$primaryColor}; color: {readableColor($primaryColor)}">
-	{#if showAll}Hide{:else}Show{/if} All Vars
-</button></div>
-<div class="prose mx-auto hidden px-5" class:hidden={!showAll}>
-	<AllVarsOutput type="CSS" {allColors} />
-	<AllVarsOutput type="Tailwind" {allColors} />
-</div>
 
 
 <About />
@@ -141,5 +197,31 @@ let showAll = false
 <style lang="postcss">
 	h1 {
 		@apply text-3xl text-center p-4 font-semibold;
+	}
+	button {
+		@apply py-2 px-4 flex align-middle gap-2;
+	}
+	.icon {
+		@apply inline-block pt-0.5;
+	}
+	.allvars {
+		@apply max-w-max mx-auto text-center mt-6 mb-2;
+		>div {
+			@apply flex flex-wrap gap-2 justify-center;
+		}
+	}
+	.allvars-outputs {
+		@apply my-4 md:flex;
+		>div {
+			@apply mx-3;
+		}
+		&:not(.showing) {
+			display: none;
+		}
+	}
+	.panel-settings {
+		&:not(.showing) {
+			display: none;
+		}
 	}
 </style>

@@ -56,47 +56,49 @@
     </button>
     <div class="setting-control">
       {#if type === "CSS"}
-      <div class="border-1">
-        <SettingVarCssPrefix noColor />
+      <div>
+        <SettingVarCssPrefix />
       </div>
       <div>
-        <SettingVarCss noColor />
+        <SettingVarCss />
       </div>
       {/if}
       {#if type === "Tailwind"}
-      <SettingVarTailwind noColor />
+      <SettingVarTailwind />
       {/if}
     </div>
   </div>
-  <div class="vars">
-    {#if type === "Tailwind"}
-    <div class="muted">colors: &lbrace;</div>
-    <div id="all-vars-tailwind" class="copyTarget">
-      <div class="pl-3">
+  <div class="vars-body">
+    <div class="vars">
+      {#if type === "Tailwind"}
+      <div class="muted">colors: &lbrace;</div>
+      <div id="all-vars-tailwind" class="copyTarget">
         <div class="pl-3">
-{#each allColors as {color, name}, i}
-<div>{$colorNames[i] || placeholder(i,color)}: &lbrace;</div>
-{@html shadesAsTailwind($colorNames[i], placeholder(i,color), color, colorShades(color,$steps,($scheme === 1) ? $factorLightness / 3 : $factorLightness, $factorSaturation), _cssVarPrefix, _varOptCSS, _varOptTailwind)}
-<div>&rbrace;,</div>
-{/each}
+          <div class="pl-3">
+    {#each allColors as {color, name}, i}
+    <div>{$colorNames[i] || placeholder(i,color)}: &lbrace;</div>
+    {@html shadesAsTailwind($colorNames[i], placeholder(i,color), color, colorShades(color,$steps,($scheme === 1) ? $factorLightness / 3 : $factorLightness, $factorSaturation), _cssVarPrefix, _varOptCSS, _varOptTailwind)}
+    <div>{`\n`}&rbrace;,{`\n`}</div>
+    {/each}
+          </div>
         </div>
       </div>
-    </div>
-    <div class="muted">&rbrace;,</div>
-    {:else}
-    <div class="muted">::root &lbrace;</div>
-    <div id="all-vars-css" class="copyTarget">
-      <div class="pl-3">
-        {#each allColors as {color, name, shades}, i}
-          {@html shadesAsCSS($colorNames[i], placeholder(i,color), color, 
-            colorShades(color,$steps,($scheme === 1) ? $factorLightness / 3 : $factorLightness,$factorSaturation), _cssVarPrefix, _varOptCSS)}
-        {/each}
+      <div class="muted">&rbrace;,</div>
+      {:else}
+      <div class="muted">::root &lbrace;</div>
+      <div id="all-vars-css" class="copyTarget">
+        <div class="pl-3">
+          {#each allColors as {color, name, shades}, i}
+            {@html shadesAsCSS($colorNames[i], placeholder(i,color), color,
+              colorShades(color,$steps,($scheme === 1) ? $factorLightness / 3 : $factorLightness,$factorSaturation), _cssVarPrefix, _varOptCSS)}
+          {/each}
+        </div>
       </div>
+      <div class="muted">&rbrace;</div>
+      {/if}
     </div>
-    <div class="muted">&rbrace;</div>
-    {/if}
+    </div>
   </div>
-</div>
 
 <style lang="postcss">
   h2 {

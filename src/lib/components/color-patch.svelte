@@ -95,7 +95,7 @@ function copyClick(event,chosen) {
       class="mx-3 mt-2 inline-flex text-xs" 
       title="Copy Tailwind variables"
     >
-      <CopyIcon size="1.25x" class="mr-1" /><span class="align-bottom tracking-tighter -mt-0.4 inline-block transform scale-60"><TailwindIcon /></span>
+      <CopyIcon size="1.25x" class="mr-1" /><span class="icon-tailwind"><TailwindIcon /></span>
     </button>
     {#if description}
     <em>({description} = 
