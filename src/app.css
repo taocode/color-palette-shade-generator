@@ -69,6 +69,11 @@
 --color-yellowgreen-700: hsla(97, 65%, 30%, 1);
 --color-yellowgreen-800: hsla(97, 65%, 22%, 1);
 --color-yellowgreen-900: hsla(97, 66%, 15%, 1);
+
+--color-C: darkblue;
+--color-P: darkviolet;
+--color-S: yellow;
+--color-G: lightgreen;
 }
 
 .btn {
@@ -93,7 +98,7 @@
   @apply inline-block py-1 md:px-2;
 }
 .icon-tailwind {
-  @apply align-bottom tracking-tighter -mt-0.4 inline-block transform scale-60;
+  @apply align-bottom tracking-tighter inline-block pt-1 transform scale-60;
 }
 .settings {
   @apply max-w-3/4  mx-auto my-2 text-center flex flex-col align-end justify-center gap-x-3 gap-y-1 
@@ -152,14 +157,18 @@
   @apply inline-flex justify-center place-items-center font-700;
 }
 .C {
-  @apply bg-primary-700 text-white;
+  background-color: var(--color-C, blue);
+  color: var(--color-foreground, white);
 }
 .P {
-  @apply bg-primary-400 text-white;
+  background-color: var(--color-P, violet);
+  color: var(--color-foreground, white);
 }
 .S {
-  @apply bg-complementary-600 text-black;
+  background-color: var(--color-S, yellow);
+  color: var(--color-foreground, black);
 }
 .G {
-  @apply bg-complementary-400 text-black px-2;
+  background-color: var(--color-G, lightgreen);
+  color: var(--color-foreground, black);
 }

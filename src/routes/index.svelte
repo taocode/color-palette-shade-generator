@@ -1,5 +1,5 @@
 <script>
-	import { readableColor, hsla, toHex, toHsla, parseToHsla, adjustHue } from 'color2k'
+	import { darken, lighten, readableColor, hsla, toHex, toHsla, parseToHsla, adjustHue } from 'color2k'
 	import { EyeOffIcon, EyeIcon, CopyIcon } from 'svelte-feather-icons'
 	import { browser } from '$app/env'
 	import { page } from '$app/stores'
@@ -71,7 +71,7 @@ import Tailwind from '$lib/components/svg/tailwind.svelte'
 			if ($hue != defaults.hue) state.H = ($hue*1).toFixed(1)
 			if ($saturation != defaults.saturation) state.S = ($saturation*100).toFixed()
 			if ($lightness != defaults.lightness) state.L = ($lightness*100).toFixed()
-			if ($alpha != defaults.alpha) state.A = $alpha.toFixed(2)
+			if ($alpha != defaults.alpha) state.A = (1*$alpha).toFixed(2)
 
 			if ($scheme != defaults.scheme) state.scheme = $scheme.toFixed()
 			if ($steps != defaults.steps) state.steps = $steps.toFixed()
@@ -121,7 +121,15 @@ import Tailwind from '$lib/components/svg/tailwind.svelte'
   <meta name="description" content="Generate a color palette using color theory with multiple shades for use with CSS, Tailwind">
 </svelte:head>
 
-<div class="pt-2 pb-6 top-controls" style="color: {readable}; background-color: {$primaryColor};">
+<div class="pt-2 pb-6 top-controls" 
+style="
+	color: {readable}; 
+	background-color: {$primaryColor};
+	--color-C: {darken(adjustHue($primaryColor,30),0.1)};
+	--color-P: {darken(adjustHue($primaryColor,120),0.1)};
+	--color-S: {lighten(adjustHue($primaryColor,210),0.1)};
+	--color-G: {lighten(adjustHue($primaryColor,300),0.1)};
+">
 	<h1><ColorPaletteShadeGenerator /></h1>
 	<ColorChoose />
 	<SettingsScheme />
