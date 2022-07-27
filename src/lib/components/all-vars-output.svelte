@@ -22,7 +22,7 @@
   $: _scheme = schemes[$scheme]
   
   const placeholder = (i, currentColor) => {
-    return Array.isArray(_scheme.names) && _scheme.names.length >= i 
+    return i > 0 && Array.isArray(_scheme.names) && _scheme.names.length >= i 
             ? ($colorNames[0] || hName) + '-'+ _scheme.names[i-1] 
             : hueName(parseToHsla(currentColor)[0])
   }
