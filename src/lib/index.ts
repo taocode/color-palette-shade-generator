@@ -25,6 +25,7 @@ export const hueNames = [
   {red:360}
 ]
 export const hueName = (hue) => {
+  hue = (1*hue).toFixed()
   return hueNames.reduce((p,c,i) => {
     const pi = ((i>0) ? i : hueNames.length) - 1
     const [prev, ph] = Object.entries(hueNames[pi])[0]
@@ -162,7 +163,7 @@ export const shadesAsCSS = (name,placeholder,masterColor,shades,cssPrefix,vOptCS
   return shades.reduce((p,c,i) => {
       varValue = cssColor(c,vOptCSS)
       return `${p}\n<div class="pl-3">--${cssPre}${name}-${cssVarNum(i)}: ${varValue};</div>`
-    },`<div class="pl-3">--${cssPre}${name}: ${varValue};</div>`)
+    },`\n<div class="pl-3">--${cssPre}${name}: ${varValue};</div>`)
 }
 const tailwindColor = (name, color, cssPrefix, vOptCSS, vOptTailwind, n = -1) => {
   const vn = n < 0 ? '' : '-' + cssVarNum(n)
@@ -181,7 +182,7 @@ export const shadesAsTailwind = (name,placeholder,masterColor,shades,cssPrefix,v
     varValue = tailwindColor(name,c,cssPrefix,vOptCSS,vOptTailwind,i)
     const varNum = i<1 ? '50' : `${i}00`
     return `${p}\n\t<div class="pl-3">'${varNum}': '${varValue}',</div>` 
-  },`<div class="pl-3">DEFAULT: '${varValue}',</div>`)
+  },`\n<div class="pl-3">\tDEFAULT: '${varValue}',</div>`)
 }
 export const colorShades = (color,steps,stepFactorLightness,stepFactorSaturation) => {
   let arr = [toHsla(color)]
