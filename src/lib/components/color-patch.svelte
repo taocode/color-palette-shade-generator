@@ -9,7 +9,7 @@ import VarsOutput from './vars-output.svelte'
 // import 
 
 import { dots, hueName, notice, schemes, colorShades } from '$lib'
-import { colorNames, varOptCSS, varOptTailwind, cssVarPrefix, primaryColor, scheme, steps, factorLightness, factorSaturation } from '$lib/stores'
+import { colorNames, varOptCSS, varOptTailwind, cssVarPrefix, primaryColor, scheme, steps, factorLightness, factorSaturation, hue } from '$lib/stores'
 import SettingVarCss from './setting-var-css.svelte'
 import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
 
@@ -26,7 +26,6 @@ let hidden = true
 
 $: lastShade = shades[shades.length-1]
 $: primaryHue = parseToHsla(color)[0].toFixed()
-$: hue = parseToHsla(color)[0].toFixed()
 $: $colorNames[schemeIndex] = name
 $: _cssVarPrefix = $cssVarPrefix
 $: cssVarPrefix.set(_cssVarPrefix)
@@ -100,9 +99,8 @@ function copyClick(event,chosen) {
     </button>
     {#if description}
     <em>({description} = 
-      {#if schemeIndex < 1 || hue !== primaryHue}{hue}°,
-      {/if}
-      {(parseToHsla(color)[2]*100).toFixed()}%Lv)
+      {primaryHue}°,
+      {(parseToHsla(color)[2]*100).toFixed()}%L)
     </em>
     {/if}
     <button class="border border-transparent hover:border-current rounded px-1 "
