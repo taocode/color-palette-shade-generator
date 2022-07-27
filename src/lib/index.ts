@@ -77,7 +77,7 @@ export const schemes = [
   }, {
     name: `Complementary`,
     hues: [180],
-    names: ['complementary'],
+    names: ['complement'],
     varName: 'complementary'
   }, { 
     name: `Analogous`, 
@@ -110,7 +110,7 @@ export const schemeColors = ({hues,lightnesses,varName,names},primary) => {
     return {
       color,
       name,
-      description: `φ${plus}${hue}°`
+      description: `φ${plus}${hueShift}°`
     }
   })
   const lightShades = (lightnesses || []).map((lV,i,a)=>{
