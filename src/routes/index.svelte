@@ -66,15 +66,15 @@ import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte';
 		// console.log('colors vs',{allColors},schemeColors(schemes[scheme],color))
 		if (browser) {
 			const state = {}
-			if ($hue != defaults.hue) state.H = $hue
-			if ($saturation != defaults.saturation) state.S = $saturation*100
-			if ($lightness != defaults.lightness) state.L = $lightness*100
-			if ($alpha != defaults.alpha) state.A = $alpha
+			if ($hue != defaults.hue) state.H = $hue.toFixed(1)
+			if ($saturation != defaults.saturation) state.S = ($saturation*100).toFixed()
+			if ($lightness != defaults.lightness) state.L = ($lightness*100).toFixed()
+			if ($alpha != defaults.alpha) state.A = $alpha.toFixed(2)
 
-			if ($scheme != defaults.scheme) state.scheme = $scheme
-			if ($steps != defaults.steps) state.steps = $steps
-			if ($factorLightness != defaults.factorLightness) state.pL = ($factorLightness*100).toFixed()
-			if ($factorSaturation != defaults.factorSaturation) state.pS = ($factorSaturation*100).toFixed()
+			if ($scheme != defaults.scheme) state.scheme = $scheme.toFixed()
+			if ($steps != defaults.steps) state.steps = $steps.toFixed()
+			if ($factorLightness != defaults.factorLightness) state.pL = ($factorLightness*100).toFixed(1)
+			if ($factorSaturation != defaults.factorSaturation) state.pS = ($factorSaturation*100).toFixed(1)
 
 			$colorNames.forEach((name,i) => {
 				if (name && name !== '') {
