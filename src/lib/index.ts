@@ -51,7 +51,7 @@ export const cssSchemes = [
     sample: 'hsl(240, 75%, 50%)',
   }, {
     id: 'RGB',
-    description: 'Red Green Blue - rgb()',
+    description: 'Red Green Blue',
     sample: 'rgb(32, 32, 223)',
   }, {
     id: 'Hex',
@@ -63,7 +63,7 @@ export const cssSchemes = [
 export const updateHSLA = (color, fix=false) => {	
   let [h,s,l,a] = parseToHsla(color)
   if (fix) {
-    h = h.toFixed()
+    h = h.toFixed(1)
     s = s.toFixed(3)
     l = l.toFixed(3)
     a = a.toFixed(2)
