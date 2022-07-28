@@ -125,10 +125,10 @@ import Tailwind from '$lib/components/svg/tailwind.svelte'
 style="
 	color: {readable}; 
 	background-color: {$primaryColor};
-	--color-C: {darken(adjustHue($primaryColor,30),0.1)};
-	--color-P: {darken(adjustHue($primaryColor,120),0.1)};
-	--color-S: {lighten(adjustHue($primaryColor,210),0.1)};
-	--color-G: {lighten(adjustHue($primaryColor,300),0.1)};
+	--color-C: {darken(adjustHue($primaryColor,240),0.1)};
+	--color-P: {darken(adjustHue($primaryColor,330),0.1)};
+	--color-S: {lighten(adjustHue($primaryColor,180),0.1)};
+	--color-G: {lighten(adjustHue($primaryColor,90),0.1)};
 ">
 	<h1><ColorPaletteShadeGenerator /></h1>
 	<ColorChoose />
@@ -150,33 +150,37 @@ style="
 		</div>
 	</div>
 	<div class="allvars">
-		<div>
-			<button class=""
-				on:click={() => showSettings = ! showSettings }
-				style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
-				<span class="icon">{#if showSettings}<EyeOffIcon size="1.25x" title="Hide" />{:else}<EyeIcon size="1.25x" title="Show" />{/if}</span>
-				Settings
-		 </button>
-			<button class=""
-			on:click={() => showVars = ! showVars }
-			style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
-		 	<span class="icon">{#if showVars}<EyeOffIcon size="1.25x" title="Hide" />{:else}<EyeIcon size="1.25x" title="Show" />{/if}</span>
-			 Vars
-			</button>
-			<button title="Copy CSS Vars"
-				on:click={() => copyVars('css') }
-				style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
-					<span class="icon"><CopyIcon size="1x" /></span>
-					CSS
-			</button>
-			<button title="Copy Tailwind Vars"
-				on:click={() => copyVars('tailwind') }
-				style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
-					<span class="icon"><CopyIcon size="1x" /></span>
-					<span class="icon-tailwind">
-						<Tailwind />
-					</span>
-			</button>
+		<div class="buttons">
+			<div>
+				<button class=""
+					on:click={() => showSettings = ! showSettings }
+					style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
+					<span class="icon">{#if showSettings}<EyeOffIcon size="1.25x" title="Hide" />{:else}<EyeIcon size="1.25x" title="Show" />{/if}</span>
+					Settings
+				</button>
+				<button class=""
+					on:click={() => showVars = ! showVars }
+					style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
+					<span class="icon">{#if showVars}<EyeOffIcon size="1.25x" title="Hide" />{:else}<EyeIcon size="1.25x" title="Show" />{/if}</span>
+					Vars
+				</button>
+			</div>
+			<div>
+				<button title="Copy CSS Vars"
+					on:click={() => copyVars('css') }
+					style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
+						<span class="icon"><CopyIcon size="1x" /></span>
+						CSS
+				</button>
+				<button title="Copy Tailwind Vars"
+					on:click={() => copyVars('tailwind') }
+					style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
+						<span class="icon"><CopyIcon size="1x" /></span>
+						<span class="icon-tailwind">
+							<Tailwind />
+						</span>
+				</button>
+			</div>
 		</div>
 		 <div class="allvars-outputs" class:showing={showVars}>
 			<div>
@@ -207,15 +211,18 @@ style="
 		@apply text-3xl text-center p-4 font-semibold;
 	}
 	button {
-		@apply py-2 px-4 flex align-middle gap-2;
+		@apply py-1 px-3 flex align-middle place-items-center mx-auto my-2 transform scale-x-95 xs:(py-2 px-4 scale-x-100 );
 	}
 	.icon {
-		@apply inline-block pt-0.5;
+		@apply inline-block pt-0.5 pr-1;
 	}
 	.allvars {
 		@apply max-w-max mx-auto text-center mt-6 mb-2;
+	}
+	.buttons { 
+		@apply flex flex-wrap justify-center gap-1 px-2 xs:(flex-nowrap flex-row px-0 gap-3);
 		>div {
-			@apply flex flex-wrap gap-2 justify-center;
+			@apply flex gap-1 xs:(gap-3);
 		}
 	}
 	.allvars-outputs {

@@ -98,7 +98,10 @@
   @apply inline-block py-1 md:px-2;
 }
 .icon-tailwind {
-  @apply align-bottom tracking-tighter inline-block pt-1 transform scale-60;
+  @apply align-bottom tracking-tighter inline-block pt-1 -mt-1 transform scale-60;
+}
+.allvars .icon-tailwind {
+  @apply mt-0;
 }
 .settings {
   @apply max-w-3/4  mx-auto my-2 text-center flex flex-col align-end justify-center gap-x-3 gap-y-1 

@@ -1,6 +1,6 @@
 <script>
-import { describeScheme, schemes, cssSchemes, describeCssScheme } from '$lib'
-import { lightness, scheme } from '$lib/stores'
+import { describeScheme, schemes, cssSchemes } from '$lib'
+import { scheme } from '$lib/stores'
 import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
 
 </script>
@@ -13,8 +13,8 @@ import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
 		<li>HSLA based</li>
 		<li>Produces your favorite color notations for web (CSS/Tailwind):
 			 <ul>
-				{#each cssSchemes as s, i}
-				<li>{s.name || s.id} {describeCssScheme(s)}</li>
+				{#each cssSchemes as {id, name, description, sample}, i}
+				<li><button class="">{name || id}</button>: {description} - <em>{sample}</em></li>
 				{/each}
 		</ul></li>
 		<li>Custom variable names with sensible default colors and prefix</li>
