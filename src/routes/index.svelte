@@ -17,7 +17,7 @@
 
 	import { schemes, schemeColors, updateHSLA, colorShades, hueName } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, 
-		factorLightness, factorSaturation, varOptTailwind, defaults } from '$lib/stores'
+		factorLightness, factorSaturation, cssVarPrefix, varOptCSS, varOptTailwind, defaults } from '$lib/stores'
 	import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte'
 import Tailwind from '$lib/components/svg/tailwind.svelte'
 
@@ -37,7 +37,12 @@ import Tailwind from '$lib/components/svg/tailwind.svelte'
 			if (searchParams.has('steps')) steps.set( parseInt(searchParams.get('steps')) )
 			if (searchParams.has('pL')) factorLightness.set( 0.01 * parseFloat(searchParams.get('pL')) )
 			if (searchParams.has('pS')) factorSaturation.set( 0.01 * parseFloat(searchParams.get('pS')) )
-			const colorNamesSP = new Array(4).fill('c')
+
+			if (searchParams.has('vp')) cssVarPrefix.set(searchParams.get('vp'))
+			if (searchParams.has('vc')) varOptCSS.set(searchParams.get('vc'))
+			if (searchParams.has('vt')) varOptTailwind.set(searchParams.get('vt'))
+
+			const colorNamesSP = new Array(10).fill('c')
 				.map((c,i) => searchParams.has(c+i) ? searchParams.get(c+i) : '')
 			// console.log('onMount(colorNamesSearchParams)',{colorNamesSP,searchParams})
 			colorNames.set(colorNamesSP)
@@ -77,6 +82,10 @@ import Tailwind from '$lib/components/svg/tailwind.svelte'
 			if ($steps != defaults.steps) state.steps = $steps.toFixed()
 			if ($factorLightness != defaults.factorLightness) state.pL = ($factorLightness*100).toFixed(1)
 			if ($factorSaturation != defaults.factorSaturation) state.pS = ($factorSaturation*100).toFixed(1)
+
+			if ($cssVarPrefix != defaults.cssVarPrefix) state.vp = $cssVarPrefix
+			if ($varOptCSS != defaults.varOptCSS) state.vc = $varOptCSS
+			if ($varOptTailwind != defaults.varOptTailwind) state.vt = $varOptTailwind
 
 			$colorNames.forEach((name,i) => {
 				if (name && name !== '') {
@@ -125,10 +134,10 @@ import Tailwind from '$lib/components/svg/tailwind.svelte'
 style="
 	color: {readable}; 
 	background-color: {$primaryColor};
-	--color-C: {darken(adjustHue($primaryColor,240),0.1)};
-	--color-P: {darken(adjustHue($primaryColor,330),0.1)};
-	--color-S: {lighten(adjustHue($primaryColor,180),0.1)};
-	--color-G: {lighten(adjustHue($primaryColor,90),0.1)};
+	--color-C: {darken(adjustHue($primaryColor,240),0.175)};
+	--color-P: {darken(adjustHue($primaryColor,330),0.175)};
+	--color-S: {lighten(adjustHue($primaryColor,180),0.12)};
+	--color-G: {lighten(adjustHue($primaryColor,90),0.12)};
 ">
 	<h1><ColorPaletteShadeGenerator /></h1>
 	<ColorChoose />
@@ -162,7 +171,7 @@ style="
 					on:click={() => showVars = ! showVars }
 					style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
 					<span class="icon">{#if showVars}<EyeOffIcon size="1.25x" title="Hide" />{:else}<EyeIcon size="1.25x" title="Show" />{/if}</span>
-					Vars
+					Output
 				</button>
 			</div>
 			<div>

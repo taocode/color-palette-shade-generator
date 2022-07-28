@@ -1,7 +1,7 @@
 <script>
   import { readableColor } from 'color2k'
   import { primaryColor, varOptCSS } from '$lib/stores'
-
+  import { cssSchemes } from '$lib'
   
   export const varOptsCSS = [
     'HSLA','RGBA','#HexA', 'HSL', 'RGB', '#Hex'
@@ -23,8 +23,8 @@
   on:change={()=>{varOptCSS.set(_varOptCSS)}}
   style="--color-background: {color}; --color-foreground: {readableColor(color)};"
   >
-    {#each varOptsCSS as o, i}
-    <option value={o}>{o}</option>
+    {#each cssSchemes as {id,name}, i}
+    <option value={id}>{name || id}</option>
     {/each}
   </select>
 </div>

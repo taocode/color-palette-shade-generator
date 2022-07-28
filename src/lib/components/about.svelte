@@ -1,11 +1,18 @@
 <script>
+import { darken, lighten, adjustHue } from 'color2k'
 import { describeScheme, schemes, cssSchemes } from '$lib'
-import { scheme } from '$lib/stores'
+import { scheme, primaryColor, varOptCSS } from '$lib/stores'
 import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
 
 </script>
 
-<div class="prose mx-auto my-10 px-3 sm:px-0">
+<div class="prose mx-auto my-10 px-3 sm:px-0"
+style="
+--color-C: {darken(adjustHue($primaryColor,60),0.175)};
+--color-P: {darken(adjustHue($primaryColor,150),0.175)};
+--color-S: {lighten(adjustHue($primaryColor,240),0.12)};
+--color-G: {lighten(adjustHue($primaryColor,330),0.12)};
+">
 	<h2 class="flex align-bottom"><span class="">About</span> <ColorPaletteShadeGenerator size="1.5em" /></h2>
 	<p>Use this color shade generating app to make multiple shades of colors and variables for websites (CSS, Tailwind/WindiCSS) based on <a target="_blank" href="https://www.interaction-design.org/literature/topics/color-theory">color theory</a>.</p>
 	<h3>Features</h3>
@@ -14,19 +21,20 @@ import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
 		<li>Produces your favorite color notations for web (CSS/Tailwind):
 			 <ul>
 				{#each cssSchemes as {id, name, description, sample}, i}
-				<li><button class="">{name || id}</button>: {description} - <em>{sample}</em></li>
+				<li><button on:click={()=>varOptCSS.set(id)}>{name || id}</button>: {description} - <em>{sample}</em></li>
 				{/each}
 		</ul></li>
-		<li>Custom variable names with sensible default colors and prefix</li>
+		<li>Custom variable names overrides with sensible default colors and customizable prefix</li>
+		<li>Customizable shade step % luminosity and % saturation shifts</li>
 		<li>Variables that are copy+paste ready for CSS (--var-name: color) and Tailwind/WindiCSS</li>
 		<li>Secondary colors for accents based on color theory</li>
 	</ol>
-	<h2>Schemes:</h2>
+	<h3>Schemes:</h3>
 	<ul class="list-disc">
 		{#each schemes as s, i}
 		<li>
 			<span>
-			<button class="font-bold" on:click={()=>scheme.set(i)}>{s.name}</button>
+			<button on:click={()=>scheme.set(i)}>{s.name}</button>
 				<em>
 					{#if s.hues}
 					({1+s.hues.length} color{#if s.hues.length > 0}s{/if})
@@ -42,3 +50,8 @@ import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
 	<p>I believe that <strong>H</strong>ue <strong>S</strong>aturation <strong>L</strong>ightness is easier for a human to comprehend. RGBA and Hex outputs are also provided.</p>
 
 </div>
+<style lang="less">
+	button {
+		@apply font-bold;
+	}
+</style>
