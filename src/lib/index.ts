@@ -170,9 +170,9 @@ const cssColor = (color,optCSS) => {
   // console.log(`cssColor(${_varOptCSS},${color})`)
   if (optCSS === 'RGBA') {
     return toRgba(color)
-  } else if (optCSS === '#HexA') {
+  } else if (optCSS === 'HexA') {
     return toHex(color)
-  } else if (optCSS === '#Hex') {
+  } else if (optCSS === 'Hex') {
     return toHex(color).substring(0,7)
   } else if (optCSS === 'HSL') {
     const hsl = parseToHsla(color)
