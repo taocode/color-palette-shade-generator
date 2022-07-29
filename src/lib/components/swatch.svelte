@@ -4,10 +4,11 @@
   import { CopyIcon, Edit2Icon } from 'svelte-feather-icons'
   import { clickOutside } from 'svelte-use-click-outside'
 
-  import { hue, saturation, lightness, alpha, primaryColor } from '$lib/stores'
+  import { hue, saturation, lightness, alpha, primaryColor, cssVarPrefix } from '$lib/stores'
   import { cssVarNum, dots, notice, updateHSLA } from '$lib'
   
   export let color = 'black'
+  export let name = ''
   export let shadeIndex = -1
 
   const varNum = cssVarNum(shadeIndex)
@@ -33,22 +34,22 @@
     }
   }
   let hidden = true
-
+  $: variableName = '--' + ($cssVarPrefix ? `${$cssVarPrefix}-` : '') + `${name}-${varNum}`
 </script>
 <div class="swatch relative" style="background-color: {color}; color: {readableColor(color)}">
   <div>
-    <button class="absolute inset-0 border border-transparent leading-tight rounded p-4 hover:border-current"
+    <button class="detail-trigger"
     on:click={() => { hidden = false }}
     tabindex={1}>
-    <div>{varNum}</div>
-    <div class="text-sm">{@html dots}</div>
+    <span>{varNum}</span>
+    <span class="text-sm">{@html dots}</span>
   </button>
   </div>
   <div class="fixed hidden bg-dark-900 bg-opacity-80 inset-0 flex z-10" class:hidden>
       <div class="info"
       use:clickOutside={() => hidden = true}
       style="background-color: {color}; color: {readableColor(color)}"
-      >
+      ><div class="variable-name">{variableName}</div>
         <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mt-1 mx-1 pointer-events-none" size="1x" /> {toHsla(color)}</button>
         <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mt-1 mx-1 pointer-events-none" size="1x" /> {toRgba(color)}</button>
         <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mt-1 mx-1 pointer-events-none" size="1x" /> {toHex(color)}</button>
@@ -70,8 +71,18 @@
       @apply w-full;
     }
   }
+  .detail-trigger {
+    @apply absolute inset-0 border border-transparent leading-tight rounded p-4 hover:border-current
+    w-full;
+    >span {
+      @apply flex flex-col ;
+    }
+  }
+  .variable-name {
+    @apply text-[1.2em] mb-2 font-mono;
+  }
   .swatch {
-    @apply p-2 min-h-16 min-w-16 flex flex-grow flex-col items-center justify-center lg:min-h-20;
+    @apply w-full h-full flex flex-col items-center justify-center lg:min-h-20;
   }
 
 </style>

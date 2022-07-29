@@ -153,9 +153,11 @@ function copyClick(event,chosen) {
   </div>
 </div>
 <div class="shades">
-{#each shades as color, shadeIndex}
-  <Swatch {color} {shadeIndex} on:updateColor />
-{/each}
+  {#each shades as color, shadeIndex}
+  <div>
+    <Swatch name={name || placeholder} {color} {shadeIndex} on:updateColor />
+  </div>
+  {/each}
 </div>
 <style lang="postcss">
   .name {
@@ -195,6 +197,9 @@ function copyClick(event,chosen) {
   }
   .shades {
 		@apply flex flex-wrap text-center;
+    >div {
+      @apply min-w-12 min-h-16 w-1/5 flex justify-center items-center sm:w-1/10;
+    }
 	}
   .details {
     @apply inset-auto m-auto p-2 border-2 z-10 
