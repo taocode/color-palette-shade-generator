@@ -1,17 +1,19 @@
 <script>
-import { darken, lighten, adjustHue } from 'color2k'
+import { darken, lighten, adjustHue, toHex, readableColor } from 'color2k'
 import { describeScheme, schemes, cssSchemes } from '$lib'
 import { scheme, primaryColor, varOptCSS } from '$lib/stores'
 import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
 
+let readable = readableColor('white')
 </script>
 
 <div class="prose mx-auto my-10 px-3 sm:px-0"
 style="
---color-C: {darken(adjustHue($primaryColor,60),0.175)};
---color-P: {darken(adjustHue($primaryColor,150),0.175)};
---color-S: {lighten(adjustHue($primaryColor,240),0.12)};
---color-G: {lighten(adjustHue($primaryColor,330),0.12)};
+--color-C: {darken($primaryColor,0.175)};
+--color-P: {darken(adjustHue($primaryColor,90),0.175)};
+--color-S: {lighten(adjustHue($primaryColor,180),0.12)};
+--color-G: {lighten(adjustHue($primaryColor,270),0.12)};
+--color-glow: {toHex(readable)+'66'};
 ">
 	<h2 class="flex align-bottom"><span class="">About</span> <ColorPaletteShadeGenerator size="1.5em" /></h2>
 	<p>Use this color shade generating app to make multiple shades of colors and variables for websites (CSS, Tailwind/WindiCSS) based on <a target="_blank" href="https://www.interaction-design.org/literature/topics/color-theory">color theory</a>.</p>
@@ -21,7 +23,7 @@ style="
 		<li>Produces your favorite color notations for web (CSS/Tailwind):
 			 <ul>
 				{#each cssSchemes as {id, name, description, sample}, i}
-				<li><button on:click={()=>varOptCSS.set(id)}>{name || id}</button>: {description} - <em>{sample}</em></li>
+				<li><span class="name">{name || id}</span>: {description} - <em>{sample}</em></li>
 				{/each}
 		</ul></li>
 		<li>Custom variable names overrides with sensible default colors and customizable prefix</li>
@@ -34,7 +36,7 @@ style="
 		{#each schemes as s, i}
 		<li>
 			<span>
-			<button on:click={()=>scheme.set(i)}>{s.name}</button>
+			<span class="name">{s.name}</span>
 				<em>
 					{#if s.hues}
 					({1+s.hues.length} color{#if s.hues.length > 0}s{/if})
@@ -51,7 +53,7 @@ style="
 
 </div>
 <style lang="less">
-	button {
-		@apply font-bold;
+	.name {
+		@apply font-semibold;
 	}
 </style>

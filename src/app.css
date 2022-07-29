@@ -157,7 +157,8 @@
 }
 
 .CPSG {
-  @apply inline-flex justify-center place-items-center font-700;
+  @apply inline-flex justify-center place-items-center font-700 mr-[0.08ch];
+  box-shadow: 0 0 0.15em 1px var(--color-glow, #ffffffdd);
 }
 .C {
   background-color: var(--color-C, blue);

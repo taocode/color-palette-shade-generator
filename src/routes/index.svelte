@@ -138,6 +138,7 @@ style="
 	--color-P: {darken(adjustHue($primaryColor,330),0.175)};
 	--color-S: {lighten(adjustHue($primaryColor,180),0.12)};
 	--color-G: {lighten(adjustHue($primaryColor,90),0.12)};
+	--color-glow: {toHex(readable)+'99'};
 ">
 	<h1><ColorPaletteShadeGenerator /></h1>
 	<ColorChoose />

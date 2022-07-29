@@ -43,7 +43,7 @@ export const cssSchemes = [
   }, {
     id: 'HexA',
     name: '#HexA',
-    description: 'Hexadecimal with alpha',
+    description: 'Hexadecimal with Alpha',
     sample: '#2020dfe6',
   }, {
     id: 'HSL',

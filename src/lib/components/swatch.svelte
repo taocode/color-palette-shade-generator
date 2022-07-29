@@ -79,7 +79,7 @@
     }
   }
   .variable-name {
-    @apply text-[1.2em] mb-2 font-mono;
+    @apply text-[1.1em] px-2 text-center mb-2 font-mono whitespace-nowrap;
   }
   .swatch {
     @apply w-full h-full flex flex-col items-center justify-center lg:min-h-20;

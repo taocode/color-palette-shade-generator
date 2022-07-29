@@ -8,7 +8,9 @@ export const fanciful = name
         (p,c) => {
           const fl = c.substring(0,1)
           const r = c.substring(1)
-          return `${p} <div class="max-w-min whitespace-nowrap mr-2"><span class="CPSG ${fl}" style="height: ${size}; width: ${size};">${fl}</span>${r}</div>`
+          return `${p} 
+          <div class="max-w-min whitespace-nowrap mr-2"><span class="CPSG ${fl}" 
+            style="height: ${size}; width: ${size};">${fl}</span>${r}</div>`
         },''
       )
 </script>
