@@ -104,8 +104,8 @@
   @apply mt-0;
 }
 .settings {
-  @apply max-w-3/4  mx-auto my-2 text-center flex flex-col align-end justify-center gap-x-3 gap-y-1 
-  xs:(flex-row max-w-none)
+  @apply max-w-3/4  mx-auto my-2 text-center flex flex-col align-end justify-center 
+  xs:(flex-row max-w-none gap-1)
   md:max-w-screen-lg;
   &.vars {
     @apply flex-col sm:flex-row;

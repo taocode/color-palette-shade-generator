@@ -1,6 +1,6 @@
 <script>
 	import { darken, lighten, readableColor, hsla, toHex, toHsla, parseToHsla, adjustHue } from 'color2k'
-	import { EyeOffIcon, EyeIcon, CopyIcon } from 'svelte-feather-icons'
+	import { EyeIcon, CopyIcon, CheckSquareIcon, SquareIcon } from 'svelte-feather-icons'
 	import { browser } from '$app/env'
 	import { page } from '$app/stores'
 	import { onMount } from 'svelte'
@@ -133,9 +133,10 @@
 		}
 	}
 	let iconEyeSize = '1.3x'
-	let showTogglers = false;
-	function toggleShow(e) {
-		showTogglers = ! showTogglers
+	let outputTogglers = false;
+	let iconSquareSize = '1.3x'
+	function toggleShowOutputs(e) {
+		outputTogglers = ! outputTogglers
 	}
 	let showCopiers = false;
 	function toggleCopiers(e) {
@@ -148,7 +149,7 @@
   <meta name="description" content="Generate a color palette using color theory with multiple shades for use with CSS, Tailwind">
 </svelte:head>
 
-<div class="pt-3 pb-1 top-controls" 
+<div class="pt-3 pb-1 -mb-4 top-controls" 
 style="
 	color: {readable}; 
 	background-color: {$primaryColor};
@@ -164,20 +165,24 @@ style="
 	<HueSlider />
 	<div class="panel-scheme">
 		<div class="show-toggles"
-			on:mouseenter={()=>showTogglers = true}
-			on:mouseleave={()=>showTogglers = false}
-			>
-			<button on:click={toggleShow}>
+		on:mouseenter={()=>outputTogglers = true}
+		on:mouseleave={()=>outputTogglers = false}
+		>
+			<button class="primary-toggle">
 				<EyeIcon size={iconEyeSize} />
 			</button>
-			<div class="toggles-wrap showers" class:showing={showTogglers}>
+			<div class="toggles-wrap outputTogglers" class:showing={outputTogglers}>
 				<div class="show-toggler">
-				<input id="settingsToggle" type="checkbox" bind:checked={showSettings} />
-					<label for="settingsToggle">Show Settigs</label>
+					<button on:click={()=> showSettings = ! showSettings}>
+						<span class="inline-block mr-1">{#if showSettings}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
+						Show Settings
+					</button>
 				</div>
 				<div class="show-toggler">
-					<input id="outputToggle" type="checkbox" bind:checked={showVars} />
-					<label for="outputToggle">Show Output</label>
+					<button on:click={()=> showVars = ! showVars}>
+						<span class="inline-block mr-1">{#if showVars}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
+						Show Output
+					</button>
 				</div>
 			</div>
 		</div>
@@ -187,8 +192,8 @@ style="
 		<div class="show-toggles"
 			on:mouseenter={()=>showCopiers = true}
 			on:mouseleave={()=>showCopiers = false}>
-		<button>
-			<CopyIcon size={iconEyeSize} />
+			<button class="primary-toggle">
+				<CopyIcon size={iconEyeSize} />
 			</button>
 			<div class="toggles-wrap copiers" class:showing={showCopiers}>
 				<div class="show-toggler">
@@ -204,7 +209,7 @@ style="
 								<span class="icon-tailwind">
 									<Tailwind />
 								</span>
-						</button>
+							</button>
 					</div>
 				</div>
 			</div>
@@ -257,7 +262,7 @@ style="
 		@apply text-3xl text-center p-4 font-semibold;
 	}
 	button {
-		@apply py-1 px-3 flex align-middle place-items-center mx-auto my-2 transform scale-x-95 xs:(py-2 px-4 scale-x-100);
+		@apply py-1 px-3 flex align-middle place-items-center mx-auto my-2 xs:(py-2 px-4);
 		background-color: var(--color-btn-bg);
 		color: var(--color-btn-fg);
 	}
@@ -276,26 +281,23 @@ style="
 	.show-toggles {
 		@apply relative;
 		.toggles-wrap {
-			@apply absolute py-1 px-2 z-20
+			@apply absolute py-1 px-2 z-20 top-9
 			xs:(top-11 -right-12);
 			background-color: var(--color-btn-bg);
 			color: var(--color-btn-fg);
 			&:not(.showing) {
 				@apply hidden;
 			}
-			&.showers {
-				@apply top-9 left-4 -right-14;
+			&.outputTogglers {
+				@apply left-4 w-45;
 			}
 			&.copiers {
-				@apply top-9 -left-14 right-4;
+				@apply right-4 w-30;
 			}
 		}
-		.show-toggler label {
-			@apply inline-block my-2;
+		.show-toggler {
+			@apply whitespace-nowrap;
 		}
-	}
-	input[type=checkbox] {
-		background-color: red;
 	}
 	.panel-settings {
 		&:not(.showing) {
@@ -303,8 +305,8 @@ style="
 		}
 	}
 	.panel-scheme {
-		@apply flex gap-2 mx-auto max-w-[60ch] relative;
-		button {
+		@apply flex mx-auto justify-center relative mt-6;
+		.primary-toggle {
 			@apply mx-4;
 		}
 	}
