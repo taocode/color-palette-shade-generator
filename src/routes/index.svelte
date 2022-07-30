@@ -133,6 +133,10 @@
 		}
 	}
 	let iconEyeSize = '1.3x'
+	let showTogglers = true;
+	function toggleShow(e) {
+		showTogglers = ! showTogglers
+	}
 </script>
 
 <svelte:head>
@@ -149,10 +153,55 @@ style="
 	--color-S: {lighten(adjustHue($primaryColor,180),0.12)};
 	--color-G: {lighten(adjustHue($primaryColor,90),0.12)};
 	--color-glow: {toHex(readable)+'99'};
+	--color-btn-bg: {buttonColor};
+	--color-btn-fg: {readableColor(buttonColor)};
 ">
 	<h1><ColorPaletteShadeGenerator /></h1>
 	<HueSlider />
-	<SettingsScheme />
+	<div class="panel-scheme">
+		<div class="show-toggles"
+			on:mouseenter={()=>showTogglers = true}
+			on:mouseleave={()=>showTogglers = false}>
+			<button on:click={toggleShow} 
+			>
+				<EyeIcon size={iconEyeSize} />
+			</button>
+			<div class="toggles-wrap" class:showing={showTogglers}>
+				<div class="show-toggler">
+				<input id="settingsToggle" type="checkbox" bind:checked={showSettings} />
+					<label for="settingsToggle">Show Settigs</label>
+				</div>
+				<div class="show-toggler">
+					<input id="outputToggle" type="checkbox" bind:checked={showVars} />
+					<label for="outputToggle">Show Output</label>
+				</div>
+			</div>
+		</div>
+		<div>
+			<SettingsScheme />
+		</div>
+		<div>
+			<button>
+			<CopyIcon size={iconEyeSize} />
+			</button>
+			<div class="copy-buttons">
+				<div>
+					<button title="Copy CSS Vars"
+						on:click={() => copyVars('css') }
+						>
+							CSS
+					</button>
+					<button title="Copy Tailwind Vars"
+						on:click={() => copyVars('tailwind') }
+						>
+							<span class="icon-tailwind">
+								<Tailwind />
+							</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="panel-settings" class:showing={showSettings}>
 		<ColorChoose />
 		<div class="varopts settings">
@@ -171,38 +220,7 @@ style="
 		</div>
 	</div>
 	<div class="allvars">
-		<div class="buttons">
-			<div>
-				<button class=""
-					on:click={() => showSettings = ! showSettings }
-					style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
-					<span class="icon">{#if showSettings}<EyeOffIcon size={iconEyeSize} />{:else}<EyeIcon size={iconEyeSize} />{/if}</span>
-					<span class="sr-only">{showSettings ? 'Hide' : 'Show'}</span>&nbsp;Settings
-				</button>
-				<button class=""
-					on:click={() => showVars = ! showVars }
-					style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
-					<span class="icon">{#if showVars}<EyeOffIcon size={iconEyeSize} />{:else}<EyeIcon size={iconEyeSize} />{/if}</span>
-					<span class="sr-only">{showVars ? 'Hide' : 'Show'}</span>&nbsp;Output
-				</button>
-			</div>
-			<div>
-				<button title="Copy CSS Vars"
-					on:click={() => copyVars('css') }
-					style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
-						<span class="icon"><CopyIcon size="1x" /></span>
-						CSS
-				</button>
-				<button title="Copy Tailwind Vars"
-					on:click={() => copyVars('tailwind') }
-					style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
-						<span class="icon"><CopyIcon size="1x" /></span>
-						<span class="icon-tailwind">
-							<Tailwind />
-						</span>
-				</button>
-			</div>
-		</div>
+		
 		 <div class="allvars-outputs" class:showing={showVars}>
 			<div>
 				<AllVarsOutput type="CSS" {allColors} />
@@ -232,7 +250,9 @@ style="
 		@apply text-3xl text-center p-4 font-semibold;
 	}
 	button {
-		@apply py-1 px-3 flex align-middle place-items-center mx-auto my-2 transform scale-x-95 xs:(py-2 px-4 scale-x-100 );
+		@apply py-1 px-3 flex align-middle place-items-center mx-auto my-2 transform scale-x-95 xs:(py-2 px-4 scale-x-100);
+		background-color: var(--color-btn-bg);
+		color: var(--color-btn-fg);
 	}
 	.icon {
 		@apply inline-block pt-0.5 pr-1;
@@ -255,9 +275,33 @@ style="
 			display: none;
 		}
 	}
+	.show-toggles {
+		@apply relative;
+		.toggles-wrap {
+			@apply absolute top-9 left-4 -right-14 py-1 px-2
+			xs:(top-11 -right-12);
+			background-color: var(--color-btn-bg);
+			color: var(--color-btn-fg);
+			&:not(.showing) {
+				@apply hidden;
+			}
+		}
+		.show-toggler label {
+			@apply inline-block my-2;
+		}
+	}
+	input[type=checkbox] {
+		background-color: red;
+	}
 	.panel-settings {
 		&:not(.showing) {
 			display: none;
+		}
+	}
+	.panel-scheme {
+		@apply flex gap-2 mx-auto max-w-[60ch] relative;
+		button {
+			@apply mx-4;
 		}
 	}
 </style>
