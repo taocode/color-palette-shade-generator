@@ -67,6 +67,8 @@ function copyClick(event,chosen) {
       )
     }
   }
+
+  let showCopiers = true
 </script>
 
 <div class="color-patch name" style="
@@ -83,20 +85,30 @@ function copyClick(event,chosen) {
       size={name?.length || placeholder?.length || 6}
       class="varName"
       >
-    <button 
-      on:click={(event)=>copyClick(event,'css')}
-      title="Copy CSS variables"
-      class="mx-3 mt-2 inline-flex text-xs" 
-    >
-      <CopyIcon size="1.25x" class="mr-1" /><span class="align-bottom tracking-tighter">CSS</span>
-    </button>
-    <button 
-      on:click={(event)=>copyClick(event,'tailwind')}
-      class="mx-3 mt-2 inline-flex text-xs" 
-      title="Copy Tailwind variables"
-    >
-      <CopyIcon size="1.25x" class="mr-1" /><span class="icon-tailwind"><TailwindIcon /></span>
-    </button>
+    <div class="copy-wrap"
+      on:mouseenter={() => showCopiers = true}
+      on:mouseleave={() => showCopiers = false}
+      >
+      <CopyIcon size="1x"  />
+      <div class="copy-controls use-dark-bg"
+        class:showing={showCopiers}
+        >
+        <button
+          on:click={(event)=>copyClick(event,'css')}
+          title="Copy CSS variables"
+          class="m-1 inline-flex text-xs py-1 px-2 border w-12 text-center justify-center rounded"
+          >
+          <span class="align-bottom tracking-tighter">CSS</span>
+        </button>
+        <button
+          on:click={(event)=>copyClick(event,'tailwind')}
+          title="Copy Tailwind variables"
+          class="m-1 inline-flex text-xs py-1 px-2 border w-12 text-center justify-center rounded"
+          >
+          <span class="icon-tailwind"><TailwindIcon /></span>
+        </button>
+      </div>
+    </div>
     {#if description}
     <em>({description} = 
       {primaryHue}°,
@@ -173,6 +185,21 @@ function copyClick(event,chosen) {
       --start-percent: 40%;
     }
 	}
+  .use-dark-bg {
+    background-color: var(--color-dark);
+  }
+  .copy-wrap {
+    @apply relative ml-2 mr-1 py-1 px-2;
+  }
+  .copy-controls {
+    @apply absolute top-8 z-15 p-1 text-center opacity-100;
+    &:not(.showing) {
+      @apply opacity-0 -z-1;
+    }
+    &:focus-within {
+      @apply opacity-100 z-15;
+    }
+  }
   .close {
     @apply flex absolute top-2 right-2 rounded-sm float-right border-1;
     color: var(--color-foreground);
