@@ -133,9 +133,13 @@
 		}
 	}
 	let iconEyeSize = '1.3x'
-	let showTogglers = true;
+	let showTogglers = false;
 	function toggleShow(e) {
 		showTogglers = ! showTogglers
+	}
+	let showCopiers = false;
+	function toggleCopiers(e) {
+		showCopiers = ! showCopiers
 	}
 </script>
 
@@ -144,7 +148,7 @@
   <meta name="description" content="Generate a color palette using color theory with multiple shades for use with CSS, Tailwind">
 </svelte:head>
 
-<div class="pt-2 pb-6 top-controls" 
+<div class="pt-3 pb-1 top-controls" 
 style="
 	color: {readable}; 
 	background-color: {$primaryColor};
@@ -161,12 +165,12 @@ style="
 	<div class="panel-scheme">
 		<div class="show-toggles"
 			on:mouseenter={()=>showTogglers = true}
-			on:mouseleave={()=>showTogglers = false}>
-			<button on:click={toggleShow} 
+			on:mouseleave={()=>showTogglers = false}
 			>
+			<button on:click={toggleShow}>
 				<EyeIcon size={iconEyeSize} />
 			</button>
-			<div class="toggles-wrap" class:showing={showTogglers}>
+			<div class="toggles-wrap showers" class:showing={showTogglers}>
 				<div class="show-toggler">
 				<input id="settingsToggle" type="checkbox" bind:checked={showSettings} />
 					<label for="settingsToggle">Show Settigs</label>
@@ -180,24 +184,28 @@ style="
 		<div>
 			<SettingsScheme />
 		</div>
-		<div>
-			<button>
+		<div class="show-toggles"
+			on:mouseenter={()=>showCopiers = true}
+			on:mouseleave={()=>showCopiers = false}>
+		<button>
 			<CopyIcon size={iconEyeSize} />
 			</button>
-			<div class="copy-buttons">
-				<div>
-					<button title="Copy CSS Vars"
-						on:click={() => copyVars('css') }
-						>
-							CSS
-					</button>
-					<button title="Copy Tailwind Vars"
-						on:click={() => copyVars('tailwind') }
-						>
-							<span class="icon-tailwind">
-								<Tailwind />
-							</span>
-					</button>
+			<div class="toggles-wrap copiers" class:showing={showCopiers}>
+				<div class="show-toggler">
+					<div>
+						<button title="Copy CSS Vars"
+							on:click={() => copyVars('css') }
+							>
+								CSS
+						</button>
+						<button title="Copy Tailwind Vars"
+							on:click={() => copyVars('tailwind') }
+							>
+								<span class="icon-tailwind">
+									<Tailwind />
+								</span>
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -242,7 +250,6 @@ style="
 	on:updateColor={updateColor} />
 {/each}
 
-
 <About />
 
 <style lang="postcss">
@@ -254,17 +261,8 @@ style="
 		background-color: var(--color-btn-bg);
 		color: var(--color-btn-fg);
 	}
-	.icon {
-		@apply inline-block pt-0.5 pr-1;
-	}
 	.allvars {
 		@apply max-w-max mx-auto text-center mt-6 mb-2;
-	}
-	.buttons { 
-		@apply flex flex-wrap justify-center gap-1 px-2 xs:(flex-nowrap flex-row px-0 gap-3);
-		>div {
-			@apply flex gap-1 xs:(gap-3);
-		}
 	}
 	.allvars-outputs {
 		@apply my-4 md:flex;
@@ -278,12 +276,18 @@ style="
 	.show-toggles {
 		@apply relative;
 		.toggles-wrap {
-			@apply absolute top-9 left-4 -right-14 py-1 px-2
+			@apply absolute py-1 px-2 z-20
 			xs:(top-11 -right-12);
 			background-color: var(--color-btn-bg);
 			color: var(--color-btn-fg);
 			&:not(.showing) {
 				@apply hidden;
+			}
+			&.showers {
+				@apply top-9 left-4 -right-14;
+			}
+			&.copiers {
+				@apply top-9 -left-14 right-4;
 			}
 		}
 		.show-toggler label {
