@@ -22,7 +22,7 @@ export let placeholder = hueName(primaryHue)
 
 export let shades = colorShades(color,$steps,$factorLightness,$factorSaturation)
 
-let hidden = true
+let hidden = false
 
 $: lastShade = shades[shades.length-1]
 $: primaryHue = parseToHsla(color)[0].toFixed()
@@ -68,7 +68,7 @@ function copyClick(event,chosen) {
     }
   }
 
-  let showCopiers = true
+  let showCopiers = false
 </script>
 
 <div class="color-patch name" style="
@@ -134,10 +134,12 @@ function copyClick(event,chosen) {
         style="
         --color-background: {lastShade};
         --color-foreground: {readableColor(lastShade)}">
-        <div class="flex place-items-center font-mono"
+        <div class="flex justify-items-start place-items-center font-mono mr-8"
         style="">
           <div class="flex place-items-center mr-1">CSS var:</div>
-          <SettingVarCssPrefix dashDash fixedColor={lastShade} />
+          <div class="max-w-fit">
+            <SettingVarCssPrefix dashDash fixedColor={lastShade} />
+          </div>
           {#if _cssVarPrefix}
           <label for="varname{schemeIndex}" title="var name" class="">
             -
@@ -149,7 +151,7 @@ function copyClick(event,chosen) {
             class=""
             size={name?.length || placeholder?.length || 6}
             style="--color-placeholder: {desaturate(lighten(color,0.2),0.1)};
-                  border-color: var(--color-dark);"
+                  border-color: var(--color-light);"
             >
         </div>
       </div>
@@ -210,7 +212,7 @@ function copyClick(event,chosen) {
     @apply text-xl p-1 pl-2 flex flex-col;
   }
   input {
-    @apply font-500 max-w-30 border-0 pl-2;
+    @apply font-500 max-w-30 pl-2 border-1;
     background-color: var(--color-background);
     color: var(--color-foreground);
   }

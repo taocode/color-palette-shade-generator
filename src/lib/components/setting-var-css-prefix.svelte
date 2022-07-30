@@ -29,7 +29,7 @@
     bind:value={_cssVarPrefix} 
     class="var-prefix"
     type="text"
-    size={_cssVarPrefix?.length || 1}
+    size={_cssVarPrefix?.length || 6}
     style="--color-background: {color};
         --color-foreground: {readableColor(color)};"
     >
@@ -40,7 +40,7 @@
     @apply flex flex-col text-xl;
   }
   input {
-    @apply pl-1;
+    @apply pl-1 border;
     color: var(--color-foreground);
     background-color: var(--color-background);
   }
