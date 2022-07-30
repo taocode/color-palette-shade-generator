@@ -3,7 +3,7 @@
 	import { EyeOffIcon, EyeIcon, CopyIcon } from 'svelte-feather-icons'
 	import { browser } from '$app/env'
 	import { page } from '$app/stores'
-	import { onMount, onDestroy } from 'svelte'
+	import { onMount } from 'svelte'
 
 	import ColorPaletteShadeGenerator from '$lib/components/color-palette-shade-generator.svelte'
 	import About from '$lib/components/about.svelte'
@@ -14,13 +14,23 @@
 	import AllVarsOutput from '$lib/components/all-vars-output.svelte'
 	import SettingVarTailwind from '$lib/components/setting-var-tailwind.svelte'
 	import SettingVarCss from '$lib/components/setting-var-css.svelte'
+	import HueSlider from '$lib/components/hue-slider.svelte'
 
 	import { schemes, schemeColors, updateHSLA, colorShades, hueName } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, 
 		factorLightness, factorSaturation, cssVarPrefix, varOptCSS, varOptTailwind, defaults } from '$lib/stores'
 	import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte'
-import Tailwind from '$lib/components/svg/tailwind.svelte'
+	import Tailwind from '$lib/components/svg/tailwind.svelte'
 
+	let timer
+	const debounceHistory = (state) => {
+    clearTimeout(timer)
+		timer = setTimeout(() => {
+			const params = new URLSearchParams(state)
+			const strParams = (params.toString() !== '') ? `/?${params}` : '/'
+      history.replaceState(state,'',strParams)
+		}, 200);
+	}
 	
 	export let lightnessPercent = $factorLightness*100
 	export let saturationPercent = $factorSaturation*100
@@ -93,10 +103,9 @@ import Tailwind from '$lib/components/svg/tailwind.svelte'
 				}
 			})
 			// console.log('colornames:',{$colorNames,state})
-			const params = new URLSearchParams(state)
 			// console.log(params.toString(),{params})
-			const strParams = (params.toString() !== '') ? `/?${params}` : '/'
-			history.replaceState(state,'',strParams)
+			
+			debounceHistory(state)
 		}
 	}
 	$: buttonColor = adjustHue($primaryColor,90)
@@ -123,6 +132,7 @@ import Tailwind from '$lib/components/svg/tailwind.svelte'
 			)
 		}
 	}
+	let iconEyeSize = '1.3x'
 </script>
 
 <svelte:head>
@@ -141,9 +151,10 @@ style="
 	--color-glow: {toHex(readable)+'99'};
 ">
 	<h1><ColorPaletteShadeGenerator /></h1>
-	<ColorChoose />
+	<HueSlider />
 	<SettingsScheme />
 	<div class="panel-settings" class:showing={showSettings}>
+		<ColorChoose />
 		<div class="varopts settings">
 			<div>
 				<SettingVarCssPrefix label="CSS Var Prefix: " />
@@ -165,14 +176,14 @@ style="
 				<button class=""
 					on:click={() => showSettings = ! showSettings }
 					style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
-					<span class="icon">{#if showSettings}<EyeOffIcon size="1.25x" title="Hide" />{:else}<EyeIcon size="1.25x" title="Show" />{/if}</span>
-					Settings
+					<span class="icon">{#if showSettings}<EyeOffIcon size={iconEyeSize} />{:else}<EyeIcon size={iconEyeSize} />{/if}</span>
+					<span class="sr-only">{showSettings ? 'Hide' : 'Show'}</span>&nbsp;Settings
 				</button>
 				<button class=""
 					on:click={() => showVars = ! showVars }
 					style="background-color:{buttonColor}; color: {readableColor(buttonColor)}">
-					<span class="icon">{#if showVars}<EyeOffIcon size="1.25x" title="Hide" />{:else}<EyeIcon size="1.25x" title="Show" />{/if}</span>
-					Output
+					<span class="icon">{#if showVars}<EyeOffIcon size={iconEyeSize} />{:else}<EyeIcon size={iconEyeSize} />{/if}</span>
+					<span class="sr-only">{showVars ? 'Hide' : 'Show'}</span>&nbsp;Output
 				</button>
 			</div>
 			<div>

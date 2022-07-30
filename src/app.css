@@ -114,6 +114,17 @@
     }
   }
 }
+.top-controls .hue-slider {
+  --size-thumb: 2em;
+  --size-track: 1em;
+  .track {
+    height: var(--size-track,1em);
+  }
+  .thumb {
+    height: var(--size-thumb,1em);
+    width: var(--size-thumb,1em);
+  }
+}
 .vars-output .heading {
   @apply flex;
   button {
