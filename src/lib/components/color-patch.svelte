@@ -78,7 +78,7 @@ function copyClick(event,chosen) {
 --color-dark: {lastShade};
 --color-light: {shades[0]};
 ">
-  <div class="flex align-middle">
+  <div class="flex align-middle max-w-prose mx-auto">
     <input id="varName" 
       bind:value={name}
       {placeholder}
@@ -175,7 +175,7 @@ function copyClick(event,chosen) {
 </div>
 <style lang="postcss">
   .name {
-		@apply px-4 py-2;
+		@apply px-3 py-1;
     --start-percent: 75%;
     background: var(--color-dark);
     color: var(--color-foreground); 
@@ -215,6 +215,7 @@ function copyClick(event,chosen) {
     @apply font-500 max-w-30 pl-2 border-1;
     background-color: var(--color-background);
     color: var(--color-foreground);
+    border-color: var(--color-light);
   }
   input::placeholder {
     @apply font-100 italic text-sm;
@@ -227,7 +228,7 @@ function copyClick(event,chosen) {
   .shades {
 		@apply flex text-center;
     >div {
-      @apply min-w-8 w-full min-h-14 flex justify-center items-center;
+      @apply min-w-8 w-full min-h-6 flex justify-center items-center;
     }
 	}
   .details {

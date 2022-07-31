@@ -42,7 +42,6 @@
     on:click={() => { hidden = false }}
     tabindex={1}>
     <span>{varNum}</span>
-    <span class="text-sm">{@html dots}</span>
   </button>
   </div>
   <div class="fixed hidden bg-dark-900 bg-opacity-80 inset-0 flex z-10" class:hidden>
@@ -72,22 +71,19 @@
     }
   }
   .detail-trigger {
-    @apply absolute inset-0 border border-transparent leading-tight rounded py-2 px-1
+    @apply absolute inset-0 border border-transparent leading-tight rounded
     w-full text-[0.8em]
     transform
     scale-x-70
     hover:border-current
     xs:(scale-x-90)
-    sm:(scale-x-100 py-3);
-    >span {
-      @apply flex flex-col ;
-    }
+    sm:(scale-x-100);
   }
   .variable-name {
     @apply text-[1.1em] px-2 text-center mb-2 font-mono whitespace-nowrap;
   }
   .swatch {
-    @apply w-full h-full flex flex-col items-center justify-center lg:min-h-20;
+    @apply w-full h-full flex flex-col items-center justify-center;
   }
 
 </style>
