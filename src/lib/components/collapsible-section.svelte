@@ -1,7 +1,6 @@
 <script>
   import { PlusSquareIcon, MinusSquareIcon } from 'svelte-feather-icons'
   export let heading = ""
-  export let level = 2
   export let collapsed = false
 </script>
 
