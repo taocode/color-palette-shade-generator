@@ -225,9 +225,9 @@ function copyClick(event,chosen) {
     @apply py-0 leading-0 max-w-20 focus:max-w-none;
   }
   .shades {
-		@apply flex flex-wrap text-center;
+		@apply flex text-center;
     >div {
-      @apply min-w-12 min-h-16 w-1/5 flex justify-center items-center sm:w-1/10;
+      @apply min-w-8 w-full min-h-14 flex justify-center items-center;
     }
 	}
   .details {

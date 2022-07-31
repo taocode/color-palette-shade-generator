@@ -72,8 +72,13 @@
     }
   }
   .detail-trigger {
-    @apply absolute inset-0 border border-transparent leading-tight rounded p-4 hover:border-current
-    w-full;
+    @apply absolute inset-0 border border-transparent leading-tight rounded py-2 px-1
+    w-full text-[0.8em]
+    transform
+    scale-x-70
+    hover:border-current
+    xs:(scale-x-90)
+    sm:(scale-x-100 py-3);
     >span {
       @apply flex flex-col ;
     }
