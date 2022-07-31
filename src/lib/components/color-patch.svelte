@@ -22,7 +22,7 @@ export let placeholder = hueName(primaryHue)
 
 export let shades = colorShades(color,$steps,$factorLightness,$factorSaturation)
 
-let hidden = false
+let hidden = true
 
 $: lastShade = shades[shades.length-1]
 $: primaryHue = parseToHsla(color)[0].toFixed()
@@ -115,7 +115,7 @@ function copyClick(event,chosen) {
       {(parseToHsla(color)[2]*100).toFixed()}%L)
     </em>
     {/if}
-    <button class="border border-transparent hover:border-current rounded px-1 "
+    <button class="ml-2 border border-transparent hover:border-current rounded px-1 "
     on:click={() => { hidden = ! hidden }}>{@html dots}</button>
   </div>
   <div class="fixed hidden bg-dark-900 bg-opacity-80 inset-0 flex z-10" class:hidden>
@@ -194,7 +194,7 @@ function copyClick(event,chosen) {
     @apply relative ml-2 mr-1 py-1 px-2;
   }
   .copy-controls {
-    @apply absolute top-8 z-15 p-1 text-center opacity-100;
+    @apply absolute top-6 -left-1 z-15 p-1 text-center opacity-100;
     &:not(.showing) {
       @apply opacity-0 -z-1;
     }
