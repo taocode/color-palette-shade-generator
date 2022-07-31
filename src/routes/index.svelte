@@ -146,7 +146,8 @@
 
 <svelte:head>
 	<title>Color Palette Shade Generator</title>
-  <meta name="description" content="Generate a color palette using color theory with multiple shades for use with CSS, Tailwind">
+  <meta name="description" content="Use color theory to generate a color palette with multiple shades of color codes ready to paste into CSS, Tailwind.">
+	<link rel='canonical' href='/' />
 </svelte:head>
 
 <div class="pt-3 pb-1 -mb-4 top-controls" 
