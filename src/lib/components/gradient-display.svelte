@@ -19,10 +19,3 @@ style="
 ">
 
 </div>
-
-<style lang="postcss">
-.gradient-display {
-	@apply h-80 bg-gray-400;
-}
-
-</style>

@@ -168,6 +168,8 @@
 }
 
 .gradient-display {
+  @apply bg-light-500;
+  min-height: 66vh;
   &.scheme-0,
   &.scheme-1,
   &.scheme-2 {
@@ -176,10 +178,10 @@
   &.scheme-3,
   &.scheme-4,
   &.scheme-5 {
-    background: linear-gradient(75deg, var(--c1) 20%, var(--c0) 40%, var(--c0) 60%, var(--c2) 80% );
+    background: linear-gradient(90deg, var(--c1) 20%, var(--c0) 40%, var(--c0) 60%, var(--c2) 80% );
   }
   &.scheme-6 {
-    background: linear-gradient(75deg, 
+    background: linear-gradient(90deg, 
     var(--c0) 15%, 
     var(--c1) 25%, var(--c1) 40%, 
     var(--c2) 60%, var(--c2) 75%, 
