@@ -15,6 +15,7 @@
 	import SettingVarTailwind from '$lib/components/setting-var-tailwind.svelte'
 	import SettingVarCss from '$lib/components/setting-var-css.svelte'
 	import HueSlider from '$lib/components/hue-slider.svelte'
+	import GradientDisplay from '$lib/components/gradient-display.svelte'
 
 	import { schemes, schemeColors, updateHSLA, colorShades, hueName } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, 
@@ -257,6 +258,8 @@ style="
 {/each}
 
 <About />
+
+<GradientDisplay />
 
 <style lang="postcss">
 	h1 {
