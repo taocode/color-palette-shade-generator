@@ -134,15 +134,16 @@
 		}
 	}
 	let iconEyeSize = '1.3x'
-	let outputTogglers = false;
+	let outputTogglers = false
 	let iconSquareSize = '1.3x'
 	function toggleShowOutputs(e) {
 		outputTogglers = ! outputTogglers
 	}
-	let showCopiers = false;
+	let showCopiers = false
 	function toggleCopiers(e) {
 		showCopiers = ! showCopiers
 	}
+	let showColorPatches = false
 </script>
 
 <svelte:head>
@@ -175,6 +176,12 @@ style="
 			</button>
 			<div class="toggles-wrap outputTogglers" class:showing={outputTogglers}>
 				<div class="show-toggler">
+					<button on:click={()=> showColorPatches = ! showColorPatches}>
+						<span class="inline-block mr-1">{#if showColorPatches}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
+						Show Shades
+					</button>
+				</div>
+				<div class="show-toggler">
 					<button on:click={()=> showSettings = ! showSettings}>
 						<span class="inline-block mr-1">{#if showSettings}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
 						Show Settings
@@ -183,7 +190,7 @@ style="
 				<div class="show-toggler">
 					<button on:click={()=> showVars = ! showVars}>
 						<span class="inline-block mr-1">{#if showVars}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
-						Show Output
+						Show Code
 					</button>
 				</div>
 			</div>
@@ -246,18 +253,21 @@ style="
 		</div>
 	</div>
 </div>
-{#each allColors as {color, description, name}, i}
-	<ColorPatch {color} 
-	name={$colorNames[i]}
-	placeholder={
-		((name && $colorNames[0]) ? $colorNames[0] : hueName(parseToHsla(color)[0])) + 
-		((!name) ? '' : `-${name}`)} 
-	{description} schemeIndex={i}
-	shades={colorShades(color,$steps, ($scheme === 1) ? $factorLightness/3 : $factorLightness, $factorSaturation)}
-	on:updateColor={updateColor} />
-{/each}
+<div class="separator" class:showing={!showColorPatches}></div>
+<div class="color-patches" class:showing={showColorPatches}>
+	{#each allColors as {color, description, name}, i}
+		<ColorPatch {color}
+		name={$colorNames[i]}
+		placeholder={
+			((name && $colorNames[0]) ? $colorNames[0] : hueName(parseToHsla(color)[0])) +
+			((!name) ? '' : `-${name}`)}
+		{description} schemeIndex={i}
+		shades={colorShades(color,$steps, ($scheme === 1) ? $factorLightness/3 : $factorLightness, $factorSaturation)}
+		on:updateColor={updateColor} />
+	{/each}
+</div>
 
-<div class="relative flow-root">
+<div class="relative flow-root min-h-screen">
 	<About />
 	<GradientDisplay />
 </div>
@@ -283,10 +293,22 @@ style="
 			display: none;
 		}
 	}
+	.color-patches {
+		display: block;
+		&:not(.showing) {
+			display: none;
+		}
+	}
+	.separator {
+		@apply h-2 mt-2 bg-black;
+		&:not(.showing) {
+			display: none;
+		}
+	}
 	.show-toggles {
 		@apply relative;
 		.toggles-wrap {
-			@apply absolute py-1 px-2 z-20 top-9
+			@apply absolute py-1 px-2 z-20 top-9 text-left
 			xs:(top-11 -right-12);
 			background-color: var(--color-btn-bg);
 			color: var(--color-btn-fg);
@@ -298,6 +320,9 @@ style="
 			}
 			&.copiers {
 				@apply right-4 w-30;
+			}
+			button {
+				@apply w-full;
 			}
 		}
 		.show-toggler {
