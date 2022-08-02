@@ -167,8 +167,16 @@
   }
 }
 
-.tabs .panels .panel {
+.tabs .panels .panel,
+.tabs.hidePanels .panels .panel {
   @apply hidden;
+}
+.tabs .svelte-tabs ul {
+  border-bottom: none;
+}
+.tabs.hidePanels .svelte-tabs .svelte-tabs__selected {
+  color: inherit;
+  border-bottom: inherit;
 }
 
 .tabs .selected .panel {

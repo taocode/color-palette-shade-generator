@@ -1,5 +1,7 @@
 <script>
 import { darken, lighten, adjustHue, toHex, readableColor } from 'color2k'
+import { clickOutside } from 'svelte-use-click-outside'
+
 import { Tabs, Tab, TabList, TabPanel } from '$lib/components/layout/tab'
 
 import { describeScheme, schemes, cssSchemes } from '$lib'
@@ -8,10 +10,13 @@ import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
 import CollapsibleSection from './collapsible-section.svelte'
 
 let readable = readableColor('white')
+let hidePanels = false
 </script>
 
 
-<div class="max-w-prose bg-white/75 mx-auto px-3 pt-2 mt-12 mb-24">
+<div class="max-w-prose bg-white/75 mx-auto px-3 pt-2 mt-12 mb-24"
+on:click={() => hidePanels = false}
+use:clickOutside={() => hidePanels = true}>
 	<div class="flow-root prose mx-auto p-4 sm:px-0"
 	style="
 	--color-C: {darken($primaryColor,0.175)};
@@ -23,7 +28,7 @@ let readable = readableColor('white')
 		<h2 class="flex align-bottom"><span class="">About</span> <ColorPaletteShadeGenerator size="1.5em" /></h2>
 		<p>Make multiple shades of colors with <span class="font-mono font-semibold">copy+paste code outputs</span> for CSS and Tailwind color variables and create accent colors based on <a target="_blank" href="https://www.interaction-design.org/literature/topics/color-theory">color theory</a>.</p>
 	</div>
-		<div class="tabs">
+		<div class="tabs" class:hidePanels>
 			<Tabs initialSelectedIndex={-1}>
 				<TabList>
 					<Tab>Features</Tab>
