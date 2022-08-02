@@ -167,8 +167,16 @@
   }
 }
 
+.tabs .panels .panel {
+  @apply hidden;
+}
+
+.tabs .selected .panel {
+  @apply block;
+}
+
 .gradient-display {
-  @apply bg-light-500;
+  @apply absolute bg-light-500 top-0 w-full h-full -z-1;
   min-height: 66vh;
   &.scheme-0,
   &.scheme-1,

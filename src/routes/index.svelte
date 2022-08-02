@@ -257,9 +257,10 @@ style="
 	on:updateColor={updateColor} />
 {/each}
 
-<About />
-
-<GradientDisplay />
+<div class="relative flow-root">
+	<About />
+	<GradientDisplay />
+</div>
 
 <style lang="postcss">
 	h1 {
