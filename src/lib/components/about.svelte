@@ -53,7 +53,6 @@ use:clickOutside={() => hidePanels = true}>
 										<li>Number of steps, <em>default:</em> <code class="italic">10</code></li>
 									</ul>
 								</li>
-								<li>Secondary colors for accents based on color theory</li>
 								<li>HSLA based, produces your favorite color notations for web:
 									 <ul>
 										{#each cssSchemes as {id, name, description, sample}, i}
