@@ -110,7 +110,7 @@
 		}
 	}
 	$: buttonColor = adjustHue($primaryColor,90)
-	let showVars = false
+	let showCode = false
 	let showSettings = false
 
 	const copyVars = (type) => {
@@ -143,7 +143,7 @@
 	function toggleCopiers(e) {
 		showCopiers = ! showCopiers
 	}
-	let showColorPatches = false
+	let showShades = false
 </script>
 
 <svelte:head>
@@ -176,21 +176,21 @@ style="
 			</button>
 			<div class="toggles-wrap outputTogglers" class:showing={outputTogglers}>
 				<div class="show-toggler">
-					<button on:click={()=> showColorPatches = ! showColorPatches}>
-						<span class="inline-block mr-1">{#if showColorPatches}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
-						Show Shades
-					</button>
-				</div>
-				<div class="show-toggler">
 					<button on:click={()=> showSettings = ! showSettings}>
 						<span class="inline-block mr-1">{#if showSettings}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
-						Show Settings
+						Settings
 					</button>
 				</div>
 				<div class="show-toggler">
-					<button on:click={()=> showVars = ! showVars}>
-						<span class="inline-block mr-1">{#if showVars}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
-						Show Code
+					<button on:click={()=> showCode = ! showCode}>
+						<span class="inline-block mr-1">{#if showCode}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
+						Code
+					</button>
+				</div>
+				<div class="show-toggler">
+					<button on:click={()=> showShades = ! showShades}>
+						<span class="inline-block mr-1">{#if showShades}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
+						Shades
 					</button>
 				</div>
 			</div>
@@ -243,7 +243,7 @@ style="
 	</div>
 	<div class="allvars">
 		
-		 <div class="allvars-outputs" class:showing={showVars}>
+		 <div class="allvars-outputs" class:showing={showCode}>
 			<div>
 				<AllVarsOutput type="CSS" {allColors} />
 			</div>
@@ -253,8 +253,8 @@ style="
 		</div>
 	</div>
 </div>
-<div class="separator" class:showing={!showColorPatches}></div>
-<div class="color-patches" class:showing={showColorPatches}>
+<div class="separator" class:showing={!showShades}></div>
+<div class="color-patches" class:showing={showShades}>
 	{#each allColors as {color, description, name}, i}
 		<ColorPatch {color}
 		name={$colorNames[i]}
@@ -306,7 +306,7 @@ style="
 		}
 	}
 	.show-toggles {
-		@apply relative;
+		@apply relative p-0;
 		.toggles-wrap {
 			@apply absolute py-1 px-2 z-20 top-9 text-left
 			xs:(top-11 -right-12);
@@ -316,10 +316,10 @@ style="
 				@apply hidden;
 			}
 			&.outputTogglers {
-				@apply left-4 w-45;
+				@apply left-0 w-45;
 			}
 			&.copiers {
-				@apply right-4 w-30;
+				@apply right-0 w-30;
 			}
 			button {
 				@apply w-full;
@@ -335,9 +335,9 @@ style="
 		}
 	}
 	.panel-scheme {
-		@apply flex mx-auto justify-center relative mt-6;
+		@apply flex mx-auto justify-around relative mt-6;
 		.primary-toggle {
-			@apply mx-4;
+			@apply mx-0;
 		}
 	}
 </style>
