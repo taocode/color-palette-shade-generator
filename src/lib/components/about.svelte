@@ -25,7 +25,7 @@ use:clickOutside={() => hidePanels = true}>
 	--color-G: {lighten(adjustHue($primaryColor,270),0.12)};
 	--color-glow: {toHex(readable)+'66'};
 	">
-		<h2 class="flex align-bottom"><span class="">About</span> <ColorPaletteShadeGenerator size="1.5em" /></h2>
+		<h2 class="flex align-bottom"><span class="mr-2">About</span> <ColorPaletteShadeGenerator size="1.5em" /></h2>
 		<p>Make shades of colors with <strong>copy+paste <span class="font-mono">code</span> output</strong> for websites. Create accent colors based on <a target="_blank" href="https://www.interaction-design.org/literature/topics/color-theory">color theory</a>.</p>
 	</div>
 		<div class="tabs" class:hidePanels>
@@ -40,17 +40,17 @@ use:clickOutside={() => hidePanels = true}>
 							<ol>
 								<li>Variable outputs are easily copied via provided buttons
 									<ul>
-										<li>CSS variables: <code class="italic">--color-blue-500: hsla(240, 80%, 50%, 1)</code></li>
-										<li>Tailwind/WindiCSS config (<code class="italic">tailwind.config.js</code>) variables with optional reference the CSS variables</li>
+										<li>CSS variables: <code class="italic whitespace-nowrap">--color-blue-500: hsla(240, 80%, 50%, 1)</code></li>
+										<li>Tailwind/WindiCSS config (<code class="italic whitespace-nowrap">tailwind.config.js</code>) variables with optional reference the CSS variables</li>
 									</ul>
 								</li>
 								<li>Customizable options:
 									<ul>
-										<li>Variable name, <em>deafult:</em> name based on hue <code class="italic"><span class="font-extralight">--color-</span>varname</code></li>
-										<li>Variable name prefix, <em>default:</em> <code class="italic"><span class="font-extralight">--</span>color<span class="font-extralight">-varname</span></code></li>
-										<li><abbr title="Luminosity">%L</abbr> shift per step, <em>default:</em> <code class="italic">7.5%; dark/light: 1/3%L</code></li>
-										<li><abbr title="Saturation">%S</abbr> shift per step, <em>default:</em> <code class="italic">0%</code></li>
-										<li>Number of steps, <em>default:</em> <code class="italic">10</code></li>
+										<li>Variable name, <em>deafult:</em> name based on hue <code class="italic whitespace-nowrap"><span class="font-extralight">--color-</span>varname</code></li>
+										<li>Variable name prefix, <em>default:</em> <code class="italic whitespace-nowrap"><span class="font-extralight">--</span>color<span class="font-extralight">-varname</span></code></li>
+										<li><abbr title="Luminosity">%L</abbr> shift per step, <em>default:</em> <code class="italic whitespace-nowrap">7.5%; dark/light: 1/3%L</code></li>
+										<li><abbr title="Saturation">%S</abbr> shift per step, <em>default:</em> <code class="italic whitespace-nowrap">0%</code></li>
+										<li>Number of steps, <em>default:</em> <code class="italic whitespace-nowrap">10</code></li>
 									</ul>
 								</li>
 								<li>Secondary colors for accents based on color theory</li>
