@@ -33,7 +33,6 @@ use:clickOutside={() => hidePanels = true}>
 				<TabList>
 					<Tab>Features</Tab>
 					<Tab>Schemes</Tab>
-					<Tab>Why HSLA?</Tab>
 				</TabList>
 				<div class="panels prose">
 				<TabPanel>
@@ -80,11 +79,6 @@ use:clickOutside={() => hidePanels = true}>
 								</li>
 								{/each}
 							</ul>
-						</div>
-					</TabPanel>
-					<TabPanel>
-						<div class="panel">
-							<p>I believe that <strong>H</strong>ue <strong>S</strong>aturation <strong>L</strong>ightness is easiest for a human to comprehend. RGB(A) and Hex outputs are also provided.</p>
 						</div>
 					</TabPanel>
 				</div>
