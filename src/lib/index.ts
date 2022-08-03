@@ -82,12 +82,12 @@ export const describeScheme = ({hues, varName, names, lightnesses}) => {
       
       const shadeName = (names) ? names[i] : varName + (i+1)
       
-      return `${p}, ${shadeName} = φ${c>0?'+':''}${c.toFixed()}°`
+      return `${p}, <span class="whitespace-nowrap">${shadeName} = φ${c>0?'+':''}${c.toFixed()}°</span>`
     }, 'primary = φ')
   } else if (lightnesses) {
     return lightnesses?.reduce((p,c,i) => {
       const shadeName = (names) ? names[i] : varName + (i+1)
-      return `${p}, ${shadeName} = φ${c>0?'+':''}${c.toFixed()}%`
+      return `${p}, <span class="whitespace-nowrap">${shadeName} = φ${c>0?'+':''}${c.toFixed()}%</span>`
     }, 'primary = φ')
   }
 }
