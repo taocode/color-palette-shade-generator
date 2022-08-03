@@ -39,16 +39,15 @@ use:clickOutside={() => hidePanels = true}>
 				<TabPanel>
 						<div class="panel">
 							<ol>
-								<li>HSLA based</li>
 								<li>Variable outputs are easily copied via provided buttons
 									<ul>
 										<li>CSS variables: <code class="italic">--color-blue-500: hsla(240, 80%, 50%, 1)</code></li>
-										<li>Tailwind/WindiCSS config (<code class="italic">tailwind.config.js</code>) variables including option to reference the CSS variables</li>
+										<li>Tailwind/WindiCSS config (<code class="italic">tailwind.config.js</code>) variables with optional reference the CSS variables</li>
 									</ul>
 								</li>
 								<li>Customizable options:
 									<ul>
-										<li>Variable name with sensible defaults based on hue</li>
+										<li>Variable name, <em>deafult:</em> name based on hue <code class="italic"><span class="font-extralight">--color-</span>varname</code></li>
 										<li>Variable name prefix, <em>default:</em> <code class="italic"><span class="font-extralight">--</span>color<span class="font-extralight">-varname</span></code></li>
 										<li><abbr title="Luminosity">%L</abbr> shift per step, <em>default:</em> <code class="italic">7.5%; dark/light: 1/3%L</code></li>
 										<li><abbr title="Saturation">%S</abbr> shift per step, <em>default:</em> <code class="italic">0%</code></li>
@@ -56,10 +55,10 @@ use:clickOutside={() => hidePanels = true}>
 									</ul>
 								</li>
 								<li>Secondary colors for accents based on color theory</li>
-								<li>Produces your favorite color notations for web:
+								<li>HSLA based, produces your favorite color notations for web:
 									 <ul>
 										{#each cssSchemes as {id, name, description, sample}, i}
-										<li><span class="name">{name || id}</span>: {description} - <em>{sample}</em></li>
+										<li><span class="name">{name || id}</span>: {description} - <em class="whitespace-nowrap">{sample}</em></li>
 										{/each}
 								</ul>
 							</li>
@@ -71,16 +70,13 @@ use:clickOutside={() => hidePanels = true}>
 							<ul class="list-disc">
 								{#each schemes as s, i}
 								<li>
-									<span>
-									<span class="name">{s.name}</span>
+									<button class="name"
+									on:click={()=>scheme.set(i)}>{s.name}</button>
 										<em>
 											{#if s.hues}
-											({1+s.hues.length} color{#if s.hues.length > 0}s{/if})
-											{:else if s.lightnesses}
-											({1+s.lightnesses.length} shade{#if s.lightnesses.length > 0}s{/if})
-											{/if}
-										</em>: {describeScheme(s)}
-								</span>
+											({1+s.hues.length} color{#if s.hues.length > 0}s{/if}){:else if s.lightnesses}
+											({1+s.lightnesses.length} shade{#if s.lightnesses.length > 0}s{/if}){/if}</em>:
+											{@html describeScheme(s)}
 								</li>
 								{/each}
 							</ul>
