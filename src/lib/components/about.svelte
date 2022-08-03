@@ -26,7 +26,7 @@ use:clickOutside={() => hidePanels = true}>
 	--color-glow: {toHex(readable)+'66'};
 	">
 		<h2 class="flex align-bottom"><span class="">About</span> <ColorPaletteShadeGenerator size="1.5em" /></h2>
-		<p>Make shades of colors with <strong>copy+paste <span class="font-mono">code</span> output</strong> for websites. Create accent colors based on <a target="_blank" href="https://www.interaction-design.org/literature/topics/color-theory">color theory</a>.</p>
+		<p>Make shades of colors with <strong>copy+paste <span class="font-mono">code</span> output</strong> for websites. Create accent colors based on color theory.</p>
 	</div>
 		<div class="tabs" class:hidePanels>
 			<Tabs initialSelectedIndex={-1}>
@@ -62,6 +62,7 @@ use:clickOutside={() => hidePanels = true}>
 								</ul>
 							</li>
 							</ol>
+							<p class="text-center">Thanks to <a target="_blank" href="https://www.kevinpowell.co/">Kevin Powell</a> for explaining HSL so well: <a target="_blank" href="https://www.youtube.com/watch?v=Ab9pHqhsfcc">Are you using the WRONG color model in your CSS?</a></p>
 						</div>
 					</TabPanel>
 					<TabPanel>
@@ -71,14 +72,15 @@ use:clickOutside={() => hidePanels = true}>
 								<li>
 									<button class="name"
 									on:click={()=>scheme.set(i)}>{s.name}</button>
-										<em>
-											{#if s.hues}
-											({1+s.hues.length} color{#if s.hues.length > 0}s{/if}){:else if s.lightnesses}
-											({1+s.lightnesses.length} shade{#if s.lightnesses.length > 0}s{/if}){/if}</em>:
-											{@html describeScheme(s)}
+									<em>
+									{#if s.hues}
+									({1+s.hues.length} color{#if s.hues.length > 0}s{/if}){:else if s.lightnesses}
+									({1+s.lightnesses.length} shade{#if s.lightnesses.length > 0}s{/if}){/if}</em>:
+									{@html describeScheme(s)}
 								</li>
 								{/each}
 							</ul>
+							<p class="text-center">Learn more about <a target="_blank" href="https://www.interaction-design.org/literature/topics/color-theory">color theory</a>.</p>
 						</div>
 					</TabPanel>
 				</div>
