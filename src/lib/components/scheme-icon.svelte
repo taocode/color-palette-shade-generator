@@ -1,10 +1,11 @@
 <script>
-  import { darken, lighten } from 'color2k'
-
+ 
   import { schemes, schemeColors, getSchemeColorShade } from '$lib'
   import { primaryColor } from '$lib/stores'
+ 
   export let color = $primaryColor
   export let schemeIndex = 0
+ 
   const scheme = schemes[schemeIndex]
   const { hues, lightnesses } = scheme
 
@@ -34,7 +35,7 @@
 
 <style global lang="postcss">
   .scheme-icon {
-    @apply inline-flex h-6 w-8 align-bottom;
+    @apply inline-flex h-7 w-8 align-bottom;
   }
   .hue-color {
     @apply w-full;

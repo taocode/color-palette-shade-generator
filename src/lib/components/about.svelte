@@ -7,7 +7,6 @@ import { Tabs, Tab, TabList, TabPanel } from '$lib/components/layout/tab'
 import { describeScheme, schemes, cssSchemes } from '$lib'
 import { scheme, primaryColor, varOptCSS } from '$lib/stores'
 import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
-import CollapsibleSection from './collapsible-section.svelte'
 import SchemeIcon from './scheme-icon.svelte'
 
 let readable = readableColor('white')

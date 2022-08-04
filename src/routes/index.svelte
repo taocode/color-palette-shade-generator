@@ -22,6 +22,7 @@
 		factorLightness, factorSaturation, cssVarPrefix, varOptCSS, varOptTailwind, defaults } from '$lib/stores'
 	import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte'
 	import Tailwind from '$lib/components/svg/tailwind.svelte'
+import SchemeChooserIcons from '$lib/components/scheme-chooser-icons.svelte'
 
 	let timer
 	const debounceHistory = (state) => {
@@ -196,7 +197,7 @@ style="
 			</div>
 		</div>
 		<div>
-			<SettingsScheme />
+			<SchemeChooserIcons />
 		</div>
 		<div class="show-toggles"
 			on:mouseenter={()=>showCopiers = true}
@@ -335,7 +336,7 @@ style="
 		}
 	}
 	.panel-scheme {
-		@apply flex mx-auto justify-around relative mt-6;
+		@apply flex mx-auto max-w-prose justify-around relative mt-6;
 		.primary-toggle {
 			@apply mx-0;
 		}
