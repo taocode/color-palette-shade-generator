@@ -8,6 +8,7 @@ import { describeScheme, schemes, cssSchemes } from '$lib'
 import { scheme, primaryColor, varOptCSS } from '$lib/stores'
 import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
 import CollapsibleSection from './collapsible-section.svelte'
+import SchemeIcon from './scheme-icon.svelte'
 
 let readable = readableColor('white')
 let hidePanels = false
@@ -16,7 +17,14 @@ let hidePanels = false
 
 <div class="max-w-prose bg-white/75 mx-auto px-3 pt-2 mt-16 mb-40"
 on:click={() => hidePanels = false}
-use:clickOutside={() => hidePanels = true}>
+use:clickOutside={() => hidePanels = true}
+style="
+--color-primary: {$primaryColor};
+--color-bullet: {darken($primaryColor,0.1)};
+--color-tab-selected: {darken(adjustHue($primaryColor,90),0.1)};
+--color-link: {darken(adjustHue($primaryColor,180),0.15)};
+"
+>
 	<div class="flow-root prose mx-auto p-4 sm:px-0"
 	style="
 	--color-C: {darken($primaryColor,0.175)};
@@ -34,9 +42,9 @@ use:clickOutside={() => hidePanels = true}>
 					<Tab>Features</Tab>
 					<Tab>Schemes</Tab>
 				</TabList>
-				<div class="panels prose">
+				<div class="panels">
 				<TabPanel>
-						<div class="panel">
+						<div class="panel prose">
 							<ol>
 								<li>Variable outputs are easily copied via provided buttons
 									<ul>
@@ -53,7 +61,7 @@ use:clickOutside={() => hidePanels = true}>
 										<li>Number of steps, <em>default:</em> <code class="italic whitespace-nowrap">10</code></li>
 									</ul>
 								</li>
-								<li>HSLA based, produces your favorite color notations for web:
+								<li>HSLA based, produces your chosen color notations for web:
 									 <ul>
 										{#each cssSchemes as {id, name, description, sample}, i}
 										<li><span class="name">{name || id}</span>: {description} - <em class="whitespace-nowrap">{sample}</em></li>
@@ -66,20 +74,23 @@ use:clickOutside={() => hidePanels = true}>
 					</TabPanel>
 					<TabPanel>
 						<div class="panel">
-							<ul class="list-disc">
+							<ul class="schemes">
 								{#each schemes as s, i}
 								<li>
+									<SchemeIcon scheme={schemes[i]} schemeIndex={i} color={$primaryColor} />
 									<button class="name"
 									on:click={()=>scheme.set(i)}>{s.name}</button>
 									<em>
 									{#if s.hues}
-									({1+s.hues.length} color{#if s.hues.length > 0}s{/if}){:else if s.lightnesses}
+									({1+(s.hues.length)} color{#if s.hues.length > 0}s{/if}){:else if s.lightnesses}
 									({1+s.lightnesses.length} shade{#if s.lightnesses.length > 0}s{/if}){/if}</em>:
 									{@html describeScheme(s)}
 								</li>
 								{/each}
 							</ul>
-							<p class="text-center">Learn more about <a target="_blank" href="https://www.interaction-design.org/literature/topics/color-theory">color theory</a>.</p>
+							<div class="prose">
+								<p class="text-center">Learn more about <a target="_blank" href="https://www.interaction-design.org/literature/topics/color-theory">color theory</a>.</p>
+							</div>
 						</div>
 					</TabPanel>
 				</div>
@@ -95,6 +106,20 @@ use:clickOutside={() => hidePanels = true}>
 		@apply text-left;
 	}
 	.tabs {
-		@apply max-w-prose mx-auto text-center pb-3;
+		@apply max-w-prose mx-auto text-center pb-6;
+	}
+	.panel {
+		@apply max-w-prose mx-auto;
+		ul > li::before {
+			background-color: var(--color-bullet);
+		}
+	}
+	.panel .schemes {
+		@apply px-2;
+		li {
+			@apply mt-3 mb-6;
+			text-indent: -2.4em;
+			margin-left: 3rem;
+		}
 	}
 </style>

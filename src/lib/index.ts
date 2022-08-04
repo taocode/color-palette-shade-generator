@@ -77,26 +77,51 @@ export const describeCssScheme = ({id,name,description}) => {
   return (name ? name : id) + (description ? ` - ${description}` : '')
 }
 export const describeScheme = ({hues, varName, names, lightnesses}) => {
+  const primaryText = 'primary = φ'
   if (hues) {
     return hues.reduce((p,c,i) => {
       
       const shadeName = (names) ? names[i] : varName + (i+1)
       
       return `${p}, <span class="whitespace-nowrap">${shadeName} = φ${c>0?'+':''}${c.toFixed()}°</span>`
-    }, 'primary = φ')
+    }, primaryText)
   } else if (lightnesses) {
-    return lightnesses?.reduce((p,c,i) => {
+    return lightnesses.reduce((p,c,i) => {
       const shadeName = (names) ? names[i] : varName + (i+1)
-      return `${p}, <span class="whitespace-nowrap">${shadeName} = φ${c>0?'+':''}${c.toFixed()}%</span>`
-    }, 'primary = φ')
+      return `${p}, <span class="whitespace-nowrap">${shadeName} = φ${c>0?'+':''}${c.toFixed()}%L</span>`
+    }, primaryText)
   }
+  return primaryText
 }
 
-
+/*
+$: c0 = _si < 1 ? darken(_pc,0.3) : _si === 1 ? darken(_pc,0.36) :  _pc
+$: c1 = _si < 1 ? lighten(_pc,0.3) : _si === 1 ? darken(_pc,0.025) : _sCs[1].color
+$: c2 = _si === 1 ? lighten(_pc,0.025) : _si > 2 ? _sCs[2].color : 'transparent'
+$: c3 = _si === 1 ? lighten(_pc,0.33): _si > 5 ? _sCs[3].color : 'transparent'
+*/
+export const getSchemeColorShade = (si, primary, ci, schemeColors) => {
+  switch (ci) {
+    case 0: return primary
+    case 1:
+      switch (si) {
+        case 0: return lighten(primary,0.3)
+        case 1: return darken(primary,0.25)
+        default: return schemeColors[1].color
+      }
+    case 2:
+      switch (si) {
+        case 1: return lighten(primary,0.3)
+        default: return schemeColors[2]?.color || 'orange'
+      }
+    case 3:
+      return schemeColors[3]?.color || 'yellow'
+    default: return 'red'
+  }
+}
 export const schemes = [
   {
     name: `Monochromatic`, 
-    hues: [],
     varName: 'mono'
   }, {
     name: `Dark/Light`,
@@ -114,11 +139,11 @@ export const schemes = [
     varName: 'analogous'
   }, {
     name: `Split Complementary`,
-    hues: [150,210],
+    hues: [-150,150],
     varName: 'split'
   }, {
     name: `Triadic`, 
-    hues: [120,240],
+    hues: [-120,120],
     varName: 'triadic'
   }, {
     name: `Tetradic`,
@@ -164,7 +189,7 @@ export const schemeColors = ({hues,lightnesses,varName,names},primary) => {
 export const dots = '<span class="tracking-widest">•••</span>'
 
 
-export const cssVarNum = (n: number): string => (n<0) ? '' : (n) ? n+'00' : '50'
+export const cssVarNum = (n: number): string => (n<0) ? '' : (n) ? `${n}00` : '50'
 
 const cssColor = (color,optCSS) => {
   // console.log(`cssColor(${_varOptCSS},${color})`)
