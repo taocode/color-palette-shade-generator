@@ -14,7 +14,7 @@
   <div class="">
     <div class="flex flex-wrap gap-1 justify-center text-center xs:mx-3">
         {#each schemes as s, i}
-          <button 
+          <button title={s.name}
 					class="border-4"
 					style="border-color: {i === $scheme ? '#FFFFFFBB' : '#555555AA'};"
 					on:click={()=>scheme.set(i)}>
