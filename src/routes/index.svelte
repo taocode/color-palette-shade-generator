@@ -22,7 +22,8 @@
 		factorLightness, factorSaturation, cssVarPrefix, varOptCSS, varOptTailwind, defaults } from '$lib/stores'
 	import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte'
 	import Tailwind from '$lib/components/svg/tailwind.svelte'
-import SchemeChooserIcons from '$lib/components/scheme-chooser-icons.svelte'
+	import SchemeChooserIcons from '$lib/components/scheme-chooser-icons.svelte'
+	import MakersMark from '$lib/components/makers-mark.svelte'
 
 	let timer
 	const debounceHistory = (state) => {
@@ -271,6 +272,7 @@ style="
 <div class="relative flow-root min-h-screen">
 	<About />
 	<GradientDisplay />
+	<MakersMark />
 </div>
 
 <style lang="postcss">
