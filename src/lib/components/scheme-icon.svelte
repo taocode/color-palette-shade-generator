@@ -35,7 +35,7 @@
 
 <style global lang="postcss">
   .scheme-icon {
-    @apply inline-flex h-7 w-8 align-bottom;
+    @apply inline-flex h-6 w-7 xs:(h-7 w-8) align-bottom;
   }
   .hue-color {
     @apply w-full;
