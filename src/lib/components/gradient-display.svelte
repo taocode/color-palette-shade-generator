@@ -3,32 +3,30 @@ import { adjustHue, darken, lighten } from 'color2k'
 import { schemes, schemeColors, getSchemeColorShade } from '$lib'
 import { primaryColor, scheme } from '$lib/stores'
 
+let style = ""
 $: _si = $scheme
 $: _pc = $primaryColor
-$: _sCs = schemeColors(schemes[_si],_pc) 
-$: c0 = _pc
-$: c1 = getSchemeColorShade(_si, _pc, 1, _sCs)
-$: c2 = getSchemeColorShade(_si, _pc, 2, _sCs)
-$: c3 = getSchemeColorShade(_si, _pc, 3, _sCs)
-$: if (_si === 0) {
-  c0 = darken(_pc,0.3)
-  c1 = lighten(_pc,0.3)
-} else if (_si === 1) {
-  c0 = darken(_pc,0.075)
-  c1 = darken(_pc,0.4)
-  c2 = lighten(_pc,0.075)
-  c3 = lighten(_pc,0.3)
+
+let colors = ['']
+$: {
+  const _sCs = schemeColors(schemes[_si],_pc)
+  colors = _sCs.map((v,i)=>getSchemeColorShade(_si, _pc, i, _sCs))
+  if (_si === 0) {
+    colors[0] = darken(_pc,0.3)
+    colors[1] = lighten(_pc,0.3)
+  } else if (_si === 1) {
+    colors[0] = darken(_pc,0.05)
+    colors[1] = darken(_pc,0.4)
+    colors[2] = lighten(_pc,0.01)
+    colors[3] = lighten(_pc,0.3)
+  }
+  style = colors.reduce((p,c,i) => `${p}\n--c${i}: ${c};`,'')
 }
 
 </script>
 
 <div class="gradient-display scheme-{_si}"
-style="
---c0: {c0};
---c1: {c1};
---c2: {c2};
---c3: {c3};
-">
+{style}>
 
 </div>
 
