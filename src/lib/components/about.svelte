@@ -14,7 +14,7 @@ let hidePanels = false
 </script>
 
 
-<div class="max-w-prose bg-white/75 mx-auto px-3 pt-2 mt-16 mb-40"
+<div class="max-w-prose bg-white/75 mx-auto px-3 pt-2 mt-16 mb-60"
 on:click={() => hidePanels = false}
 use:clickOutside={() => hidePanels = true}
 style="
@@ -25,7 +25,7 @@ style="
 "
 >
 	<div class="flow-root prose mx-auto p-4 sm:px-0">
-		<p class="text-center">Make shades of colors with <strong>copy+paste <span class="font-mono">code</span> output</strong> for websites. Create accent colors based on color theory.</p>
+		<p class="text-center">Make shades of colors with <strong>copy+paste <span class="font-mono">code</span> output</strong> for websites. Explore accent colors based on color theory.</p>
 	</div>
 		<div class="tabs" class:hidePanels>
 			<Tabs initialSelectedIndex={-1}>
