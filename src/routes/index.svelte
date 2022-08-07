@@ -17,9 +17,10 @@
 	import HueSlider from '$lib/components/hue-slider.svelte'
 	import GradientDisplay from '$lib/components/gradient-display.svelte'
 
-	import { schemes, schemeColors, updateHSLA, colorShades, hueName, getSchemeColorShade } from '$lib'
+	import { colorShades, hueName, getSchemeColorShade, notice, schemes, schemeColors, updateHSLA } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, 
 		factorLightness, factorSaturation, cssVarPrefix, varOptCSS, varOptTailwind, defaults } from '$lib/stores'
+	import { clickOutside } from 'svelte-use-click-outside'
 	import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte'
 	import Tailwind from '$lib/components/svg/tailwind.svelte'
 	import SchemeChooserIcons from '$lib/components/scheme-chooser-icons.svelte'
@@ -111,7 +112,7 @@
 			debounceHistory(state)
 		}
 	}
-	$: buttonColor = adjustHue($primaryColor,90)
+	$: buttonColor = adjustHue($primaryColor,120)
 	let showCode = false
 	let showSettings = false
 
@@ -120,17 +121,17 @@
 		const varsOutput = allVars?.closest('.all-vars-output')
 		const heading = varsOutput.querySelector('h2').innerText.trim()
 		const text = allVars.innerText.trim()
-		console.log({text,type,varsOutput})
+		// console.log({text,type,varsOutput})
 		if (!navigator.clipboard) {
 			document.execCommand('copy',false,text)
 		} else {
 			navigator.clipboard.writeText(text).then(
 				function() {
-					notice(`copied vars for: <span class="whitespace-nowrap">${heading}</span>`,varsOutput)
+					document.documentElement.append(notice(`copied <code class="whitespace-nowrap">${heading}</code> vars`))
 				}
 			).catch(
 				function(err) {
-					notice(`failed to copy: ${err}`,event.srcElement)
+					document.documentElement.append(notice(`failed to copy: ${err}`))
 				}
 			)
 		}
@@ -197,10 +198,11 @@ style="
 	<HueSlider />
 	<div class="panel-scheme">
 		<div class="show-toggles"
-		on:mouseenter={()=>outputTogglers = true}
-		on:mouseleave={()=>outputTogglers = false}
+		use:clickOutside={()=>outputTogglers=false}
+		on:mouseenter={()=>outputTogglers=true}
 		>
-			<button class="primary-toggle">
+			<button class="primary-toggle"
+			on:click={()=>outputTogglers=true}>
 				<EyeIcon size={iconEyeSize} />
 			</button>
 			<div class="toggles-wrap outputTogglers" class:showing={outputTogglers}>
@@ -229,8 +231,9 @@ style="
 		</div>
 		<div class="show-toggles"
 			on:mouseenter={()=>showCopiers = true}
-			on:mouseleave={()=>showCopiers = false}>
-			<button class="primary-toggle">
+			use:clickOutside={()=>showCopiers = false}>
+			<button class="primary-toggle"
+			on:click={()=>showCopiers = true}>
 				<CopyIcon size={iconEyeSize} />
 			</button>
 			<div class="toggles-wrap copiers" class:showing={showCopiers}>
@@ -346,10 +349,13 @@ style="
 				@apply hidden;
 			}
 			&.outputTogglers {
-				@apply left-0 w-45;
+				@apply left-0 w-40;
 			}
 			&.copiers {
-				@apply right-0 w-30;
+				@apply right-0 w-22;
+				button {
+					@apply justify-center border-1 w-9/10 rounded-md;
+				}
 			}
 			button {
 				@apply w-full;
@@ -365,7 +371,7 @@ style="
 		}
 	}
 	.panel-scheme {
-		@apply flex mx-auto max-w-prose justify-around relative mt-6;
+		@apply flex mx-auto max-w-[60ch] justify-between relative mt-6 px-4;
 		.primary-toggle {
 			@apply mx-0;
 		}

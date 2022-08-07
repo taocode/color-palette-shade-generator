@@ -24,11 +24,11 @@
     } else {
       navigator.clipboard.writeText(text).then(
         function() {
-          notice(`copied: <span class="whitespace-nowrap">${text}</span>`,noteElement)
+          document.documentElement.append(notice(`copied: <span class="whitespace-nowrap">${text}</span>`))
         }
       ).catch(
         function(err) {
-          notice(`failed to copy: ${err}`,event.srcElement)
+          document.documentElement.append(notice(`failed to copy: ${err}`))
         }
       )
     }

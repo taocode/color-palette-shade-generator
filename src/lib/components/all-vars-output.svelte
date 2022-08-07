@@ -36,11 +36,11 @@
     } else {
       navigator.clipboard.writeText(text).then(
         function() {
-          notice(`copied vars for: <span class="whitespace-nowrap">${heading}</span>`,varsOutput)
+          document.documentElement.append(notice(`copied <span class="whitespace-nowrap">${heading}</span> vars`))
         }
       ).catch(
         function(err) {
-          notice(`failed to copy: ${err}`,event.srcElement)
+          document.documentElement.append(notice(`failed to copy: ${err}`))
         }
       )
     }

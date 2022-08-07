@@ -2,7 +2,7 @@ import { toHsla } from "color2k"
 import { writable } from "svelte/store"
 
 export const defaults = {
-  hue: 210,
+  hue: 180,
   saturation: 0.75,
   lightness: 0.50,
   alpha: 1,
