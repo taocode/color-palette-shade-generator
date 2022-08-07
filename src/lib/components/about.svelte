@@ -32,7 +32,7 @@ style="
 	--color-G: {lighten(adjustHue($primaryColor,270),0.12)};
 	--color-glow: {toHex(readable)+'66'};
 	">
-		<h2 class="flex align-bottom"><span class="">About</span> <ColorPaletteShadeGenerator size="1.5em" /></h2>
+		<h2 class="flex flex-col gap-1 xs:flex-row"><span class="w-full text-center xs:w-auto">About</span> <ColorPaletteShadeGenerator size="1.5em" /></h2>
 		<p>Make shades of colors with <strong>copy+paste <span class="font-mono">code</span> output</strong> for websites. Create accent colors based on color theory.</p>
 	</div>
 		<div class="tabs" class:hidePanels>

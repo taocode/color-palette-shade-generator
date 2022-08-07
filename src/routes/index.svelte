@@ -277,7 +277,7 @@ style="
 
 <style lang="postcss">
 	h1 {
-		@apply text-3xl text-center p-4 font-semibold;
+		@apply text-2xl text-center p-4 font-semibold xs:text-3xl;
 	}
 	button {
 		@apply py-1 px-3 flex align-middle place-items-center mx-auto my-2 xs:(py-2 px-4);
