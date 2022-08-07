@@ -8,6 +8,7 @@
 
   $: scheme.set(_scheme)
   $: _scheme = $scheme
+  $: schemeName = schemes[_scheme].name
 
 </script>
 <div class="settings scheme">
@@ -16,7 +17,7 @@
         {#each schemes as s, i}
           <button title={s.name}
 					class="border-4"
-					style="border-color: {i === $scheme ? '#FFFFFFBB' : '#555555AA'};"
+					style="border-color: {i === _scheme ? '#FFFFFFCC' : '#33333399'};"
 					on:click={()=>scheme.set(i)}>
             <SchemeIcon scheme={schemes[i]} schemeIndex={i} color={$primaryColor} />
 					</button>
@@ -24,6 +25,10 @@
 			</div>
 	</div>
 </div>
+<div class="scheme-name">{schemeName}</div>
 
 <style lang="postcss">
+.scheme-name {
+  @apply max-w-max mx-auto py-1 px-3 mt-4 bg-white/70 text-black;
+}
 </style>
