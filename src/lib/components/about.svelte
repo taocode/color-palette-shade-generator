@@ -4,7 +4,7 @@ import { clickOutside } from 'svelte-use-click-outside'
 
 import { Tabs, Tab, TabList, TabPanel } from '$lib/components/layout/tab'
 
-import { describeScheme, schemes, cssSchemes } from '$lib'
+import { describeScheme, schemes, cssSchemes, getSchemeColorShade, schemeColors } from '$lib'
 import { scheme, primaryColor, varOptCSS } from '$lib/stores'
 import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
 import SchemeIcon from './scheme-icon.svelte'
@@ -24,16 +24,8 @@ style="
 --color-link: {darken(adjustHue($primaryColor,180),0.15)};
 "
 >
-	<div class="flow-root prose mx-auto p-4 sm:px-0"
-	style="
-	--color-C: {darken($primaryColor,0.175)};
-	--color-P: {darken(adjustHue($primaryColor,90),0.175)};
-	--color-S: {lighten(adjustHue($primaryColor,180),0.12)};
-	--color-G: {lighten(adjustHue($primaryColor,270),0.12)};
-	--color-glow: {toHex(readable)+'66'};
-	">
-		<h2 class="flex flex-col gap-1 xs:flex-row"><span class="w-full text-center xs:w-auto">About</span> <ColorPaletteShadeGenerator size="1.5em" /></h2>
-		<p>Make shades of colors with <strong>copy+paste <span class="font-mono">code</span> output</strong> for websites. Create accent colors based on color theory.</p>
+	<div class="flow-root prose mx-auto p-4 sm:px-0">
+		<p class="text-center">Make shades of colors with <strong>copy+paste <span class="font-mono">code</span> output</strong> for websites. Create accent colors based on color theory.</p>
 	</div>
 		<div class="tabs" class:hidePanels>
 			<Tabs initialSelectedIndex={-1}>
@@ -98,6 +90,9 @@ style="
 </div>
 
 <style lang="postcss">
+	p {
+		@apply text-lg;
+	}
 	.name {
 		@apply font-semibold;
 	}

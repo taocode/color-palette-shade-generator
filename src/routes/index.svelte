@@ -17,7 +17,7 @@
 	import HueSlider from '$lib/components/hue-slider.svelte'
 	import GradientDisplay from '$lib/components/gradient-display.svelte'
 
-	import { schemes, schemeColors, updateHSLA, colorShades, hueName } from '$lib'
+	import { schemes, schemeColors, updateHSLA, colorShades, hueName, getSchemeColorShade } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, 
 		factorLightness, factorSaturation, cssVarPrefix, varOptCSS, varOptTailwind, defaults } from '$lib/stores'
 	import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte'
@@ -146,6 +146,35 @@
 		showCopiers = ! showCopiers
 	}
 	let showShades = false
+
+	let cpsgStyle = ""
+$: _si = $scheme
+$: _pc = $primaryColor
+
+let cpsgColors = ['']
+let cpsgReadables = ['']
+$: {
+  const _sCs = schemeColors(schemes[_si],_pc)
+  cpsgColors = _sCs.map((v,i)=>getSchemeColorShade(_si, _pc, i, _sCs))
+  if (_si === 0) {
+    cpsgColors[0] = darken(_pc,0.3)
+		cpsgColors[1] = darken(_pc,0.1)
+		cpsgColors[2] = lighten(_pc,0.1)
+    cpsgColors[3] = lighten(_pc,0.3)
+  } else if (_si === 1) {
+    cpsgColors[0] = darken(_pc,0.4)
+    cpsgColors[2] = darken(_pc,0.1)
+    cpsgColors[1] = lighten(_pc,0.1)
+    cpsgColors[3] = lighten(_pc,0.3)
+  } else if (_si === 2) {
+		cpsgColors = cpsgColors.map((v,i)=>i<1?darken(v,0.2):lighten(v,0.2))
+	} else {
+		cpsgColors = cpsgColors.map((v,i)=>i<1?darken(v,0.2):v)
+	}
+  cpsgStyle = cpsgColors.reduce((p,c,i) => `${p}\n--cpsg-${i}: ${c};`,'') 
+							+	cpsgColors.reduce((p,c,i) => `${p}\n--cpsg-fg-${i}: ${readableColor(c)};`,'')
+}
+
 </script>
 
 <svelte:head>
@@ -158,15 +187,13 @@
 style="
 	color: {readable}; 
 	background-color: {$primaryColor};
-	--color-C: {darken(adjustHue($primaryColor,240),0.175)};
-	--color-P: {darken(adjustHue($primaryColor,330),0.175)};
-	--color-S: {lighten(adjustHue($primaryColor,180),0.12)};
-	--color-G: {lighten(adjustHue($primaryColor,90),0.12)};
 	--color-glow: {toHex(readable)+'99'};
 	--color-btn-bg: {buttonColor};
 	--color-btn-fg: {readableColor(buttonColor)};
 ">
-	<h1><ColorPaletteShadeGenerator /></h1>
+	<div class="scheme-{$scheme}" style={cpsgStyle}>
+		<h1><ColorPaletteShadeGenerator /></h1>
+	</div>
 	<HueSlider />
 	<div class="panel-scheme">
 		<div class="show-toggles"
