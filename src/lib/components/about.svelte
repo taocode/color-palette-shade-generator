@@ -45,7 +45,7 @@ style="
 								</li>
 								<li>Customizable options:
 									<ul>
-										<li>Variable name, <em>deafult:</em> name based on hue <code class="italic whitespace-nowrap"><span class="font-extralight">--color-</span>varname</code></li>
+										<li>Variable name, <em>default:</em> name based on hue <code class="italic whitespace-nowrap"><span class="font-extralight">--color-</span>varname</code></li>
 										<li>Variable name prefix, <em>default:</em> <code class="italic whitespace-nowrap"><span class="font-extralight">--</span>color<span class="font-extralight">-varname</span></code></li>
 										<li><abbr title="Luminosity">%L</abbr> shift per step, <em>default:</em> <code class="italic whitespace-nowrap">7.5%; dark/light: 1/3%L</code></li>
 										<li><abbr title="Saturation">%S</abbr> shift per step, <em>default:</em> <code class="italic whitespace-nowrap">0%</code></li>
