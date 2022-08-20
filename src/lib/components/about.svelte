@@ -47,20 +47,22 @@ style="
 									<ul>
 										<li>Variable name, <em>default:</em> name based on hue <code class="italic whitespace-nowrap"><span class="font-extralight">--color-</span>varname</code></li>
 										<li>Variable name prefix, <em>default:</em> <code class="italic whitespace-nowrap"><span class="font-extralight">--</span>color<span class="font-extralight">-varname</span></code></li>
-										<li><abbr title="Luminosity">%L</abbr> shift per step, <em>default:</em> <code class="italic whitespace-nowrap">7.5%</code>; <em>dark/light:</em> <code>%L/3 (7.5%/3=2.5%)</code></li>
+										<li><abbr title="Luminosity">%L</abbr> shift per step, <em>default:</em> <code class="italic whitespace-nowrap">7.5%</code>; <em>dark/light:</em> <code>%L/3</code> <em class="font-mono text-sm">(7.5%/3=2.5%)</em></li>
 										<li><abbr title="Saturation">%S</abbr> shift per step, <em>default:</em> <code class="italic whitespace-nowrap">0%</code></li>
 										<li>Number of steps, <em>default:</em> <code class="italic whitespace-nowrap">10</code></li>
 									</ul>
 								</li>
+								<li>Chosen color, scheme and customizable options are stored in the query string <em class="font-mono tracking-tighter">(url.searchParams)</em> for a sharable link.
+								</li>
 								<li>HSLA based, produces your chosen color notations for web:
 									 <ul>
 										{#each cssSchemes as {id, name, description, sample}, i}
-										<li><span class="name">{name || id}</span>: {description} - <em class="whitespace-nowrap">{sample}</em></li>
+										<li><span class="name">{name || id}</span>: {description} - <em class="whitespace-nowrap text-[0.85em] font-mono">{sample}</em></li>
 										{/each}
 								</ul>
 							</li>
 							</ol>
-							<p class="text-center">Thanks to <a target="_blank" href="https://www.kevinpowell.co/">Kevin Powell</a> for explaining HSL so well: <a target="_blank" href="https://www.youtube.com/watch?v=Ab9pHqhsfcc">Are you using the WRONG color model in your CSS?</a></p>
+							<p class="text-center">Thanks to <a target="_blank" href="https://www.kevinpowell.co/">Kevin Powell</a> for explaining HSL: <a target="_blank" href="https://www.youtube.com/watch?v=Ab9pHqhsfcc">Are you using the WRONG color model in your CSS?</a></p>
 						</div>
 					</TabPanel>
 					<TabPanel>
