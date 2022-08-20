@@ -16,7 +16,7 @@
 </script>
 <div class="settings vars">
   {#if withLabel}
-  <label for="varsOpt">CSS Notation:</label>
+  <label for="varsOpt">Color Notation:</label>
   {/if}
   <select id="varsOpt"
   bind:value={_varOptCSS}
