@@ -61,7 +61,7 @@ export const cssSchemes = [
   }
 ]
 export const updateHSLA = (color, fix=false) => {	
-  let [h,s,l,a] = parseToPreciseHsla(color)
+  let [h,s,l,a] = parseToHsla(color)
   if (fix) {
     h = h.toFixed(1)
     s = s.toFixed(3)
@@ -201,12 +201,14 @@ const cssColor = (color,optCSS) => {
     return toHex(color).substring(0,7)
   } else if (optCSS === 'HSL') {
     const hsl = parseToHsla(color)
-    return `hsl(${hsl[0].toFixed()}, ${(100*hsl[1]).toFixed()}%, ${(100*hsl[2]).toFixed()}%)`
+    return `hsl(${parseFloat(hsl[0].toFixed(1))}, ${parseFloat((100*hsl[1]).toFixed(1))}%, ${parseFloat((100*hsl[2]).toFixed(1))}%)`
   } else if (optCSS === 'RGB') {
     const rgb = parseToRgba(color)
     return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`
   }
-  return toHsla(color)
+  const hsla = parseToHsla(color)
+  return `hsla(${parseFloat(hsla[0].toFixed(1))}, ${parseFloat((100*hsla[1]).toFixed(1))}%, ${parseFloat((100*hsla[2]).toFixed(1))}%, ${parseFloat(hsla[3].toFixed(2))})`
+  // return toHsla(color)
 }
 
 export const shadesAsCSS = (name,placeholder,masterColor,shades,cssPrefix,vOptCSS) => {
@@ -237,11 +239,6 @@ export const shadesAsTailwind = (name,placeholder,masterColor,shades,cssPrefix,v
     return `${p}\n\t<div class="pl-3">'${varNum}': '${varValue}',</div>` 
   },`\n<div class="pl-3">\tDEFAULT: '${varValue}',</div>`)
 }
-export const parseToPreciseHsla = (color) => { 
-  return (color.startsWith('hsla')) 
-    ? color.substring(5,color.length-1).split(', ').map((c) => parseFloat(c))
-    : parseToHsla(color)
-  }
 export const colorShades = (color,steps,stepFactorLightness,stepFactorSaturation) => {
   let arr = [color]
   for (let i = 1; i < steps; i++) {
