@@ -41,7 +41,7 @@
 		// console.log("onMount()",{browser})
 		if (browser) {
 			const searchParams = $page.url.searchParams
-			if (searchParams.has('H')) hue.set(0.1*parseFloat(searchParams.get('H')))
+			if (searchParams.has('H')) hue.set(parseFloat(searchParams.get('H')))
 			if (searchParams.has('S')) saturation.set(0.01*parseFloat(searchParams.get('S')))
 			if (searchParams.has('L')) lightness.set(0.01*parseFloat(searchParams.get('L')))
 			if (searchParams.has('A')) alpha.set(parseFloat(searchParams.get('A')))
