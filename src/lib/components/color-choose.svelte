@@ -4,10 +4,10 @@ import { adjustHue, darken, readableColor, hsla, toHex, toHsla, parseToHsla } fr
 import { hue, saturation, lightness, alpha, primaryColor } from '$lib/stores'
 import { updateHSLA } from '$lib';
 
-$: h = $hue
-$: lP = ($lightness*100).toFixed()
-$: sP = ($saturation*100).toFixed()
-$: a = ($alpha*1).toFixed(1)
+$: h = parseFloat(($hue*1).toFixed(1))
+$: lP = parseFloat(($lightness*100).toFixed(1))
+$: sP = parseFloat(($saturation*100).toFixed(1))
+$: a = parseFloat(($alpha*1).toFixed(1))
 
 $: hue.set( h )
 $: saturation.set( sP/100 )
@@ -40,7 +40,7 @@ function colorPicked({srcElement}) {
 					class="hsla" 
 					style="background-color: {$primaryColor};"
 					bind:value={h} 
-				>,
+				><span>,</span>
 				<input id="saturation"
 					placeholder="Saturation"
 					type="number" 
@@ -48,7 +48,7 @@ function colorPicked({srcElement}) {
 					class="hsla" 
 					style="background-color: {$primaryColor};" 
 					bind:value={sP}
-				>%,
+				><span>%, </span>
 				<input id="luminosity"
 					placeholder="luminosity"
 					type="number" 
@@ -56,7 +56,7 @@ function colorPicked({srcElement}) {
 					class="hsla" 
 					style="background-color: {$primaryColor};" 
 					bind:value={lP} 
-				>%,
+				><span>%, </span>
 				<input id="alpha"
 					placeholder="Hue"
 					type="number" 
@@ -65,7 +65,7 @@ function colorPicked({srcElement}) {
 					style="background-color: {$primaryColor};" 
 					bind:value={a}
 				>
-				)
+				<span>)</span>
 			</label>
 		</div>
 	</div>
@@ -74,17 +74,23 @@ function colorPicked({srcElement}) {
 <style lang="postcss">
 	label {
 		@apply block flex items-center justify-end w-full text-[0.75em];
+		span {
+			@apply flex-shrink;
+		}
 	}
 	label input {
 		@apply text-[2em] ml-2;
 	}
 	input {
-		@apply text-right border-transparent leading-tight flex-shrink;
+		@apply text-right border leading-tight flex-shrink font-mono;
 	}
 	.choose-color {
 		@apply max-w-max mx-auto pb-4 leading-loose sm:text-xl;
 	}
 	.hsla {
-		@apply font-semibold max-w-[4ch];
+		@apply flex-shrink font-semibold max-w-[5ch];
+		&#hue {
+			@apply flex-grow max-w-none w-full;
+		}
 	}
 </style>
