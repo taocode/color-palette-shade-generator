@@ -6,7 +6,7 @@ export const defaults = {
   saturation: 0.75,
   lightness: 0.50,
   alpha: 1,
-  scheme: 6,
+  scheme: 3,
   steps: 10,
   factorLightness: 0.075,
   factorSaturation: 0,
