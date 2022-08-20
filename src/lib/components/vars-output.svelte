@@ -15,8 +15,6 @@
   export let color = 'gray'
   export let shades = colorShades(color,$steps,$factorLightness,$factorSaturation)
 
-  $: hue = parseToHsla(color)[0]
-  $: hName = hueName(hue)
   $: _varOptCSS = $varOptCSS
   $: _varOptTailwind = $varOptTailwind
   $: _cssVarPrefix = $cssVarPrefix

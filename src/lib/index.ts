@@ -61,7 +61,7 @@ export const cssSchemes = [
   }
 ]
 export const updateHSLA = (color, fix=false) => {	
-  let [h,s,l,a] = parseToHsla(color)
+  let [h,s,l,a] = parseToPreciseHsla(color)
   if (fix) {
     h = h.toFixed(1)
     s = s.toFixed(3)
@@ -237,8 +237,13 @@ export const shadesAsTailwind = (name,placeholder,masterColor,shades,cssPrefix,v
     return `${p}\n\t<div class="pl-3">'${varNum}': '${varValue}',</div>` 
   },`\n<div class="pl-3">\tDEFAULT: '${varValue}',</div>`)
 }
+export const parseToPreciseHsla = (color) => { 
+  return (color.startsWith('hsla')) 
+    ? color.substring(5,color.length-1).split(', ').map((c) => parseFloat(c))
+    : parseToHsla(color)
+  }
 export const colorShades = (color,steps,stepFactorLightness,stepFactorSaturation) => {
-  let arr = [toHsla(color)]
+  let arr = [color]
   for (let i = 1; i < steps; i++) {
     if (i % 2) {
       const lighter = lighten(color,(i+1)/2*stepFactorLightness)
