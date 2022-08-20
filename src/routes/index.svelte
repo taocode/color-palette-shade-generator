@@ -27,13 +27,14 @@
 	import MakersMark from '$lib/components/makers-mark.svelte'
 
 	let timer
+	const historyDebounceMS = 50
 	const debounceHistory = (state) => {
     clearTimeout(timer)
 		timer = setTimeout(() => {
 			const params = new URLSearchParams(state)
 			const strParams = (params.toString() !== '') ? `/?${params}` : '/'
       history.replaceState(state,'',strParams)
-		}, 200);
+		}, historyDebounceMS);
 	}
 	
 	export let lightnessPercent = $factorLightness*100
