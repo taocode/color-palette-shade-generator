@@ -26,7 +26,7 @@
 --progress-bg: transparent;
 --thumb-bg: {adjustHue(`hsl(${_hue[0]}, 100%, 50%)`,180)};
 " >
-	<Slider min={0} max={360} bind:value={_hue}
+	<Slider min={0} max={360} step={0.1} bind:value={_hue}
 	/>
 </div>
 

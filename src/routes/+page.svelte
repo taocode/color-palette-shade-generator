@@ -41,7 +41,7 @@
 		// console.log("onMount()",{browser})
 		if (browser) {
 			const searchParams = $page.url.searchParams
-			if (searchParams.has('H')) hue.set(parseInt(searchParams.get('H')))
+			if (searchParams.has('H')) hue.set(0.1*parseFloat(searchParams.get('H')))
 			if (searchParams.has('S')) saturation.set(0.01*parseFloat(searchParams.get('S')))
 			if (searchParams.has('L')) lightness.set(0.01*parseFloat(searchParams.get('L')))
 			if (searchParams.has('A')) alpha.set(parseFloat(searchParams.get('A')))
@@ -84,8 +84,8 @@
 		if (browser) {
 			const state = {}
 			if ($hue != defaults.hue) state.H = ($hue*1).toFixed(1)
-			if ($saturation != defaults.saturation) state.S = ($saturation*100).toFixed()
-			if ($lightness != defaults.lightness) state.L = ($lightness*100).toFixed()
+			if ($saturation != defaults.saturation) state.S = ($saturation*100).toFixed(1)
+			if ($lightness != defaults.lightness) state.L = ($lightness*100).toFixed(1)
 			if ($alpha != defaults.alpha) state.A = (1*$alpha).toFixed(2)
 
 			if ($scheme != defaults.scheme) state.scheme = $scheme.toFixed()
