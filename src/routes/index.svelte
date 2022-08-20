@@ -36,10 +36,7 @@
       history.replaceState(state,'',strParams)
 		}, historyDebounceMS);
 	}
-	
-	export let lightnessPercent = $factorLightness*100
-	export let saturationPercent = $factorSaturation*100
-	
+		
 	onMount(() => {
 		// console.log("onMount()",{browser})
 		if (browser) {
@@ -78,9 +75,7 @@
 
 	$: {
 		$steps
-		lightnessPercent = $factorLightness*100
-		saturationPercent = $factorSaturation*100
-
+		
 		primaryColor.set( hsla($hue, $saturation, $lightness, $alpha) )
 
 		readable = readableColor($primaryColor)
