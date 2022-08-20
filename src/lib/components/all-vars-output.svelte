@@ -2,7 +2,7 @@
   import { parseToHsla, toHsla } from 'color2k'
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
-  import { colorShades, hueName, notice, parseToPreciseHsla, schemes, shadesAsCSS, shadesAsTailwind } from '$lib'
+  import { colorShades, hueName, notice, schemes, shadesAsCSS, shadesAsTailwind } from '$lib'
   import { colorNames, varOptCSS, varOptTailwind, cssVarPrefix, steps, factorLightness, factorSaturation, scheme } from '$lib/stores'
   import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
   import SettingVarCss from './setting-var-css.svelte'
@@ -13,7 +13,7 @@
   export let _varOptCSS = $varOptCSS
   export let _varOptTailwind = $varOptTailwind
   $: color = allColors[0]?.color || 'hsla(0, 0%, 0%, 1)'
-  $: hue = parseToPreciseHsla(color)[0].toFixed(1)
+  $: hue = parseToHsla(color)[0].toFixed(1)
   $: hName = hueName(hue)
   $: _varOptTailwind = $varOptTailwind
   $: _varOptCSS = $varOptCSS
