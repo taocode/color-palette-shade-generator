@@ -9,7 +9,6 @@ $: lP = ($lightness*100).toFixed()
 $: sP = ($saturation*100).toFixed()
 $: a = ($alpha*1).toFixed(1)
 
-$: primaryColor.set( hsla($hue, $saturation, $lightness, $alpha) )
 $: hue.set( h )
 $: saturation.set( sP/100 )
 $: lightness.set( lP/100 )

@@ -63,8 +63,6 @@
 		}
 	})
 
-	$: primaryColor.set($hue, $saturation, $lightness, $alpha)
-	
 	let readable = readableColor("white")
 	let allColors = []
 	
@@ -76,8 +74,6 @@
 	$: {
 		$steps
 		
-		primaryColor.set( hsla($hue, $saturation, $lightness, $alpha) )
-
 		readable = readableColor($primaryColor)
 		allColors = schemeColors(schemes[$scheme],$primaryColor)
 		// console.log('colors vs',{allColors},schemeColors(schemes[scheme],color))

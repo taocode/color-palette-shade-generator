@@ -1,5 +1,5 @@
-import { toHsla } from "color2k"
-import { writable } from "svelte/store"
+import { hsla } from "color2k"
+import { derived, writable } from "svelte/store"
 
 export const defaults = {
   hue: 180,
@@ -20,12 +20,17 @@ export const factorLightness = writable(defaults.factorLightness)
 export const factorSaturation = writable(defaults.factorSaturation)
 
 export const scheme = writable(defaults.scheme)
-export const primaryColor = writable(toHsla('hsl(240,65%,45%)'))
 
 export const hue = writable(defaults.hue)
 export const saturation = writable(defaults.saturation)
 export const lightness = writable(defaults.lightness)
 export const alpha = writable(defaults.alpha)
+export const primaryColor = derived([hue,saturation,lightness,alpha], 
+  ([$H,$S,$L,$A], set) => {
+    set(hsla($H,$S,$L,$A))
+    // console.log('derived primary: ',$H,$S,$L,$A)
+  }
+)
 
 export const colorNames = writable(defaults.colorNames)
 export const cssVarPrefix = writable(defaults.cssVarPrefix)
