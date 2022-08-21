@@ -53,7 +53,7 @@ style="
 										<li>Number of steps, <em>default:</em> <code class="italic whitespace-nowrap">10</code></li>
 									</ul>
 								</li>
-								<li>Chosen color, scheme and customizable options are stored in the query string <em class="font-mono tracking-tighter">(url.searchParams)</em> for a sharable link.
+								<li>Chosen color, scheme and customized options are stored in the query string <em class="font-mono tracking-tighter">(url.searchParams)</em> for a sharable link.
 									<ul class="params">
 										<li><span class="qp">H</span>=Hue</li>
 										<li><span class="qp">S</span>=Saturation</li>
@@ -86,7 +86,7 @@ style="
 							<ul class="schemes">
 								{#each schemes as s, i}
 								<li>
-									<SchemeIcon scheme={schemes[i]} schemeIndex={i} color={$primaryColor} />
+									<SchemeIcon schemeIndex={i} color={$primaryColor} />
 									<button class="name"
 									on:click={()=>scheme.set(i)}>{s.name}</button>
 									<em>
