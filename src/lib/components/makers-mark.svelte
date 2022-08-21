@@ -3,7 +3,6 @@
 	import { hue, primaryColor } from '$lib/stores'
 
 	$: lessDim = ($hue/360.0)*0.05
-	$: console.log({lessDim})
 	$: colorPrimary = darken($primaryColor,0.2-lessDim)
 </script>
 <div class="placer"
