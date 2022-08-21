@@ -1,11 +1,11 @@
 <script>
-  import { readableColor, toRgba, toHex, toHsla, parseToHsla } from 'color2k'
-  import { createEventDispatcher } from 'svelte'
-  import { CopyIcon, Edit2Icon } from 'svelte-feather-icons'
+  import { readableColor, toRgba, toHex, toHsla } from 'color2k'
+
+  import { CopyIcon } from 'svelte-feather-icons'
   import { clickOutside } from 'svelte-use-click-outside'
 
-  import { hue, saturation, lightness, alpha, primaryColor, cssVarPrefix } from '$lib/stores'
-  import { cssVarNum, dots, notice, updateHSLA } from '$lib'
+  import { cssVarPrefix } from '$lib/stores'
+  import { cssVarNum, notice, updateHSLA } from '$lib'
   
   export let color = 'black'
   export let name = ''
@@ -13,8 +13,6 @@
 
   const varNum = cssVarNum(shadeIndex)
   
-  const dispatch = createEventDispatcher()
-
   function copyClick(event) {
     const text = event.srcElement.innerText.trim()
     const noteElement = event.srcElement.closest('.swatch')

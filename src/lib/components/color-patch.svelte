@@ -1,5 +1,5 @@
 <script>
-import { lighten, darken, parseToHsla, readableColor, desaturate, toHsla, readableColorIsBlack, opacify } from 'color2k'
+import { lighten, parseToHsla, readableColor, desaturate } from 'color2k'
 import { XIcon, CopyIcon } from 'svelte-feather-icons'
 import { browser } from '$app/env'
 import TailwindIcon from '$lib/components/svg/tailwind.svelte'
@@ -8,9 +8,8 @@ import Swatch from './swatch.svelte'
 import VarsOutput from './vars-output.svelte'
 // import 
 
-import { dots, hueName, notice, schemes, colorShades } from '$lib'
-import { colorNames, optColorNotation, optTailwind, cssVarPrefix, primaryColor, scheme, steps, factorLightness, factorSaturation, hue } from '$lib/stores'
-import SettingVarCss from './setting-var-css.svelte'
+import { dots, hueName, notice, colorShades } from '$lib'
+import { colorNames, optColorNotation, optTailwind, cssVarPrefix, steps, factorLightness, factorSaturation } from '$lib/stores'
 import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
 
 export let color = 'black'

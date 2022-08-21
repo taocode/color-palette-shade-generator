@@ -1,15 +1,13 @@
 <script>
-import { darken, lighten, adjustHue, toHex, readableColor } from 'color2k'
+import { darken, adjustHue } from 'color2k'
 import { clickOutside } from 'svelte-use-click-outside'
 
 import { Tabs, Tab, TabList, TabPanel } from '$lib/components/layout/tab'
 
-import { describeScheme, schemes, cssSchemes, getSchemeColorShade, schemeColors } from '$lib'
-import { scheme, primaryColor, optColorNotation } from '$lib/stores'
-import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
+import { describeScheme, schemes, cssSchemes } from '$lib'
+import { scheme, primaryColor } from '$lib/stores'
 import SchemeIcon from './scheme-icon.svelte'
 
-let readable = readableColor('white')
 let hidePanels = true
 </script>
 

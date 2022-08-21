@@ -1,5 +1,5 @@
 <script>
-	import { darken, lighten, readableColor, hsla, toHex, toHsla, parseToHsla, adjustHue } from 'color2k'
+	import { darken, lighten, readableColor, toHex, parseToHsla, adjustHue } from 'color2k'
 	import { EyeIcon, CopyIcon, CheckSquareIcon, SquareIcon } from 'svelte-feather-icons'
 	import { browser } from '$app/env'
 	import { page } from '$app/stores'
@@ -9,7 +9,6 @@
 	import About from '$lib/components/about.svelte'
 	import ColorChoose from '$lib/components/color-choose.svelte'
 	import ColorPatch from '$lib/components/color-patch.svelte'
-	import SettingsScheme from '$lib/components/settings-scheme.svelte'
 	import SettingsShades from '$lib/components/settings-shades.svelte'
 	import AllVarsOutput from '$lib/components/all-vars-output.svelte'
 	import SettingVarTailwind from '$lib/components/setting-var-tailwind.svelte'
