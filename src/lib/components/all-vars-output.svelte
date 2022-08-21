@@ -3,21 +3,23 @@
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
   import { colorShades, hueName, notice, schemes, shadesAsCSS, shadesAsTailwind } from '$lib'
-  import { colorNames, varOptCSS, varOptTailwind, cssVarPrefix, steps, factorLightness, factorSaturation, scheme } from '$lib/stores'
+  import { colorNames, optColorNotation, optTailwind, optSass, cssVarPrefix, steps, factorLightness, factorSaturation, scheme } from '$lib/stores'
   import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
   import SettingVarCss from './setting-var-css.svelte'
   import SettingVarTailwind from './setting-var-tailwind.svelte'
 
   export let type = 'CSS'
   export let allColors = []
-  export let _varOptCSS = $varOptCSS
-  export let _varOptTailwind = $varOptTailwind
+  export let _optColorNotation = $optColorNotation
+  export let _optTailwind = $optTailwind
   $: color = allColors[0]?.color || 'hsla(0, 0%, 0%, 1)'
   $: hue = parseToHsla(color)[0].toFixed(1)
   $: hName = hueName(hue)
-  $: _varOptTailwind = $varOptTailwind
-  $: _varOptCSS = $varOptCSS
+  $: _optTailwind = $optTailwind
+  $: _optColorNotation = $optColorNotation
+  $: _optSass = $optSass
   $: _cssVarPrefix = $cssVarPrefix
+  $: _scss = (type==='CSS' && _optSass > 0) ? 'S' : ''
 
   $: _scheme = schemes[$scheme]
   
@@ -49,7 +51,7 @@
 <div class="all-vars-output {type.toLocaleLowerCase()}">
   <div class="heading">
     <button title={`Copy ${type} vars`}  on:click={copyClick} class="flex-grow">
-      <h2 class="mr-2">{type}</h2>
+      <h2 class="mr-2">{_scss}{type}</h2>
       <div class="pt-4">
         <CopyIcon size="1x" />
       </div>
@@ -77,7 +79,7 @@
           <div class="pl-3">
     {#each allColors as {color, name}, i}
     <div>{$colorNames[i] || placeholder(i,color)}: &lbrace;</div>
-    {@html shadesAsTailwind($colorNames[i], placeholder(i,color), color, colorShades(color,$steps,($scheme === 1) ? $factorLightness / 3 : $factorLightness, $factorSaturation), _cssVarPrefix, _varOptCSS, _varOptTailwind)}
+    {@html shadesAsTailwind($colorNames[i], placeholder(i,color), color, colorShades(color,$steps,($scheme === 1) ? $factorLightness / 3 : $factorLightness, $factorSaturation), _cssVarPrefix, _optColorNotation, _optTailwind)}
     <div>{`\n`}&rbrace;,{`\n`}</div>
     {/each}
           </div>
@@ -90,7 +92,7 @@
         <div class="pl-3">
           {#each allColors as {color, name, shades}, i}
             {@html shadesAsCSS($colorNames[i], placeholder(i,color), color,
-              colorShades(color,$steps,($scheme === 1) ? $factorLightness / 3 : $factorLightness,$factorSaturation), _cssVarPrefix, _varOptCSS)}
+              colorShades(color,$steps,($scheme === 1) ? $factorLightness / 3 : $factorLightness,$factorSaturation), _cssVarPrefix, _optColorNotation, _optSass)}
           {/each}
         </div>
       </div>

@@ -19,12 +19,13 @@
 
 	import { colorShades, hueName, getSchemeColorShade, notice, schemes, schemeColors, updateHSLA } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, 
-		factorLightness, factorSaturation, cssVarPrefix, varOptCSS, varOptTailwind, defaults } from '$lib/stores'
+		factorLightness, factorSaturation, cssVarPrefix, optColorNotation, optTailwind, defaults, optSass } from '$lib/stores'
 	import { clickOutside } from 'svelte-use-click-outside'
 	import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte'
 	import Tailwind from '$lib/components/svg/tailwind.svelte'
 	import SchemeChooserIcons from '$lib/components/scheme-chooser-icons.svelte'
 	import MakersMark from '$lib/components/makers-mark.svelte'
+	import SettingVarSass from '$lib/components/setting-var-sass.svelte'
 
 	let timer
 	const historyDebounceMS = 50
@@ -50,9 +51,9 @@
 			if (searchParams.has('pL')) factorLightness.set( 0.01 * parseFloat(searchParams.get('pL')) )
 			if (searchParams.has('pS')) factorSaturation.set( 0.01 * parseFloat(searchParams.get('pS')) )
 
-			if (searchParams.has('vp')) cssVarPrefix.set(searchParams.get('vp'))
-			if (searchParams.has('vc')) varOptCSS.set(searchParams.get('vc'))
-			if (searchParams.has('vt')) varOptTailwind.set(searchParams.get('vt'))
+			if (searchParams.has('pre')) cssVarPrefix.set(searchParams.get('pre'))
+			if (searchParams.has('cn')) optColorNotation.set(searchParams.get('cn'))
+			if (searchParams.has('tw')) optTailwind.set(searchParams.get('tw'))
 
 			const colorNamesSP = new Array(10).fill('c')
 				.map((c,i) => searchParams.has(c+i) ? searchParams.get(c+i) : '')
@@ -89,10 +90,10 @@
 			if ($factorLightness != defaults.factorLightness) state.pL = ($factorLightness*100).toFixed(1)
 			if ($factorSaturation != defaults.factorSaturation) state.pS = ($factorSaturation*100).toFixed(1)
 
-			if ($cssVarPrefix != defaults.cssVarPrefix) state.vp = $cssVarPrefix
-			if ($varOptCSS != defaults.varOptCSS) state.vc = $varOptCSS
-			if ($varOptTailwind != defaults.varOptTailwind) state.vt = $varOptTailwind
-
+			if ($cssVarPrefix != defaults.cssVarPrefix) state.pre = $cssVarPrefix
+			if ($optColorNotation != defaults.optColorNotation) state.cn = $optColorNotation
+			if ($optTailwind != defaults.optTailwind) state.tw = $optTailwind
+			if ($optSass != defaults.optSass) state.sass = $optSass
 			$colorNames.forEach((name,i) => {
 				if (name && name !== '') {
 					state[`c${i}`] = name
@@ -258,7 +259,10 @@ style="
 					<SettingVarCss withLabel />
 			</div>
 			<div>
-					<SettingVarTailwind withLabel />
+				<SettingVarSass withLabel />
+			</div>
+			<div>
+				<SettingVarTailwind withLabel />
 			</div>
 		</div>
 		<div class="my-3">

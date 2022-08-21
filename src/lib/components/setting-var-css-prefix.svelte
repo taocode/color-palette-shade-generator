@@ -1,6 +1,6 @@
 <script>
   import { darken, lighten, readableColor } from 'color2k'
-  import { primaryColor, cssVarPrefix } from '$lib/stores'
+  import { primaryColor, cssVarPrefix, optSass } from '$lib/stores'
 
   export let noColor = false
   export let fixedColor = false
@@ -8,6 +8,7 @@
   export let color = noColor ? 'white' : (fixedColor || $primaryColor)
   export let label = ''
   
+  $: ddVal = ($optSass>0) ? '$' : '--'
   $: _cssVarPrefix = $cssVarPrefix
   $: cssVarPrefix.set(_cssVarPrefix)
   $: color = noColor ? 'white' : (fixedColor || $primaryColor)
@@ -16,7 +17,7 @@
 <div class="settings vars">
   {#if dashDash}
   <label for="css-var-prefix" title="prefix" class="dash-dash" style="color: {readableColor(color)};">
-    --
+    {ddVal}
   </label>
   {/if} 
   {#if label}

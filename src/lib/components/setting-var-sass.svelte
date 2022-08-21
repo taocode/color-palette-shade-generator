@@ -1,33 +1,30 @@
 <script>
   import { readableColor } from 'color2k'
-  import { primaryColor, optTailwind } from '$lib/stores'
+  import { primaryColor, optSass } from '$lib/stores'
 
-  export const varOptsTailwind = [
-    ['novar', 'No CSS vars'],
-    ['varonly', 'CSS vars'],
-    ['both', 'CSS vars +fallback']
-  ]
+  export const opts = ['CSS','Sass/SCSS']
+
   export let noColor = false
   export let color = noColor ? 'white' : $primaryColor
   export let fixedColor = ''
   export let withLabel = false
   // $: color = 
-  $: _optTailwind = $optTailwind
+  $: _optSass = $optSass
   $: color = noColor ? 'white' : (fixedColor || $primaryColor)
 </script>
 <div class="settings vars">
   {#if withLabel}
-  <label for="varsOpt">
-    Tailwind Vars:
+  <label for="varsOptSass">
+    CSS or Sass Vars:
   </label>
   {/if}
-  <select id="varsOpt"
-  bind:value={_optTailwind}
-  on:change={()=>optTailwind.set(_optTailwind)}
+  <select id="varsOptSass"
+  bind:value={_optSass}
+  on:change={()=>optSass.set(_optSass)}
   style="--color-background: {color}; --color-foreground: {readableColor(color)};"
   >
-    {#each varOptsTailwind as o, i}
-    <option value={o[0]}>{o[1]}</option>
+    {#each opts as o, i}
+    <option value={i}>{o}</option>
     {/each}
   </select>
 </div>

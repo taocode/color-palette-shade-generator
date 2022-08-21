@@ -5,12 +5,12 @@ import { clickOutside } from 'svelte-use-click-outside'
 import { Tabs, Tab, TabList, TabPanel } from '$lib/components/layout/tab'
 
 import { describeScheme, schemes, cssSchemes, getSchemeColorShade, schemeColors } from '$lib'
-import { scheme, primaryColor, varOptCSS } from '$lib/stores'
+import { scheme, primaryColor, optColorNotation } from '$lib/stores'
 import ColorPaletteShadeGenerator from './color-palette-shade-generator.svelte'
 import SchemeIcon from './scheme-icon.svelte'
 
 let readable = readableColor('white')
-let hidePanels = false
+let hidePanels = true
 </script>
 
 
@@ -39,7 +39,8 @@ style="
 							<ol>
 								<li>Variable outputs are easily copied via provided buttons
 									<ul>
-										<li>CSS variables: <code class="italic whitespace-nowrap">--color-blue-500: hsla(240, 80%, 50%, 1)</code></li>
+										<li>CSS variables: <code class="italic whitespace-nowrap">--color-blue-500: hsla(240, 80%, 50%, 1);</code></li>
+										<li>SASS/SCSS variables: <code class="italic whitespace-nowrap">$color-blue-500: hsl(240, 80%, 50%);</code></li>
 										<li>Tailwind/WindiCSS config (<code class="italic whitespace-nowrap">tailwind.config.js</code>) variables with optional reference the CSS variables</li>
 									</ul>
 								</li>
@@ -53,11 +54,26 @@ style="
 									</ul>
 								</li>
 								<li>Chosen color, scheme and customizable options are stored in the query string <em class="font-mono tracking-tighter">(url.searchParams)</em> for a sharable link.
+									<ul class="params">
+										<li><span class="qp">H</span>=Hue</li>
+										<li><span class="qp">S</span>=Saturation</li>
+										<li><span class="qp">L</span>=Lightness</li>
+										<li><span class="qp">A</span>=Alpha</li>
+										<li><span class="qp">scheme</span>=scheme index</li>
+										<li><span class="qp">steps</span>=number of steps</li>
+										<li><span class="qp">pL</span>=%L per step</li>
+										<li><span class="qp">pS</span>=%S per step</li>
+										<li><span class="qp">pre</span>=variable prefix</li>
+										<li><span class="qp">cn</span>=color notation</li>
+										<li><span class="qp">tw</span>=tailwind variable option</li>
+										<li><span class="qp">sass</span>=SCSS/SASS variable option</li>
+										<li><span class="qp">c[0-3]</span>=custom color names</li>
+									</ul>
 								</li>
 								<li>HSLA based, produces your chosen color notations for web:
 									 <ul>
 										{#each cssSchemes as {id, name, description, sample}, i}
-										<li><span class="name">{name || id}</span>: {description} - <em class="whitespace-nowrap text-[0.85em] font-mono">{sample}</em></li>
+										<li><span class="name">{name || id}</span>: <span>{description}</span> - <em class="whitespace-nowrap text-[0.85em] font-mono">{sample}</em></li>
 										{/each}
 								</ul>
 							</li>
@@ -116,6 +132,21 @@ style="
 			@apply mt-3 mb-6;
 			text-indent: -2.4em;
 			margin-left: 3rem;
+		}
+	}
+	.params {
+		@apply flex flex-wrap list-none list-outside gap-x-2 leading-tight;
+		li {
+			@apply pl-0 mr-4 whitespace-nowrap;
+			&::before {
+				display: none;
+			}
+		}
+		li {
+			@apply list-none;
+		}
+		.qp {
+			@apply font-bold;
 		}
 	}
 </style>

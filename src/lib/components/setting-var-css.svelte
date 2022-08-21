@@ -1,6 +1,6 @@
 <script>
   import { readableColor } from 'color2k'
-  import { primaryColor, varOptCSS } from '$lib/stores'
+  import { primaryColor, optColorNotation } from '$lib/stores'
   import { cssSchemes } from '$lib'
   
   export const varOptsCSS = [
@@ -11,7 +11,7 @@
   export let color = noColor ? 'white' : (fixedColor || $primaryColor)
   export let withLabel = false
 
-  $: _varOptCSS = $varOptCSS
+  $: _optColorNotation = $optColorNotation
   $: color = noColor ? 'white' : (fixedColor || $primaryColor)
 </script>
 <div class="settings vars">
@@ -19,8 +19,8 @@
   <label for="varsOpt">Color Notation:</label>
   {/if}
   <select id="varsOpt"
-  bind:value={_varOptCSS}
-  on:change={()=>{varOptCSS.set(_varOptCSS)}}
+  bind:value={_optColorNotation}
+  on:change={()=>{optColorNotation.set(_optColorNotation)}}
   style="--color-background: {color}; --color-foreground: {readableColor(color)};"
   >
     {#each cssSchemes as {id,name}, i}

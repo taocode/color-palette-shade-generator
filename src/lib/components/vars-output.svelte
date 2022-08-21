@@ -3,7 +3,7 @@
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
   import { colorShades, hueName, notice, shadesAsCSS, shadesAsTailwind } from '$lib'
-  import { varOptTailwind, varOptCSS, cssVarPrefix, steps, factorLightness, factorSaturation } from '$lib/stores'
+  import { optTailwind, optColorNotation, optSass, cssVarPrefix, steps, factorLightness, factorSaturation } from '$lib/stores'
 
   import SettingVarTailwind from './setting-var-tailwind.svelte'
   import SettingVarCss from './setting-var-css.svelte'
@@ -15,9 +15,11 @@
   export let color = 'gray'
   export let shades = colorShades(color,$steps,$factorLightness,$factorSaturation)
 
-  $: _varOptCSS = $varOptCSS
-  $: _varOptTailwind = $varOptTailwind
+  $: _optColorNotation = $optColorNotation
+  $: _optTailwind = $optTailwind
   $: _cssVarPrefix = $cssVarPrefix
+  $: _optSass = $optSass
+  $: _scss = type === 'CSS' && _optSass > 0 ? 'S' : ''
 
   function copyClick(event) {
     const varsOutput = event.srcElement.closest('.vars-output')
@@ -42,7 +44,7 @@
 <div class="vars-output {type.toLocaleLowerCase()}">
   <div class="heading">
     <button title={`Copy ${type} vars`} on:click={copyClick} class="inline-block">
-      <h2 class="mr-2">{type}</h2>
+      <h2 class="mr-2">{_scss}{type}</h2>
       <div class="pt-4">
         <CopyIcon size="1x" />
       </div>
@@ -62,7 +64,7 @@
     <div class="copyTarget">
       <div class="pl-3">
         {name || placeholder}: &lbrace;
-        {@html shadesAsTailwind( name, placeholder, color, shades, _cssVarPrefix, _varOptCSS, _varOptTailwind )}
+        {@html shadesAsTailwind( name, placeholder, color, shades, _cssVarPrefix, _optColorNotation, _optTailwind )}
           &rbrace;,
       </div>
     </div>
@@ -70,7 +72,7 @@
     {:else}
     <div class="muted">::root &lbrace;</div>
     <div class="copyTarget">
-      {@html shadesAsCSS( name, placeholder, color, shades, _cssVarPrefix, _varOptCSS )}
+      {@html shadesAsCSS( name, placeholder, color, shades, _cssVarPrefix, _optColorNotation, _optSass )}
     </div>
     <div class="muted">&rbrace;</div>
     {/if}

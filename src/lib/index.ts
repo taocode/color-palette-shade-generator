@@ -1,6 +1,6 @@
 import { adjustHue, darken, lighten, parseToHsla, parseToRgba, saturate, toHex, toHsla, toRgba } from 'color2k'
 
-import { steps, factorLightness, factorSaturation, hue, saturation, lightness, alpha, varOptCSS, varOptTailwind } from '$lib/stores'
+import { steps, factorLightness, factorSaturation, hue, saturation, lightness, alpha, optColorNotation, optTailwind } from '$lib/stores'
 
 export const hueNames = [
   {red:0},
@@ -192,7 +192,7 @@ export const dots = '<span class="tracking-widest">•••</span>'
 export const cssVarNum = (n: number): string => (n<0) ? '' : (n) ? `${n}00` : '50'
 
 const cssColor = (color,optCSS) => {
-  // console.log(`cssColor(${_varOptCSS},${color})`)
+  // console.log(`cssColor(${_optColorNotation},${color})`)
   if (optCSS === 'RGBA') {
     return toRgba(color)
   } else if (optCSS === 'HexA') {
@@ -211,14 +211,15 @@ const cssColor = (color,optCSS) => {
   // return toHsla(color)
 }
 
-export const shadesAsCSS = (name,placeholder,masterColor,shades,cssPrefix,vOptCSS) => {
+export const shadesAsCSS = (name,placeholder,masterColor,shades,cssPrefix,vOptCSS,sass=0) => {
   if (!name || name === '') name = placeholder
   const cssPre = (cssPrefix && cssPrefix !== '') ? `${cssPrefix}-` : ''
+  const varStart = (sass>0) ? '$' : '--'
   let varValue = cssColor(masterColor,vOptCSS)
   return shades.reduce((p,c,i) => {
       varValue = cssColor(c,vOptCSS)
-      return `${p}\n<div class="pl-3">--${cssPre}${name}-${cssVarNum(i)}: ${varValue};</div>`
-    },`\n<div class="pl-3">--${cssPre}${name}: ${varValue};</div>`)
+      return `${p}\n<div class="pl-3">${varStart}${cssPre}${name}-${cssVarNum(i)}: ${varValue};</div>`
+    },`\n<div class="pl-3">${varStart}${cssPre}${name}: ${varValue};</div>`)
 }
 const tailwindColor = (name, color, cssPrefix, vOptCSS, vOptTailwind, n = -1) => {
   const vn = n < 0 ? '' : '-' + cssVarNum(n)

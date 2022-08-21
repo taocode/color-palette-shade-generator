@@ -9,7 +9,7 @@ import VarsOutput from './vars-output.svelte'
 // import 
 
 import { dots, hueName, notice, schemes, colorShades } from '$lib'
-import { colorNames, varOptCSS, varOptTailwind, cssVarPrefix, primaryColor, scheme, steps, factorLightness, factorSaturation, hue } from '$lib/stores'
+import { colorNames, optColorNotation, optTailwind, cssVarPrefix, primaryColor, scheme, steps, factorLightness, factorSaturation, hue } from '$lib/stores'
 import SettingVarCss from './setting-var-css.svelte'
 import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
 
@@ -30,8 +30,8 @@ $: $colorNames[schemeIndex] = name
 $: _cssVarPrefix = $cssVarPrefix
 $: cssVarPrefix.set(_cssVarPrefix)
 $: {
-  $varOptCSS
-  $varOptTailwind
+  $optColorNotation
+  $optTailwind
 }
 if (browser) {
   document.addEventListener('keydown', (event) => {

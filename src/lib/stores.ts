@@ -11,8 +11,9 @@ export const defaults = {
   factorLightness: 0.075,
   factorSaturation: 0,
   cssVarPrefix: 'color',
-  varOptTailwind: 'novar',
-  varOptCSS: 'HSLA',
+  optTailwind: 'novar',
+  optColorNotation: 'HSLA',
+  optSass: 0,
   colorNames: []
 }
 export const steps = writable(defaults.steps)
@@ -35,5 +36,6 @@ export const primaryColor = derived([hue,saturation,lightness,alpha],
 export const colorNames = writable(defaults.colorNames)
 export const cssVarPrefix = writable(defaults.cssVarPrefix)
 
-export const varOptCSS = writable(defaults.varOptCSS)
-export const varOptTailwind = writable(defaults.varOptTailwind)
+export const optColorNotation = writable(defaults.optColorNotation)
+export const optTailwind = writable(defaults.optTailwind)
+export const optSass = writable(defaults.optSass)
