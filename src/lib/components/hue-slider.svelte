@@ -3,9 +3,8 @@
 	import Slider from '@bulatdashiev/svelte-slider'
 	import {hue} from '$lib/stores'
 	
-	let _hue = [$hue,360]
-	$: hue.set(_hue[0])
 	$: _hue = [$hue,360]
+	$: hue.set(_hue[0])
 </script>
 
 <div class="hue-slider" style="
@@ -25,7 +24,17 @@
 );
 --progress-bg: transparent;
 --thumb-bg: {adjustHue(`hsl(${_hue[0]}, 100%, 50%)`,180)};
-" >
+" on:click={(event) => {
+		const onThumb = event.target.classList.contains('thumb-content')
+		if (onThumb) return
+		const { layerX, target } = event
+		const hs = target.closest('.hue-slider')
+		const factorTarget = (layerX / parseFloat(hs.offsetWidth))
+		const hueTarget = factorTarget * 360
+		// console.log('clicked',{onThumb},`${factorTarget}, ${hueTarget}`,layerX,we.offsetWidth,{target,event})
+		hue.set(hueTarget)
+	}
+}>
 	<Slider min={0} max={360} step={0.1} bind:value={_hue}
 	/>
 </div>
