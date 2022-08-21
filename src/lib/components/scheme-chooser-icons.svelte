@@ -19,7 +19,7 @@
 					class="border-4"
 					style="border-color: {i === _scheme ? '#FFFFFFCC' : '#33333399'};"
 					on:click={()=>scheme.set(i)}>
-            <SchemeIcon scheme={schemes[i]} schemeIndex={i} color={$primaryColor} />
+            <SchemeIcon schemeIndex={i} color={$primaryColor} />
 					</button>
         {/each}
 			</div>
