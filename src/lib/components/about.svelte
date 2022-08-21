@@ -46,11 +46,13 @@ style="
 								</li>
 								<li>Customizable options:
 									<ul>
-										<li>Variable name, <em>default:</em> name based on hue <code class="italic whitespace-nowrap"><span class="font-extralight">--color-</span>varname</code></li>
+										<li>Variable name, <em>default:</em> name based on hue <code class="italic whitespace-nowrap"><span class="font-extralight">--color-</span>varname</code>
+										<div class="italic text-md"><strong>Show Shades</strong> to set custom varname</div></li>
 										<li>Variable name prefix, <em>default:</em> <code class="italic whitespace-nowrap"><span class="font-extralight">--</span>color<span class="font-extralight">-varname</span></code></li>
 										<li><abbr title="Luminosity">%L</abbr> shift per step, <em>default:</em> <code class="italic whitespace-nowrap">7.5%</code>; <em>dark/light:</em> <code>%L/3</code> <em class="font-mono text-sm">(7.5%/3=2.5%)</em></li>
 										<li><abbr title="Saturation">%S</abbr> shift per step, <em>default:</em> <code class="italic whitespace-nowrap">0%</code></li>
-										<li>Number of steps, <em>default:</em> <code class="italic whitespace-nowrap">10</code></li>
+										<li>Number of steps, <em>default:</em> <code class="italic">10</code></li>
+										<li>Sass/SCSS style variables, <em>default:</em> <code class="italic">0</code></li>
 									</ul>
 								</li>
 								<li>Chosen color, scheme and customized options are stored in the query string <em class="font-mono tracking-tighter">(url.searchParams)</em> for a sharable link.
