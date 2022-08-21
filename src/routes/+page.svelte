@@ -235,7 +235,7 @@ style="
 						<button title="Copy CSS Vars"
 							on:click={() => copyVars('css') }
 							>
-								CSS
+								{$optSass>0?'S':''}CSS
 						</button>
 						<button title="Copy Tailwind Vars"
 							on:click={() => copyVars('tailwind') }
