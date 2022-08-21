@@ -1,4 +1,5 @@
 <script>
+  import { fly } from 'svelte/transition'
   import { schemes, dots } from '$lib'
   import { primaryColor, scheme } from '$lib/stores'
 
@@ -8,7 +9,6 @@
 
   $: scheme.set(_scheme)
   $: _scheme = $scheme
-  $: schemeName = schemes[_scheme].name
 
 </script>
 <div class="settings scheme">
@@ -25,10 +25,15 @@
 			</div>
 	</div>
 </div>
-<div class="scheme-name">{schemeName}</div>
-
+<div class="relative h-12">
+  {#each schemes as s,i}
+  {#if i === _scheme}
+  <div class="scheme-name" in:fly="{{y: -80, x: ((i-3)*40)}}" out:fly={{y: 40}}>{s.name}</div>
+  {/if}
+  {/each}
+</div>
 <style lang="postcss">
 .scheme-name {
-  @apply max-w-max mx-auto py-1 px-3 mt-4 bg-white/70 text-black;
+  @apply absolute inset-0 max-w-max mx-auto py-1 px-3 mt-4 bg-white/70 text-black;
 }
 </style>
