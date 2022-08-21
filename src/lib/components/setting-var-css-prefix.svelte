@@ -9,8 +9,6 @@
   export let label = ''
   
   $: ddVal = ($optSass>0) ? '$' : '--'
-  $: _cssVarPrefix = $cssVarPrefix
-  $: cssVarPrefix.set(_cssVarPrefix)
   $: color = noColor ? 'white' : (fixedColor || $primaryColor)
 
 </script>
@@ -27,10 +25,10 @@
   {/if}
 
   <input id="css-var-prefix" 
-    bind:value={_cssVarPrefix} 
+    bind:value={$cssVarPrefix} 
     class="var-prefix"
     type="text"
-    size={_cssVarPrefix?.length || 6}
+    size={$cssVarPrefix?.length || 6}
     style="--color-background: {color};
         --color-foreground: {readableColor(color)};"
     >

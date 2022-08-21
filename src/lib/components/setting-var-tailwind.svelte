@@ -11,8 +11,7 @@
   export let color = noColor ? 'white' : $primaryColor
   export let fixedColor = ''
   export let withLabel = false
-  // $: color = 
-  $: _optTailwind = $optTailwind
+
   $: color = noColor ? 'white' : (fixedColor || $primaryColor)
   $: readable = readableColor(color)
 </script>
@@ -23,8 +22,7 @@
   </label>
   {/if}
   <select id="varsOpt"
-  bind:value={_optTailwind}
-  on:change={()=>optTailwind.set(_optTailwind)}
+  bind:value={$optTailwind}
   style="--color-background: {color}; --color-foreground: {readable};"
   >
     {#each varOptsTailwind as o, i}

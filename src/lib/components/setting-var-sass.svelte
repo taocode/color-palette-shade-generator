@@ -9,7 +9,6 @@
   export let fixedColor = ''
   export let withLabel = false
   // $: color = 
-  $: _optSass = $optSass
   $: color = noColor ? 'white' : (fixedColor || $primaryColor)
 </script>
 <div class="settings vars">
@@ -19,8 +18,7 @@
   </label>
   {/if}
   <select id="varsOptSass"
-  bind:value={_optSass}
-  on:change={()=>optSass.set(_optSass)}
+  bind:value={$optSass}
   style="--color-background: {color}; --color-foreground: {readableColor(color)};"
   >
     {#each opts as o, i}

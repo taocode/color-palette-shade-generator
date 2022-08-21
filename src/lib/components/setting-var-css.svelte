@@ -11,7 +11,6 @@
   export let color = noColor ? 'white' : (fixedColor || $primaryColor)
   export let withLabel = false
 
-  $: _optColorNotation = $optColorNotation
   $: color = noColor ? 'white' : (fixedColor || $primaryColor)
 </script>
 <div class="settings vars">
@@ -19,8 +18,7 @@
   <label for="varsOpt">Color Notation:</label>
   {/if}
   <select id="varsOpt"
-  bind:value={_optColorNotation}
-  on:change={()=>{optColorNotation.set(_optColorNotation)}}
+  bind:value={$optColorNotation}
   style="--color-background: {color}; --color-foreground: {readableColor(color)};"
   >
     {#each cssSchemes as {id,name}, i}
