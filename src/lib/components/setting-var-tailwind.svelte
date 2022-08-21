@@ -14,6 +14,7 @@
   // $: color = 
   $: _optTailwind = $optTailwind
   $: color = noColor ? 'white' : (fixedColor || $primaryColor)
+  $: readable = readableColor(color)
 </script>
 <div class="settings vars">
   {#if withLabel}
@@ -24,7 +25,7 @@
   <select id="varsOpt"
   bind:value={_optTailwind}
   on:change={()=>optTailwind.set(_optTailwind)}
-  style="--color-background: {color}; --color-foreground: {readableColor(color)};"
+  style="--color-background: {color}; --color-foreground: {readable};"
   >
     {#each varOptsTailwind as o, i}
     <option value={o[0]}>{o[1]}</option>
