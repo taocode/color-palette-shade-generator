@@ -1,10 +1,10 @@
 <script>
 import { adjustHue, darken, lighten } from 'color2k'
 import { schemes, schemeColors, getSchemeColorShade } from '$lib'
-import { primaryColor, scheme } from '$lib/stores'
+import { primaryColor, schemeIndex } from '$lib/stores'
 
 let style = ""
-$: _si = $scheme
+$: _si = $schemeIndex
 $: _pc = $primaryColor
 
 let colors = ['']

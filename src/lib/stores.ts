@@ -1,12 +1,13 @@
 import { hsla } from "color2k"
 import { derived, writable } from "svelte/store"
+import { schemes } from '$lib'
 
 export const defaults = {
   hue: 180,
   saturation: 0.75,
   lightness: 0.50,
   alpha: 1,
-  scheme: 3,
+  schemeIndex: 3,
   steps: 10,
   factorLightness: 0.075,
   factorSaturation: 0,
@@ -20,7 +21,8 @@ export const steps = writable(defaults.steps)
 export const factorLightness = writable(defaults.factorLightness)
 export const factorSaturation = writable(defaults.factorSaturation)
 
-export const scheme = writable(defaults.scheme)
+export const schemeIndex = writable(defaults.schemeIndex)
+export const schemeObj = derived(schemeIndex, ($si, set) => set(schemes[$si]) )
 
 export const hue = writable(defaults.hue)
 export const saturation = writable(defaults.saturation)

@@ -1,11 +1,6 @@
 <script>
-  import { schemes, dots } from '$lib'
-  import { primaryColor, scheme } from '$lib/stores'
-
-  let _scheme = $scheme
-
-  $: scheme.set(_scheme)
-  $: _scheme = $scheme
+  import { schemes } from '$lib'
+  import { primaryColor, schemeIndex } from '$lib/stores'
 
 </script>
 <div class="settings scheme">
@@ -15,7 +10,7 @@
       id="scheme-chooser"
       class="no.max-w-40" 
       style="background-color: {$primaryColor};"
-      bind:value={_scheme}
+      bind:value={$schemeIndex}
       >
         {#each schemes as s, i}
           <option value={i}>

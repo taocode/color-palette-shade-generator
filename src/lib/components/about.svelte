@@ -5,7 +5,7 @@ import { clickOutside } from 'svelte-use-click-outside'
 import { Tabs, Tab, TabList, TabPanel } from '$lib/components/layout/tab'
 
 import { describeScheme, schemes, cssSchemes } from '$lib'
-import { scheme, primaryColor } from '$lib/stores'
+import { schemeIndex, primaryColor } from '$lib/stores'
 import SchemeIcon from './scheme-icon.svelte'
 
 let hidePanels = true
@@ -88,7 +88,7 @@ style="
 								<li>
 									<SchemeIcon schemeIndex={i} color={$primaryColor} />
 									<button class="name"
-									on:click={()=>scheme.set(i)}>{s.name}</button>
+									on:click={()=>schemeIndex.set(i)}>{s.name}</button>
 									<em>
 									{#if s.hues}
 									({1+(s.hues.length)} color{#if s.hues.length > 0}s{/if}){:else if s.lightnesses}

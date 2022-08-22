@@ -2,32 +2,19 @@
   import { parseToHsla, toHsla } from 'color2k'
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
-  import { colorShades, hueName, notice, schemes, shadesAsCSS, shadesAsTailwind } from '$lib'
-  import { colorNames, optColorNotation, optTailwind, optSass, cssVarPrefix, steps, factorLightness, factorSaturation, scheme } from '$lib/stores'
+  import { colorShades, hueName, notice, placeholder, shadesAsCSS, shadesAsTailwind } from '$lib'
+  import { colorNames, optColorNotation, optTailwind, optSass, cssVarPrefix, steps, factorLightness, factorSaturation, schemeIndex, schemeObj } from '$lib/stores'
   import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
   import SettingVarCss from './setting-var-css.svelte'
   import SettingVarTailwind from './setting-var-tailwind.svelte'
 
   export let type = 'CSS'
   export let allColors = []
-  export let _optColorNotation = $optColorNotation
-  export let _optTailwind = $optTailwind
   $: color = allColors[0]?.color || 'hsla(0, 0%, 0%, 1)'
   $: hue = parseToHsla(color)[0].toFixed(1)
   $: hName = hueName(hue)
-  $: _optTailwind = $optTailwind
-  $: _optColorNotation = $optColorNotation
-  $: _optSass = $optSass
-  $: _cssVarPrefix = $cssVarPrefix
-  $: _scss = (type==='CSS' && _optSass > 0) ? 'S' : ''
+  $: _scss = (type==='CSS' && $optSass > 0) ? 'S' : ''
 
-  $: _scheme = schemes[$scheme]
-  
-  const placeholder = (i, currentColor) => {
-    return i > 0 && Array.isArray(_scheme.names) && _scheme.names.length >= i 
-            ? ($colorNames[0] || hName) + '-'+ _scheme.names[i-1] 
-            : hueName(parseToHsla(currentColor)[0])
-  }
   function copyClick(event) {
     const varsOutput = event.srcElement.closest('.all-vars-output')
     const text = varsOutput.querySelector('.copyTarget').innerText.trim()
@@ -75,26 +62,13 @@
       {#if type === "Tailwind"}
       <div class="muted">colors: &lbrace;</div>
       <div id="all-vars-tailwind" class="copyTarget">
-        <div class="pl-3">
-          <div class="pl-3">
-    {#each allColors as {color, name}, i}
-    <div>{$colorNames[i] || placeholder(i,color)}: &lbrace;</div>
-    {@html shadesAsTailwind($colorNames[i], placeholder(i,color), color, colorShades(color,$steps,($scheme === 1) ? $factorLightness / 3 : $factorLightness, $factorSaturation), _cssVarPrefix, _optColorNotation, _optTailwind)}
-    <div>{`\n`}&rbrace;,{`\n`}</div>
-    {/each}
-          </div>
-        </div>
+        <slot/>
       </div>
       <div class="muted">&rbrace;,</div>
       {:else}
       <div class="muted">::root &lbrace;</div>
       <div id="all-vars-css" class="copyTarget">
-        <div class="pl-3">
-          {#each allColors as {color, name, shades}, i}
-            {@html shadesAsCSS($colorNames[i], placeholder(i,color), color,
-              colorShades(color,$steps,($scheme === 1) ? $factorLightness / 3 : $factorLightness,$factorSaturation), _cssVarPrefix, _optColorNotation, _optSass)}
-          {/each}
-        </div>
+        <slot/>
       </div>
       <div class="muted">&rbrace;</div>
       {/if}
@@ -114,6 +88,9 @@
   }
   .setting-control {
     @apply mt-2 w-w-full text-right flex-grow flex;
+  }
+  .vars-body {
+    @apply text-left;
   }
   .vars {
     @apply font-mono text-xs;

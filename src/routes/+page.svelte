@@ -4,6 +4,7 @@
 	import { browser } from '$app/env'
 	import { page } from '$app/stores'
 	import { onMount } from 'svelte'
+	import { slide } from 'svelte/transition'
 
 	import ColorPaletteShadeGenerator from '$lib/components/color-palette-shade-generator.svelte'
 	import About from '$lib/components/about.svelte'
@@ -16,9 +17,11 @@
 	import HueSlider from '$lib/components/hue-slider.svelte'
 	import GradientDisplay from '$lib/components/gradient-display.svelte'
 
-	import { colorShades, hueName, getSchemeColorShade, notice, schemes, schemeColors, updateHSLA } from '$lib'
-	import { hue, saturation, lightness, alpha, primaryColor, colorNames, scheme, steps, 
-		factorLightness, factorSaturation, cssVarPrefix, optColorNotation, optTailwind, defaults, optSass } from '$lib/stores'
+	import { colorShades, hueName, getSchemeColorShade, notice, placeholder, schemes, schemeColors, updateHSLA, shadesAsCSS, shadesAsTailwind, htmlToElement } from '$lib'
+	import { hue, saturation, lightness, alpha, primaryColor, 
+		colorNames, schemeObj, schemeIndex, 
+		steps, factorLightness, factorSaturation, 
+		cssVarPrefix, optColorNotation, optTailwind, defaults, optSass } from '$lib/stores'
 	import { clickOutside } from 'svelte-use-click-outside'
 	import SettingVarCssPrefix from '$lib/components/setting-var-css-prefix.svelte'
 	import Tailwind from '$lib/components/svg/tailwind.svelte'
@@ -45,7 +48,7 @@
 			if (searchParams.has('S')) saturation.set(0.01*parseFloat(searchParams.get('S')))
 			if (searchParams.has('L')) lightness.set(0.01*parseFloat(searchParams.get('L')))
 			if (searchParams.has('A')) alpha.set(parseFloat(searchParams.get('A')))
-			if (searchParams.has('scheme')) scheme.set( parseInt(searchParams.get('scheme')) )
+			if (searchParams.has('scheme')) schemeIndex.set( parseInt(searchParams.get('scheme')) )
 			if (searchParams.has('steps')) steps.set( parseInt(searchParams.get('steps')) )
 			if (searchParams.has('pL')) factorLightness.set( 0.01 * parseFloat(searchParams.get('pL')) )
 			if (searchParams.has('pS')) factorSaturation.set( 0.01 * parseFloat(searchParams.get('pS')) )
@@ -59,7 +62,7 @@
 			// console.log('onMount(colorNamesSearchParams)',{colorNamesSP,searchParams})
 			colorNames.set(colorNamesSP)
 			// console.log('start color', {searchParams}, $page.url)
-			allColors = schemeColors(schemes[$scheme],$primaryColor)
+			allColors = schemeColors($schemeObj,$primaryColor)
 		}
 	})
 
@@ -75,7 +78,7 @@
 		$steps
 		
 		readable = readableColor($primaryColor)
-		allColors = schemeColors(schemes[$scheme],$primaryColor)
+		allColors = schemeColors($schemeObj,$primaryColor)
 		// console.log('colors vs',{allColors},schemeColors(schemes[scheme],color))
 		if (browser) {
 			const state = {}
@@ -84,7 +87,7 @@
 			if ($lightness != defaults.lightness) state.L = ($lightness*100).toFixed(1)
 			if ($alpha != defaults.alpha) state.A = (1*$alpha).toFixed(2)
 
-			if ($scheme != defaults.scheme) state.scheme = $scheme.toFixed()
+			if ($schemeIndex != defaults.schemeIndex) state.scheme = $schemeIndex.toFixed()
 			if ($steps != defaults.steps) state.steps = $steps.toFixed()
 			if ($factorLightness != defaults.factorLightness) state.pL = ($factorLightness*100).toFixed(1)
 			if ($factorSaturation != defaults.factorSaturation) state.pS = ($factorSaturation*100).toFixed(1)
@@ -107,11 +110,18 @@
 	$: buttonColor = adjustHue($primaryColor,120)
 	let showCode = false
 	let showSettings = false
-
+	$: shadesCSS = allColors.reduce((p,c,i) =>
+	  p + shadesAsCSS($colorNames[i], placeholder(i,c.color,$schemeObj,$colorNames),c.color,
+	 	colorShades(c.color,$steps,($schemeIndex===1)?$factorLightness/3:$factorLightness,$factorSaturation),$cssVarPrefix,$optColorNotation,$optSass),'')
+	$: shadesTailwind = allColors.reduce((p,c,i) =>
+	  `${p}\n<div class="pl-2">'` + 
+		($colorNames[i] || placeholder(i,c.color,$schemeObj,$colorNames)) + 
+		`': {` + 
+		shadesAsTailwind($colorNames[i], placeholder(i,c.color,$schemeObj,$colorNames),c.color,
+	 		colorShades(c.color,$steps,($schemeIndex===1)?$factorLightness/3:$factorLightness,$factorSaturation),$cssVarPrefix,$optColorNotation,$optTailwind) + "\n},</div>",'')
 	const copyVars = (type) => {
-		const allVars = document.getElementById(`all-vars-${type}`)
-		const varsOutput = allVars?.closest('.all-vars-output')
-		const heading = varsOutput.querySelector('h2').innerText.trim()
+		const allVars = htmlToElement("<div>"+((type!=='css') ? shadesTailwind : shadesCSS)+"</div>")
+		const heading = (type!=='css') ? 'Tailwind' : ($optSass>0) ? 'SCSS' : 'CSS'
 		const text = allVars.innerText.trim()
 		// console.log({text,type,varsOutput})
 		if (!navigator.clipboard) {
@@ -131,17 +141,11 @@
 	let iconEyeSize = '1.3x'
 	let outputTogglers = false
 	let iconSquareSize = '1.3x'
-	function toggleShowOutputs(e) {
-		outputTogglers = ! outputTogglers
-	}
 	let showCopiers = false
-	function toggleCopiers(e) {
-		showCopiers = ! showCopiers
-	}
 	let showShades = false
 
 	let cpsgStyle = ""
-$: _si = $scheme
+$: _si = $schemeIndex
 $: _pc = $primaryColor
 
 let cpsgColors = ['']
@@ -167,6 +171,9 @@ $: {
   cpsgStyle = cpsgColors.reduce((p,c,i) => `${p}\n--cpsg-${i}: ${c};`,'') 
 							+	cpsgColors.reduce((p,c,i) => `${p}\n--cpsg-fg-${i}: ${readableColor(c)};`,'')
 }
+const togglerTransitionOpts = {duration: 200}
+const codeTransitionOpts = {duration: 500}
+const shadesTransitionOpts = {duration: 300}
 
 </script>
 
@@ -176,7 +183,7 @@ $: {
 	<link rel='canonical' href='/' />
 </svelte:head>
 
-<div class="pt-3 pb-1 -mb-4 top-controls" 
+<div class="pt-3 pb-1 top-controls" 
 style="
 	color: {readable}; 
 	background-color: {$primaryColor};
@@ -184,7 +191,7 @@ style="
 	--color-btn-bg: {buttonColor};
 	--color-btn-fg: {readableColor(buttonColor)};
 ">
-	<div class="scheme-{$scheme}" style={cpsgStyle}>
+	<div class="scheme-{$schemeIndex}" style={cpsgStyle}>
 		<h1><ColorPaletteShadeGenerator /></h1>
 	</div>
 	<HueSlider />
@@ -197,17 +204,12 @@ style="
 			on:click={()=>outputTogglers=true}>
 				<EyeIcon size={iconEyeSize} />
 			</button>
-			<div class="toggles-wrap outputTogglers" class:showing={outputTogglers}>
+			{#if outputTogglers}
+			<div class="toggles-wrap outputTogglers" transition:slide={togglerTransitionOpts}>
 				<div class="show-toggler">
 					<button on:click={()=> showSettings = ! showSettings}>
 						<span class="inline-block mr-1">{#if showSettings}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
 						Settings
-					</button>
-				</div>
-				<div class="show-toggler">
-					<button on:click={()=> showCode = ! showCode}>
-						<span class="inline-block mr-1">{#if showCode}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
-						Code
 					</button>
 				</div>
 				<div class="show-toggler">
@@ -216,7 +218,14 @@ style="
 						Shades
 					</button>
 				</div>
+				<div class="show-toggler">
+					<button on:click={()=> showCode = ! showCode}>
+						<span class="inline-block mr-1">{#if showCode}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
+						Code
+					</button>
+				</div>
 			</div>
+			{/if}
 		</div>
 		<div>
 			<SchemeChooserIcons />
@@ -228,7 +237,8 @@ style="
 			on:click={()=>showCopiers = true}>
 				<CopyIcon size={iconEyeSize} />
 			</button>
-			<div class="toggles-wrap copiers" class:showing={showCopiers}>
+			{#if showCopiers}
+			<div class="toggles-wrap copiers" transition:slide={togglerTransitionOpts}>
 				<div class="show-toggler">
 					<div>
 						<button title="Copy CSS Vars"
@@ -246,9 +256,11 @@ style="
 					</div>
 				</div>
 			</div>
+			{/if}
 		</div>
 	</div>
-	<div class="panel-settings" class:showing={showSettings}>
+	{#if showSettings}
+	<div class="panel-settings" transition:slide={togglerTransitionOpts}>
 		<ColorChoose />
 		<div class="varopts settings">
 			<div>
@@ -268,20 +280,11 @@ style="
 			<SettingsShades />
 		</div>
 	</div>
-	<div class="allvars">
-		
-		 <div class="allvars-outputs" class:showing={showCode}>
-			<div>
-				<AllVarsOutput type="CSS" {allColors} />
-			</div>
-			<div>
-				<AllVarsOutput type="Tailwind" {allColors} />
-			</div>
-		</div>
-	</div>
+	{/if}
 </div>
-<div class="separator" class:showing={!showShades}></div>
-<div class="color-patches" class:showing={showShades}>
+<div class="separator"></div>
+{#if showShades} 	
+<div class="color-patches" transition:slide={shadesTransitionOpts}>
 	{#each allColors as {color, description, name}, i}
 		<ColorPatch {color}
 		name={$colorNames[i]}
@@ -289,10 +292,38 @@ style="
 			((name && $colorNames[0]) ? $colorNames[0] : hueName(parseToHsla(color)[0])) +
 			((!name) ? '' : `-${name}`)}
 		{description} schemeIndex={i}
-		shades={colorShades(color,$steps, ($scheme === 1) ? $factorLightness/3 : $factorLightness, $factorSaturation)}
+		shades={colorShades(color,$steps, ($schemeIndex === 1) ? $factorLightness/3 : $factorLightness, $factorSaturation)}
 		on:updateColor={updateColor} />
 	{/each}
 </div>
+<div class="separator"></div>
+{/if}
+
+{#if showCode}
+<div class="flow-root top-controls"
+style="
+	color: {readable}; 
+	background-color: {$primaryColor};
+	"
+	>
+	<div class="allvars"
+	>
+		 <div class="allvars-outputs" transition:slide={codeTransitionOpts}>
+			<div>
+				<AllVarsOutput type="CSS" {allColors}>
+					{@html shadesCSS}
+				</AllVarsOutput>
+			</div>
+			<div>
+				<AllVarsOutput type="Tailwind" {allColors}>
+					{@html shadesTailwind}
+				</AllVarsOutput>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="separator"></div>
+{/if}
 
 <div class="relative flow-root min-h-screen">
 	<About />
@@ -317,21 +348,12 @@ style="
 		>div {
 			@apply mx-3;
 		}
-		&:not(.showing) {
-			display: none;
-		}
 	}
 	.color-patches {
 		display: block;
-		&:not(.showing) {
-			display: none;
-		}
 	}
 	.separator {
-		@apply h-2 mt-2 bg-black;
-		&:not(.showing) {
-			display: none;
-		}
+		@apply h-2 bg-black;
 	}
 	.show-toggles {
 		@apply relative p-0;
@@ -340,9 +362,6 @@ style="
 			xs:(top-11 -right-12);
 			background-color: var(--color-btn-bg);
 			color: var(--color-btn-fg);
-			&:not(.showing) {
-				@apply hidden;
-			}
 			&.outputTogglers {
 				@apply left-0 w-40;
 			}
@@ -358,11 +377,6 @@ style="
 		}
 		.show-toggler {
 			@apply whitespace-nowrap;
-		}
-	}
-	.panel-settings {
-		&:not(.showing) {
-			display: none;
 		}
 	}
 	.panel-scheme {

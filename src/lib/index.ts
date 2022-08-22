@@ -1,6 +1,4 @@
-import { adjustHue, darken, lighten, parseToHsla, parseToRgba, saturate, toHex, toHsla, toRgba } from 'color2k'
-
-import { steps, factorLightness, factorSaturation, hue, saturation, lightness, alpha, optColorNotation, optTailwind } from '$lib/stores'
+import { adjustHue, darken, lighten, parseToHsla, parseToRgba, saturate, toHex, toRgba } from 'color2k'
 
 export const hueNames = [
   {red:0},
@@ -30,6 +28,12 @@ export const hueName = (hue) => {
     const [name, h] = Object.entries(c)[0]
     return (hue < h && hue >= ph) ? `${p}${prev}` : `${p}`
   },'')
+}
+export const placeholder = (i, phColor, scheme, colorNames=[]) => {
+  const hName = hueName(parseToHsla(phColor)[0])
+  return i > 0 && Array.isArray(scheme?.names) && scheme.names.length >= i 
+          ? (colorNames[0] || hName) + '-'+ scheme.names[i-1] 
+          : hName
 }
 export const cssSchemes = [
   {
