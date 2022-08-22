@@ -1,14 +1,10 @@
 <script>
   import { fly } from 'svelte/transition'
-  import { schemes, dots } from '$lib'
+  import { quadIn, quartOut } from 'svelte/easing'
+  import { schemes } from '$lib'
   import { primaryColor, schemeIndex } from '$lib/stores'
 
 	import SchemeIcon from './scheme-icon.svelte'
-
-  let _scheme = $schemeIndex
-
-  $: schemeIndex.set(_scheme)
-  $: _scheme = $schemeIndex
 
 </script>
 <div class="settings scheme">
@@ -17,7 +13,7 @@
         {#each schemes as s, i}
           <button title={s.name}
 					class="border-4"
-					style="border-color: {i === _scheme ? '#FFFFFFCC' : '#33333399'};"
+					style="border-color: {i === $schemeIndex ? '#FFFFFFCC' : '#33333399'};"
 					on:click={()=>schemeIndex.set(i)}>
             <SchemeIcon schemeIndex={i} color={$primaryColor} />
 					</button>
@@ -27,8 +23,10 @@
 </div>
 <div class="relative min-h-[3em] mb-4">
   {#each schemes as s,i}
-  {#if i === _scheme}
-  <div class="scheme-name" in:fly="{{y: -80, x: ((i-3)*40)}}" out:fly={{y: 40}}>{s.name}</div>
+  {#if i === $schemeIndex}
+  <div class="scheme-name" 
+    in:fly="{{y: -80, x: ((i-3)*40), duration: 600, easing: quartOut}}" 
+    out:fly={{y: 80, easing: quadIn}} >{s.name}</div>
   {/if}
   {/each}
 </div>

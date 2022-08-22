@@ -203,6 +203,7 @@
 
 .CPSG {
   @apply inline-flex justify-center place-items-center font-700 mr-[0.08ch];
+  transition: background 400ms ease-out;
   box-shadow: 0 0 0.15em 1px var(--color-glow, #ffffffdd);
 }
 .C {
