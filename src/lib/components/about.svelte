@@ -1,5 +1,5 @@
 <script>
-import { darken, adjustHue } from 'color2k'
+import { darken, adjustHue, opacify } from 'color2k'
 import { clickOutside } from 'svelte-use-click-outside'
 
 import { Tabs, Tab, TabList, TabPanel } from '$lib/components/layout/tab'
@@ -18,7 +18,6 @@ use:clickOutside={() => hidePanels = true}
 style="
 --color-primary: {$primaryColor};
 --color-bullet: {darken($primaryColor,0.1)};
---color-tab-selected: {darken(adjustHue($primaryColor,90),0.1)};
 --color-link: {darken(adjustHue($primaryColor,180),0.15)};
 "
 >
@@ -123,7 +122,7 @@ style="
 	.panel {
 		@apply max-w-prose mx-auto;
 		ul > li::before {
-			background-color: var(--color-bullet);
+			background-color: var(--scheme-color);
 		}
 	}
 	.panel .schemes {

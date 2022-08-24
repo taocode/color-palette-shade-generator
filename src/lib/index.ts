@@ -106,7 +106,11 @@ $: c3 = _si === 1 ? lighten(_pc,0.33): _si > 5 ? _sCs[3].color : 'transparent'
 */
 export const getSchemeColorShade = (si, primary, ci, schemeColors) => {
   switch (ci) {
-    case 0: return primary
+    case 0: 
+      switch (si) {
+        case 0: return darken(schemeColors[0].color,0.25)
+        default: return primary
+      }
     case 1:
       switch (si) {
         case 0: return lighten(primary,0.3)
@@ -123,6 +127,26 @@ export const getSchemeColorShade = (si, primary, ci, schemeColors) => {
     default: return 'red'
   }
 }
+export const schemeHues = (hues,primaryHue) => {
+  const schemeHs = (! Array.isArray(hues)) ? [] : hues.map((c) => (c<0) ? primaryHue+c+360 : primaryHue+c)
+  return [primaryHue,...schemeHs]
+}
+
+export const styleColors = (currentScheme,currentSchemeIndex,pColor) => {
+  const _sCs = schemeColors(currentScheme,pColor)
+  const colors = _sCs.map((v,i)=>getSchemeColorShade(currentSchemeIndex, pColor, i, _sCs))
+  if (currentSchemeIndex === 0) {
+    colors[0] = darken(pColor,0.3)
+    colors[1] = lighten(pColor,0.3)
+  } else if (currentSchemeIndex === 1) {
+    colors[0] = darken(pColor,0.05)
+    colors[1] = darken(pColor,0.4)
+    colors[2] = lighten(pColor,0.01)
+    colors[3] = lighten(pColor,0.3)
+  }
+  return colors.reduce((p,c,i) => `${p}\n--scheme-color-${i}: ${c};`,'')  
+}
+
 export const schemes = [
   {
     name: `Monochromatic`, 
@@ -159,7 +183,7 @@ export const schemes = [
 export const schemeColors = ({hues,lightnesses,varName,names},primary) => {
   const primaryH = parseToHsla(primary)[0].toFixed()
   const hueShades = (hues || []).map((hueShift,i,a) => {
-    const color = adjustHue(primary,(hueShift < 0) ? 360+hueShift : hueShift)
+    const color = adjustHue(primary,hueShift+360) // +360 allows negative hue shifts
     const plus = (hueShift > 0) ? '+' : ''
     // console.log('schemeColors',{a})
     const hue = parseToHsla(color)[0].toFixed()
