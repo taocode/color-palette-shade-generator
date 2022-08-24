@@ -1,39 +1,39 @@
 <script>
 import { adjustHue, darken, lighten } from 'color2k'
+import { fade } from 'svelte/transition'
+import { sineInOut } from 'svelte/easing'
 import { schemes, schemeColors, getSchemeColorShade } from '$lib'
-import { primaryColor, schemeIndex } from '$lib/stores'
+import { primaryColor, schemeIndex, schemeObj } from '$lib/stores'
 
-let style = ""
-$: _si = $schemeIndex
-$: _pc = $primaryColor
-
-let colors = ['']
-$: {
-  const _sCs = schemeColors(schemes[_si],_pc)
-  colors = _sCs.map((v,i)=>getSchemeColorShade(_si, _pc, i, _sCs))
-  if (_si === 0) {
-    colors[0] = darken(_pc,0.3)
-    colors[1] = lighten(_pc,0.3)
-  } else if (_si === 1) {
-    colors[0] = darken(_pc,0.05)
-    colors[1] = darken(_pc,0.4)
-    colors[2] = lighten(_pc,0.01)
-    colors[3] = lighten(_pc,0.3)
+function styleColors(si,pColor) {
+  const _sCs = schemeColors(schemes[si],pColor)
+  const colors = _sCs.map((v,i)=>getSchemeColorShade(si, pColor, i, _sCs))
+  if (si === 0) {
+    colors[0] = darken(pColor,0.3)
+    colors[1] = lighten(pColor,0.3)
+  } else if (si === 1) {
+    colors[0] = darken(pColor,0.05)
+    colors[1] = darken(pColor,0.4)
+    colors[2] = lighten(pColor,0.01)
+    colors[3] = lighten(pColor,0.3)
   }
-  style = colors.reduce((p,c,i) => `${p}\n--c${i}: ${c};`,'')
+  return colors.reduce((p,c,i) => `${p}\n--c${i}: ${c};`,'')  
 }
-
 </script>
 
-<div class="gradient-display scheme-{_si}"
-{style}>
-
+{#each schemes as schmo,i}
+{#if $schemeIndex === i}
+<div transition:fade class="gradient-display scheme-{i}"
+style={styleColors($schemeIndex,$primaryColor)}>
 </div>
+{/if}
+{/each}
 
 <style global lang="postcss">
 .gradient-display {
   @apply absolute bg-light-500 top-0 w-full h-full -z-1;
   min-height: 66vh;
+  transition: background 400ms ease-out;
 }
 .scheme-0 {
   background: linear-gradient(90deg, 
@@ -68,8 +68,8 @@ $: {
 .scheme-6 {
   background: linear-gradient(90deg, 
   var(--c0) 15%, 
-  var(--c1) 25%, var(--c1) 40%, 
-  var(--c2) 60%, var(--c2) 75%, 
+  var(--c1) 30%, var(--c1) 42.5%, 
+  var(--c2) 57.5%, var(--c2) 70%, 
   var(--c3) 85% );
 }
 </style>
