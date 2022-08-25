@@ -121,9 +121,6 @@ style="
 	}
 	.panel {
 		@apply max-w-prose mx-auto;
-		ul > li::before {
-			background-color: var(--scheme-color);
-		}
 	}
 	.panel .schemes {
 		@apply px-2;

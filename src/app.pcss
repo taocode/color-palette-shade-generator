@@ -189,6 +189,9 @@
       color: var(--color-link,inherit);
     }
   }
+  ul>li::before {
+    background-color: hsla(var(--scheme-hue), var(--scheme-saturation), var(--scheme-lightness), var(--scheme-alpha));
+  }
 }
 
 .tabs {
@@ -212,7 +215,7 @@
       &__tab {
         color: hsla(var(--scheme-hue-1), var(--scheme-saturation), var(--scheme-lightness), 1);
         border-bottom-color: hsla(var(--scheme-hue-1), var(--scheme-saturation), var(--scheme-lightness), 0.2);
-        @apply transition;
+        @apply transition duration-400 ease;
       }
       &__selected {
         color: hsla(var(--scheme-hue-2), var(--scheme-saturation), var(--scheme-lightness), 1);
@@ -229,13 +232,18 @@
 .scheme-0,
 .scheme-1 {
   .tabs .svelte-tabs {
+    --scheme-hue-1: var(--scheme-hue);
     --scheme-hue-2: var(--scheme-hue);
-    --scheme-lightness: 35%;
+    --scheme-lightness: 25%;
     &__selected {
-      --scheme-lightness: 45%;
+      --scheme-lightness: 40%;
     }
   }
-
+  .tabs.hidePanels .svelte-tabs .svelte-tabs {
+    &__selected {
+      --scheme-lightness: 25%;
+    }
+  }
 }
 .scheme-2 {
   .tabs {
