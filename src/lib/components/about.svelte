@@ -110,11 +110,12 @@ style="
 								<p>I wanted:</p>
 								<ul class="pb-3">
 									<li>a tool to help identify harmonious accent colors based on a single color.</li>
-									<li>multi-shade variables ready for any web site platform.</li>
-									<li>HSL notation variables; although there are many color palette generators, <em>most display primarily in hexadecimal color notation.</em></li>
+									<li>multi-shade variables ready for virtually any CSS powered platform.</li>
+									<li>HSL notation variables; although there are many color palette generators, <em>most are primarily hexadecimal color notation.</em></li>
+									<li>automated tailwind.config.js formatted variables for custom color shades.</li>
 									<li>to deepen my understanding and competency with Svelte and SvelteKit. I ended up deepening my appreciation. <em>It's so fast!</em> The latest updates to Sveltekit are smart and elegant, like Svelte.</li>
 								</ul>
-								<p>This tool is custom made for my needs. If you find it useful, helpful or whatever, feel free to pass it on and use it as you wish. It's a nerd's tool for those brave enough to learn <em>(battle)</em> CSS <em>(into submission)</em>.</p>
+								<p>If you find this tool useful, helpful or whatnot, please pass it on and use it as you wish. It's a nerd's tool for those brave enough to <abbr title="(battle)">learn</abbr> <abbr title="(into submission)">CSS</abbr>.</p>
 								<p class="text-center">Feedback welcome; check out <a href="https://github.com/taocode/color-palette-shade-generator">this project's github</a> to report a bug or suggest a feature.</p>
 								<div class="thanks-kp">Thanks to <a target="_blank" href="https://www.kevinpowell.co/">Kevin Powell</a> for explaining HSL: 
 									<div><a target="_blank" href="https://www.youtube.com/watch?v=Ab9pHqhsfcc"><span>Are you using the WRONG</span> color model in your CSS?</a></div>
