@@ -26,28 +26,31 @@ style="
 	</div>
 		<div class="tabs" class:hidePanels>
 			<Tabs initialSelectedIndex={-1}>
-				<TabList>
-					<Tab>Features</Tab>
-					<Tab>Schemes</Tab>
-				</TabList>
+				<div class="tablist">
+					<TabList>
+						<Tab>Features</Tab>
+						<Tab>Schemes</Tab>
+						<Tab>Why?</Tab>
+					</TabList>
+				</div>
 				<div class="panels">
 				<TabPanel>
 						<div class="panel prose">
-							<ol>
+							<ol class="vars">
 								<li>Variable outputs are easily copied via provided buttons
 									<ul>
-										<li>CSS variables: <code class="italic whitespace-nowrap">--color-blue-500: hsla(240, 80%, 50%, 1);</code></li>
-										<li>SASS/SCSS variables: <code class="italic whitespace-nowrap">$color-blue-500: hsl(240, 80%, 50%);</code></li>
-										<li>Tailwind/WindiCSS config (<code class="italic whitespace-nowrap">tailwind.config.js</code>) variables with optional reference the CSS variables</li>
+										<li>CSS variables: <code>--color-blue-500: hsla(240, 80%, 50%, 1);</code></li>
+										<li>SASS/SCSS variables: <code>$color-blue-500: hsl(240, 80%, 50%);</code></li>
+										<li>Tailwind/WindiCSS config (<code>tailwind.config.js</code>) variables with optional reference the CSS variables</li>
 									</ul>
 								</li>
 								<li>Customizable options:
 									<ul>
-										<li>Variable name, <em>default:</em> name based on hue <code class="italic whitespace-nowrap"><span class="font-extralight">--color-</span>varname</code>
+										<li>Variable name, <em>default:</em> name based on hue <code><span class="font-extralight">--color-</span>varname</code>
 										<div class="italic text-md"><strong>Show Shades</strong> to set custom varname</div></li>
-										<li>Variable name prefix, <em>default:</em> <code class="italic whitespace-nowrap"><span class="font-extralight">--</span>color<span class="font-extralight">-varname</span></code></li>
-										<li><abbr title="Luminosity">%L</abbr> shift per step, <em>default:</em> <code class="italic whitespace-nowrap">7.5%</code>; <em>dark/light:</em> <code>%L/3</code> <em class="font-mono text-sm">(7.5%/3=2.5%)</em></li>
-										<li><abbr title="Saturation">%S</abbr> shift per step, <em>default:</em> <code class="italic whitespace-nowrap">0%</code></li>
+										<li>Variable name prefix, <em>default:</em> <code><span class="font-extralight">--</span>color<span class="font-extralight">-varname</span></code></li>
+										<li><abbr title="Luminosity">%L</abbr> shift per step, <em>default:</em> <code>7.5%</code>; <em>dark/light:</em> <code>%L/3</code> <em class="font-mono text-sm">(7.5%/3=2.5%)</em></li>
+										<li><abbr title="Saturation">%S</abbr> shift per step, <em>default:</em> <code>0%</code></li>
 										<li>Number of steps, <em>default:</em> <code class="italic">10</code></li>
 										<li>Sass/SCSS style variables, <em>default:</em> <code class="italic">0</code></li>
 									</ul>
@@ -77,7 +80,7 @@ style="
 								</ul>
 							</li>
 							</ol>
-							<p class="text-center">Thanks to <a target="_blank" href="https://www.kevinpowell.co/">Kevin Powell</a> for explaining HSL: <a target="_blank" href="https://www.youtube.com/watch?v=Ab9pHqhsfcc">Are you using the WRONG color model in your CSS?</a></p>
+							
 						</div>
 					</TabPanel>
 					<TabPanel>
@@ -98,6 +101,24 @@ style="
 							</ul>
 							<div class="prose">
 								<p class="text-center">Learn more about <a target="_blank" href="https://www.interaction-design.org/literature/topics/color-theory">color theory</a>.</p>
+							</div>
+						</div>
+					</TabPanel>
+					<TabPanel>
+						<div class="panel">
+							<div class="prose">
+								<p>I wanted:</p>
+								<ul class="pb-3">
+									<li>a tool to help identify harmonious accent colors based on a single color.</li>
+									<li>multi-shade variables ready for any web site platform.</li>
+									<li>HSL notation variables; although there are many color palette generators, <em>most display primarily in hexadecimal color notation.</em></li>
+									<li>to deepen my understanding and competency with Svelte and SvelteKit. I ended up deepening my appreciation. <em>It's so fast!</em> The latest updates to Sveltekit are smart and elegant, like Svelte.</li>
+								</ul>
+								<p>This tool is custom made for my needs. If you find it useful, helpful or whatever, feel free to pass it on and use it as you wish. It's a nerd's tool for those brave enough to learn <em>(battle)</em> CSS <em>(into submission)</em>.</p>
+								<p class="text-center">Feedback welcome; check out <a href="https://github.com/taocode/color-palette-shade-generator">this project's github</a> to report a bug or suggest a feature.</p>
+								<div class="thanks-kp">Thanks to <a target="_blank" href="https://www.kevinpowell.co/">Kevin Powell</a> for explaining HSL: 
+									<div><a target="_blank" href="https://www.youtube.com/watch?v=Ab9pHqhsfcc"><span>Are you using the WRONG</span> color model in your CSS?</a></div>
+								</div>
 							</div>
 						</div>
 					</TabPanel>
@@ -143,6 +164,18 @@ style="
 		}
 		.qp {
 			@apply font-bold;
+		}
+	}
+	.vars code {
+		@apply italic xs:whitespace-nowrap;
+	}
+	.tablist {
+		@apply mt-3 mb-6;
+	}
+	.thanks-kp {
+		@apply text-center py-6 text-[1rem] leading-[2];
+		span {
+			@apply xs:whitespace-nowrap;
 		}
 	}
 </style>
