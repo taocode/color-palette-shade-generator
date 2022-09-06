@@ -17,7 +17,7 @@
 	import HueSlider from '$lib/components/hue-slider.svelte'
 	import GradientDisplay from '$lib/components/gradient-display.svelte'
 
-	import { colorShades, hueName, getSchemeColorShade, notice, placeholder, schemes, schemeColors, updateHSLA, shadesAsCSS, shadesAsTailwind, htmlToElement } from '$lib'
+	import { colorShadesDefault, hueName, getSchemeColorShade, notice, placeholder, schemes, schemeColors, updateHSLA, shadesAsCSS, shadesAsTailwind, htmlToElement, generatedBy } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, 
 		colorNames, schemeObj, schemeIndex, 
 		steps, factorLightness, factorSaturation, 
@@ -68,14 +68,20 @@
 
 	let readable = readableColor("white")
 	let allColors = []
-	
+	let buttonColor = adjustHue($primaryColor,120)
+	let shadesCSS = ''
+	let shadesTailwind = ''
 	function updateColor(event) {
 		console.log('updateColor(event)',event.detail,{event})
 		updateHSLA( event.detail )
 	}
 
 	$: {
+		$cssVarPrefix
+		$optColorNotation
+		$optSass
 		$steps
+		$schemeIndex
 		
 		readable = readableColor($primaryColor)
 		allColors = schemeColors($schemeObj,$primaryColor)
@@ -106,23 +112,24 @@
 			
 			debounceHistory(state)
 		}
+		buttonColor = adjustHue($primaryColor,120)
+		shadesCSS = allColors.reduce((p,c,i) =>
+			p + shadesAsCSS($colorNames[i], placeholder(i,c.color),c.color,
+			colorShadesDefault(c.color)),'')
+
+		shadesTailwind = allColors.reduce((p,c,i) =>
+			`${p}\n<div class="pl-2">'` + 
+			($colorNames[i] || placeholder(i,c.color)) + 
+			`': {` + 
+			shadesAsTailwind($colorNames[i], placeholder(i,c.color),c.color,
+					colorShadesDefault(c.color)) + "\n},</div>",'')
 	}
-	$: buttonColor = adjustHue($primaryColor,120)
 	let showCode = false
 	let showSettings = false
-	$: shadesCSS = allColors.reduce((p,c,i) =>
-	  p + shadesAsCSS($colorNames[i], placeholder(i,c.color,$schemeObj,$colorNames),c.color,
-	 	colorShades(c.color,$steps,($schemeIndex===1)?$factorLightness/3:$factorLightness,$factorSaturation),$cssVarPrefix,$optColorNotation,$optSass),'')
-	$: shadesTailwind = allColors.reduce((p,c,i) =>
-	  `${p}\n<div class="pl-2">'` + 
-		($colorNames[i] || placeholder(i,c.color,$schemeObj,$colorNames)) + 
-		`': {` + 
-		shadesAsTailwind($colorNames[i], placeholder(i,c.color,$schemeObj,$colorNames),c.color,
-	 		colorShades(c.color,$steps,($schemeIndex===1)?$factorLightness/3:$factorLightness,$factorSaturation),$cssVarPrefix,$optColorNotation,$optTailwind) + "\n},</div>",'')
 	const copyVars = (type) => {
 		const allVars = htmlToElement("<div>"+((type!=='css') ? shadesTailwind : shadesCSS)+"</div>")
 		const heading = (type!=='css') ? 'Tailwind' : ($optSass>0) ? 'SCSS' : 'CSS'
-		const text = allVars.innerText.trim()
+		const text = generatedBy() + allVars.innerText.trim()
 		// console.log({text,type,varsOutput})
 		if (!navigator.clipboard) {
 			document.execCommand('copy',false,text)
@@ -292,7 +299,7 @@ style="
 			((name && $colorNames[0]) ? $colorNames[0] : hueName(parseToHsla(color)[0])) +
 			((!name) ? '' : `-${name}`)}
 		{description} schemeIndex={i}
-		shades={colorShades(color,$steps, ($schemeIndex === 1) ? $factorLightness/3 : $factorLightness, $factorSaturation)}
+		shades={colorShadesDefault(color)}
 		on:updateColor={updateColor} />
 	{/each}
 </div>

@@ -8,7 +8,7 @@ import Swatch from './swatch.svelte'
 import VarsOutput from './vars-output.svelte'
 // import 
 
-import { dots, hueName, notice, colorShades } from '$lib'
+import { dots, hueName, notice, colorShadesDefault } from '$lib'
 import { colorNames, optColorNotation, optTailwind, cssVarPrefix, steps, factorLightness, factorSaturation } from '$lib/stores'
 import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
 
@@ -19,7 +19,7 @@ export let name = $colorNames[schemeIndex]
 let primaryHue = parseToHsla(color)[0].toFixed()
 export let placeholder = hueName(primaryHue)
 
-export let shades = colorShades(color,$steps,$factorLightness,$factorSaturation)
+export let shades = colorShadesDefault(color)
 
 let hidden = true
 
