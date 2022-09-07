@@ -14,7 +14,6 @@
 	import AllVarsOutput from '$lib/components/all-vars-output.svelte'
 	import SettingVarTailwind from '$lib/components/setting-var-tailwind.svelte'
 	import SettingVarCss from '$lib/components/setting-var-css.svelte'
-	import HueSlider from '$lib/components/hue-slider.svelte'
 	import GradientDisplay from '$lib/components/gradient-display.svelte'
 
 	import { colorShadesDefault, hueName, getSchemeColorShade, notice, placeholder, schemes, schemeColors, updateHSLA, shadesAsCSS, shadesAsTailwind, htmlToElement, generatedBy } from '$lib'
@@ -28,6 +27,7 @@
 	import SchemeChooserIcons from '$lib/components/scheme-chooser-icons.svelte'
 	import MakersMark from '$lib/components/makers-mark.svelte'
 	import SettingVarSass from '$lib/components/setting-var-sass.svelte'
+	import HslaSlider from '$lib/components/hsla-slider.svelte'
 
 	let timer
 	const historyDebounceMS = 50
@@ -126,6 +126,7 @@
 	}
 	let showCode = false
 	let showSettings = false
+	let showSliders = false
 	const copyVars = (type) => {
 		const allVars = htmlToElement("<div>"+((type!=='css') ? shadesTailwind : shadesCSS)+"</div>")
 		const heading = (type!=='css') ? 'Tailwind' : ($optSass>0) ? 'SCSS' : 'CSS'
@@ -190,7 +191,7 @@ const shadesTransitionOpts = {duration: 300}
 	<link rel='canonical' href='/' />
 </svelte:head>
 
-<div class="pt-3 pb-1 top-controls" 
+<div class="scheme-{$schemeIndex} pt-3 pb-1 top-controls" class:show-sliders={showSliders} 
 style="
 	color: {readable}; 
 	background-color: {$primaryColor};
@@ -198,10 +199,17 @@ style="
 	--color-btn-bg: {buttonColor};
 	--color-btn-fg: {readableColor(buttonColor)};
 ">
-	<div class="scheme-{$schemeIndex}" style={cpsgStyle}>
+	<div style={cpsgStyle}>
 		<h1><ColorPaletteShadeGenerator /></h1>
 	</div>
-	<HueSlider />
+	<HslaSlider prop="H" store={hue} step={0.1} max={360} />
+	{#if showSliders}
+	<div class="panel-settings" transition:slide={togglerTransitionOpts}>
+		<HslaSlider prop="S" store={saturation} />
+		<HslaSlider prop="L" store={lightness} />
+		<HslaSlider prop="A" store={alpha} />
+	</div>
+	{/if}
 	<div class="panel-scheme">
 		<div class="show-toggles"
 		use:clickOutside={()=>outputTogglers=false}
@@ -213,6 +221,12 @@ style="
 			</button>
 			{#if outputTogglers}
 			<div class="toggles-wrap outputTogglers" transition:slide={togglerTransitionOpts}>
+				<div class="show-toggler">
+					<button on:click={()=> showSliders = ! showSliders}>
+						<span class="inline-block mr-1">{#if showSliders}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
+						SLA Sliders
+					</button>
+				</div>
 				<div class="show-toggler">
 					<button on:click={()=> showSettings = ! showSettings}>
 						<span class="inline-block mr-1">{#if showSettings}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
@@ -375,11 +389,11 @@ style="
 			&.copiers {
 				@apply right-0 w-22;
 				button {
-					@apply justify-center border-1 w-9/10 rounded-md;
+					@apply justify-center border-1 w-9/10 rounded-md my-2 border-black border-2;
 				}
 			}
 			button {
-				@apply w-full;
+				@apply w-full my-0 pl-2 pr-0 xs:pl-2;
 			}
 		}
 		.show-toggler {
