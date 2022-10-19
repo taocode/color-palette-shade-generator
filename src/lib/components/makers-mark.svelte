@@ -8,8 +8,8 @@
 <div class="placer"
 style="--color-primary: {colorPrimary}">
 	<div class="maker">
-		<span>Created by <a target="_blank" class="text-lime-700" href="https://www.taocode.com/">TAOCODE</a></span>.
-		<span>Driven by curiosity. Powered by <a target="_blank" class="text-orange-700" href="https://svelte.dev/">Svelte</a></span>.
+		<span>Created by <a target="_blank" rel="noreferrer" class="text-lime-700" href="https://www.taocode.com/">TAOCODE</a></span>.
+		<span>Driven by curiosity. Powered by <a target="_blank" rel="noreferrer" class="text-orange-700" href="https://svelte.dev/">Svelte</a></span>.
 	</div>
 </div>
 <style lang="postcss">

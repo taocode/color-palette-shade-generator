@@ -1,7 +1,7 @@
 <script>
 	import { darken, lighten, readableColor, toHex, parseToHsla, adjustHue } from 'color2k'
 	import { EyeIcon, CopyIcon, CheckSquareIcon, SquareIcon } from 'svelte-feather-icons'
-	import { browser } from '$app/env'
+	import { browser } from '$app/environment'
 	import { page } from '$app/stores'
 	import { onMount } from 'svelte'
 	import { slide } from 'svelte/transition'

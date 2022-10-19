@@ -14,6 +14,7 @@ let hidePanels = true
 
 <div class="max-w-prose bg-white/75 mx-auto px-3 pt-2 mt-16 mb-60"
 on:click={() => hidePanels = false}
+on:keydown={() => hidePanels = false}
 use:clickOutside={() => hidePanels = true}
 style="
 --color-primary: {$primaryColor};
@@ -100,7 +101,7 @@ style="
 								{/each}
 							</ul>
 							<div class="prose">
-								<p class="text-center">Learn more about <a target="_blank" href="https://www.interaction-design.org/literature/topics/color-theory">color theory</a>.</p>
+								<p class="text-center">Learn more about <a target="_blank" rel="noreferrer" href="https://www.interaction-design.org/literature/topics/color-theory">color theory</a>.</p>
 							</div>
 						</div>
 					</TabPanel>
@@ -117,8 +118,8 @@ style="
 								</ul>
 								<p>If you find this tool useful, helpful or whatnot, please pass it on and use it as you wish. It's a nerd's tool for those brave enough to <abbr title="(battle)">learn</abbr> <abbr title="(into submission)">CSS</abbr>.</p>
 								<p class="text-center">Feedback welcome; check out <a href="https://github.com/taocode/color-palette-shade-generator">this project's github</a> to report a bug or suggest a feature.</p>
-								<div class="thanks-kp">Thanks to <a target="_blank" href="https://www.kevinpowell.co/">Kevin Powell</a> for explaining HSL: 
-									<div><a target="_blank" href="https://www.youtube.com/watch?v=Ab9pHqhsfcc"><span>Are you using the WRONG</span> color model in your CSS?</a></div>
+								<div class="thanks-kp">Thanks to <a target="_blank" rel="noreferrer" href="https://www.kevinpowell.co/">Kevin Powell</a> for explaining HSL: 
+									<div><a target="_blank" rel="noreferrer" href="https://www.youtube.com/watch?v=Ab9pHqhsfcc"><span>Are you using the WRONG</span> color model in your CSS?</a></div>
 								</div>
 							</div>
 						</div>

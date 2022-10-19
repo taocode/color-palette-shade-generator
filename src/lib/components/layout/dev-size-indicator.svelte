@@ -1,5 +1,5 @@
 <script>
-  import { dev } from "$app/env"
+  import { dev } from "$app/environment"
 </script>
 {#if dev}
 <div class="fixed top-0 left-0 z-50 flex items-center justify-center w-8 h-8 mt-12 ml-2 text-sm font-semibold opacity-30 hover:opacity-100 text-black uppercase bg-gray-300 rounded-full sm:bg-red-200 md:bg-yellow-200 lg:bg-green-200 xl:bg-blue-200 2xl:bg-pink-200">

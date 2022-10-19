@@ -1,7 +1,7 @@
 <script>
 import { lighten, parseToHsla, readableColor, desaturate } from 'color2k'
 import { XIcon, CopyIcon } from 'svelte-feather-icons'
-import { browser } from '$app/env'
+import { browser } from '$app/environment'
 import TailwindIcon from '$lib/components/svg/tailwind.svelte'
 import { clickOutside } from 'svelte-use-click-outside'
 import Swatch from './swatch.svelte'
