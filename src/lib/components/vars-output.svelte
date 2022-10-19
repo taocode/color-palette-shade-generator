@@ -70,7 +70,7 @@
     </div>
     <div class="muted">&rbrace;,</div>
     {:else}
-    <div class="muted">::root &lbrace;</div>
+    <div class="muted">:root &lbrace;</div>
     <div class="copyTarget">
       {@html shadesAsCSS( name, placeholder, color, shades )}
     </div>

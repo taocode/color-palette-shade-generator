@@ -66,7 +66,7 @@
       </div>
       <div class="muted">&rbrace;,</div>
       {:else}
-      <div class="muted">::root &lbrace;</div>
+      <div class="muted">:root &lbrace;</div>
       <div id="all-vars-css" class="copyTarget">
         <slot/>
       </div>
