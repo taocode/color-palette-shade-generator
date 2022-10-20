@@ -12,19 +12,12 @@
 	$: _vals = [$store,max]
 	$: store.set(_vals[0])
 	let style = `--prop: '${prop}';`
+
+	import './slider.pcss'
+
 </script>
 
-<div class="hsla-slider {prop}" style={style} on:click={(event) => {
-		const onThumb = event.target.classList.contains('thumb-content')
-		if (onThumb) return
-		const { layerX, target } = event
-		const hs = target.closest('.hsla-slider')
-		const factorTarget = (layerX / parseFloat(hs.offsetWidth))
-		const targetValue = factorTarget * max
-		// console.log('clicked',{onThumb},`${factorTarget}, ${targetValue}`,layerX,hs.offsetWidth,{target,event})
-		store.set(targetValue)
-	}
-}>
-	<Slider min={0} {max} {step} bind:value={_vals}
-	/>
+<div class="text-center">
+	<input class="hsla-slider {prop}" {style} type="range" id="slider-{prop}" bind:value={$store} min={0} {max} {step}/>
 </div>
+

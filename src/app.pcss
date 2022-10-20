@@ -126,23 +126,26 @@
 .top-controls {
   .hsla-slider {
     --size-thumb: 1.5em;
-    --size-track: 0.75em;
-    --thumb-bg: hsl(var(--scheme-hue-180), 90%, 50%);
-    --progress-bg: transparent;
-    .track {
-      height: var(--size-track,1em);
-      box-shadow: 0 0 0.2em 0.1em #FFFFFF99;
-    }
-    .thumb {
-      height: var(--size-thumb,1em);
-      width: var(--size-thumb,1em);
-    }
+    --size-track: 1.5em;
+
+    --thumb-height: var(--size-thumb);
+    --thumb-width: var(--size-thumb);
+    --thumb-color: hsl(var(--scheme-hue-180), 90%, 50%);
+    --thumb-radius: 100%;
+    --track-height: var(--size-track);
+    --track-border-width: 0;
+    --thumb-border-width: 0;
+    --track-shadow-focus-color: hsla(var(--scheme-hue-180), 99%, 70%, 99%);
+    --track-shadow-color: #fff9;
+    --track-shadow-size: 0;
+    --track-shadow-blur: 0.2em;
+    --track-shadow-border: 0.1em;
     @apply max-w-[85%] mx-auto mb-6 text-[0.85em] sm:max-w-[60ch];
     &.H {
       @apply text-[1em] max-w-[95%] sm:max-w-[60ch];
-      --size-thumb: 2em;
-      --size-track: 1em;
-      --track-bg: linear-gradient(
+      --size-thumb: 1.75em;
+      --size-track: 1.75em;
+      --track-color: linear-gradient(
         90deg,
         hsl(0, 100%, 50%) 0%,
         hsl(36, 100%, 50%) 10%,
@@ -158,21 +161,21 @@
       );
     }
     &.S {
-     --track-bg: linear-gradient(
+     --track-color: linear-gradient(
         90deg,
         hsl(var(--scheme-hue-2, var(--scheme-hue-0)), 0%, 50%) 0%,
         hsl(var(--scheme-hue-2, var(--scheme-hue-0)), 100%, 50%) 100%
       )
     }
     &.L {
-      --track-bg: linear-gradient(
+      --track-color: linear-gradient(
          90deg,
          hsl(var(--scheme-hue-2, var(--scheme-hue-0)), 70%, 10%) 0%,
          hsl(var(--scheme-hue-2, var(--scheme-hue-0)), 85%, 90%) 100%
        )
      }
      &.A {
-      --track-bg: linear-gradient(
+      --track-color: linear-gradient(
          90deg,
          hsla(var(--scheme-hue-2, var(--scheme-hue-0)), 50%, 50%, 0) 0%,
          hsla(var(--scheme-hue-2, var(--scheme-hue-0)), 50%, 50%, 1) 100%
