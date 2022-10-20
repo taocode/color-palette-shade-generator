@@ -188,7 +188,7 @@ const shadesTransitionOpts = {duration: 300}
 <svelte:head>
 	<title>Color Palette Shade Generator</title>
   <meta name="description" content="Use color theory to generate a color palette with multiple shades of color codes ready to paste into CSS, Tailwind.">
-	<link rel='canonical' href='/' />
+	<link rel='canonical' href='{$page.url.protocol}//{$page.url.host}{$page.url.pathname}' />
 </svelte:head>
 
 <div class="scheme-{$schemeIndex} pt-3 pb-1 top-controls" class:show-sliders={showSliders} 
@@ -216,6 +216,7 @@ style="
 		on:mouseenter={()=>outputTogglers=true}
 		>
 			<button class="primary-toggle"
+			title="Show/Hide Panels"
 			on:click={()=>outputTogglers=true}>
 				<EyeIcon size={iconEyeSize} />
 			</button>
@@ -255,6 +256,7 @@ style="
 			on:mouseenter={()=>showCopiers = true}
 			use:clickOutside={()=>showCopiers = false}>
 			<button class="primary-toggle"
+			title="Show/Hide Copiers"
 			on:click={()=>showCopiers = true}>
 				<CopyIcon size={iconEyeSize} />
 			</button>
