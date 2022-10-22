@@ -23,7 +23,7 @@
 		"postcss-simple-vars": "^7.0.0",
 		"prettier": "^2.6.2",
 		"prettier-plugin-svelte": "^2.8.0",
-		"svelte": "3.52.0",
+		"svelte": "^3.52.0",
 		"svelte-check": "^2.9.2",
 		"svelte-feather-icons": "^4.0.0",
 		"svelte-tabs": "^1.1.0",

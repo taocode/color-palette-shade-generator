@@ -1,5 +1,5 @@
 <script>
-import { darken, adjustHue, opacify } from 'color2k'
+import { darken, adjustHue } from 'color2k'
 import { clickOutside } from 'svelte-use-click-outside'
 
 import { Tabs, Tab, TabList, TabPanel } from '$lib/components/layout/tab'
