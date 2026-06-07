@@ -9,6 +9,7 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../app.css";
   .header {
     @apply flex w-full h-20 items-center;
     @apply text-white bg-gradient-to-r from-red-700 to-blue-800;

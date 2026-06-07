@@ -3,13 +3,14 @@
 > App delivered via Firebase Hosting (static): [color-palette-shade-generator.web.app](https://color-palette-shade-generator.web.app/)
 
 Creates multiple shades of colors for websites based on color theory schemes.
-Creates CSS and/or Tailwind variables with copy buttons that you can paste directly into your CSS or tailwind config file.
+Creates CSS and Tailwind-ready variables with copy buttons that you can paste directly into your CSS, Tailwind v4 `@theme` block, or a legacy `tailwind.config.js` colors object.
 
 ## Features
 
 1. Variable outputs are easily copied via provided buttons
    - CSS variables: `--color-blue-500: hsla(240, 80%, 50%, 1)`
-   - Tailwind/WindiCSS config (`tailwind.config.js`) variables with optional reference the CSS variables
+   - Tailwind v4 `@theme` tokens (for CSS-first Tailwind)
+   - Legacy Tailwind config (`tailwind.config.js`) color object variables with optional CSS variable references
 1. Customizable options:
    - Variable name, *default:* name based on hue `--color-varname`
    - Variable name prefix, *default:* `--color-varname`

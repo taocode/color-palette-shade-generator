@@ -14,8 +14,10 @@ import { primaryColor, schemeIndex, schemeObj } from '$lib/stores'
 {/each}
 
 <style global lang="postcss">
+@reference "../../app.css";
 .gradient-display {
-  @apply absolute bg-light-500 top-0 w-full h-full -z-1;
+  @apply absolute top-0 w-full h-full -z-[1];
+  background-color: var(--color-primary-50);
   min-height: 66vh;
   transition: background 400ms ease-out;
   background: linear-gradient(90deg, 

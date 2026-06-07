@@ -1,12 +1,12 @@
 import autoImport from 'sveltekit-autoimport'
-import WindiCSS from 'vite-plugin-windicss';
+import tailwindcss from '@tailwindcss/vite';
 
 import { sveltekit } from '@sveltejs/kit/vite';
 
 /** @type {import('vite').UserConfig} */
 const config = {
 	plugins: [
-		WindiCSS(),
+		tailwindcss(),
 		sveltekit(),
 	]
 };

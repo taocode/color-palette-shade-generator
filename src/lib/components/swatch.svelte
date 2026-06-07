@@ -42,7 +42,7 @@
     <span>{varNum}</span>
   </button>
   </div>
-  <div class="fixed hidden bg-dark-900 bg-opacity-80 inset-0 flex z-10" class:hidden>
+  <div class="fixed hidden bg-dark-900/80 inset-0 flex z-10" class:hidden>
       <div class="info"
       use:clickOutside={() => hidden = true}
       style="background-color: {color}; color: {readableColor(color)}"
@@ -56,6 +56,7 @@
   </div>
 
 <style lang="postcss">
+  @reference "../../app.css";
   .btn {
       @apply tracking-tight flex;
   }
@@ -74,8 +75,8 @@
     transform
     scale-x-70
     hover:border-current
-    xs:(scale-x-90)
-    sm:(scale-x-100);
+    xs:scale-x-90
+    sm:scale-x-100;
   }
   .variable-name {
     @apply text-[1.1em] px-2 text-center mb-2 font-mono whitespace-nowrap;

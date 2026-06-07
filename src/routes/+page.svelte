@@ -16,7 +16,7 @@
 	import SettingVarCss from '$lib/components/setting-var-css.svelte'
 	import GradientDisplay from '$lib/components/gradient-display.svelte'
 
-	import { colorShadesDefault, hueName, getSchemeColorShade, notice, placeholder, schemes, schemeColors, updateHSLA, shadesAsCSS, shadesAsTailwind, htmlToElement, generatedBy } from '$lib'
+	import { colorShadesDefault, hueName, getSchemeColorShade, notice, placeholder, schemes, schemeColors, updateHSLA, shadesAsCSS, shadesAsTailwind, shadesAsTheme, htmlToElement, generatedBy } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, 
 		colorNames, schemeObj, schemeIndex, 
 		steps, factorLightness, factorSaturation, 
@@ -71,6 +71,7 @@
 	let buttonColor = adjustHue($primaryColor,120)
 	let shadesCSS = ''
 	let shadesTailwind = ''
+	let shadesTheme = ''
 	function updateColor(event) {
 		console.log('updateColor(event)',event.detail,{event})
 		updateHSLA( event.detail )
@@ -123,13 +124,21 @@
 			`': {` + 
 			shadesAsTailwind($colorNames[i], placeholder(i,c.color),c.color,
 					colorShadesDefault(c.color)) + "\n},</div>",'')
+		shadesTheme = allColors.reduce((p,c,i) =>
+			p + shadesAsTheme(
+				$colorNames[i],
+				placeholder(i,c.color),
+				c.color,
+				colorShadesDefault(c.color)
+			),'')
 	}
 	let showCode = false
 	let showSettings = false
 	let showSliders = false
 	const copyVars = (type) => {
-		const allVars = htmlToElement("<div>"+((type!=='css') ? shadesTailwind : shadesCSS)+"</div>")
-		const heading = (type!=='css') ? 'Tailwind' : ($optSass>0) ? 'SCSS' : 'CSS'
+		const output = type === 'css' ? shadesCSS : type === 'theme' ? shadesTheme : shadesTailwind
+		const allVars = htmlToElement("<div>"+ output +"</div>")
+		const heading = type === 'theme' ? 'Tailwind v4 Theme' : (type!=='css') ? 'Tailwind' : ($optSass>0) ? 'SCSS' : 'CSS'
 		const text = generatedBy() + allVars.innerText.trim()
 		// console.log({text,type,varsOutput})
 		if (!navigator.clipboard) {
@@ -211,9 +220,13 @@ style="
 	</div>
 	{/if}
 	<div class="panel-scheme">
-		<div class="show-toggles"
+		<div
+		class="show-toggles"
+		role="button"
+		tabindex="0"
 		use:clickOutside={()=>outputTogglers=false}
 		on:mouseenter={()=>outputTogglers=true}
+		on:focus={()=>outputTogglers=true}
 		>
 			<button class="primary-toggle"
 			title="Show/Hide Panels"
@@ -252,8 +265,12 @@ style="
 		<div>
 			<SchemeChooserIcons />
 		</div>
-		<div class="show-toggles"
+		<div
+			class="show-toggles"
+			role="button"
+			tabindex="0"
 			on:mouseenter={()=>showCopiers = true}
+			on:focus={()=>showCopiers = true}
 			use:clickOutside={()=>showCopiers = false}>
 			<button class="primary-toggle"
 			title="Show/Hide Copiers"
@@ -269,7 +286,12 @@ style="
 							>
 								{$optSass>0?'S':''}CSS
 						</button>
-						<button title="Copy Tailwind Vars"
+						<button title="Copy Tailwind v4 Theme"
+							on:click={() => copyVars('theme') }
+							>
+								TW4
+							</button>
+						<button title="Copy Legacy Tailwind Vars"
 							on:click={() => copyVars('tailwind') }
 							>
 								<span class="icon-tailwind">
@@ -338,6 +360,11 @@ style="
 				</AllVarsOutput>
 			</div>
 			<div>
+				<AllVarsOutput type="Theme" {allColors}>
+					{@html shadesTheme}
+				</AllVarsOutput>
+			</div>
+			<div>
 				<AllVarsOutput type="Tailwind" {allColors}>
 					{@html shadesTailwind}
 				</AllVarsOutput>
@@ -355,11 +382,12 @@ style="
 </div>
 
 <style lang="postcss">
+	@reference "../app.css";
 	h1 {
 		@apply text-2xl text-center p-4 font-semibold xs:text-3xl;
 	}
 	button {
-		@apply py-1 px-3 flex align-middle place-items-center mx-auto my-2 xs:(py-2 px-4);
+		@apply py-1 px-3 flex align-middle place-items-center mx-auto my-2 xs:py-2 xs:px-4;
 		background-color: var(--color-btn-bg);
 		color: var(--color-btn-fg);
 	}
@@ -382,16 +410,16 @@ style="
 		@apply relative p-0;
 		.toggles-wrap {
 			@apply absolute py-1 px-2 z-20 top-9 text-left
-			xs:(top-11 -right-12);
+			xs:top-11 xs:-right-12;
 			background-color: var(--color-btn-bg);
 			color: var(--color-btn-fg);
 			&.outputTogglers {
 				@apply left-0 w-40;
 			}
 			&.copiers {
-				@apply right-0 w-22;
+				@apply right-0 w-24;
 				button {
-					@apply justify-center border-1 w-9/10 rounded-md my-2 border-black border-2;
+					@apply justify-center border-[1px] w-[90%] rounded-md my-2 border-black border-2;
 				}
 			}
 			button {

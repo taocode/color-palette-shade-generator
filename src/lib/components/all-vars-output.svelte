@@ -13,7 +13,11 @@
   $: color = allColors[0]?.color || 'hsla(0, 0%, 0%, 1)'
   $: hue = parseToHsla(color)[0].toFixed(1)
   $: hName = hueName(hue)
-  $: _scss = (type==='CSS' && $optSass > 0) ? 'S' : ''
+  $: isTheme = type === 'Theme'
+  $: isTailwind = type === 'Tailwind'
+  $: isCss = type === 'CSS'
+  $: _scss = (isCss && $optSass > 0) ? 'S' : ''
+  $: headingLabel = isTheme ? 'Tailwind v4 Theme' : `${_scss}${type}`
 
   function copyClick(event) {
     const varsOutput = event.srcElement.closest('.all-vars-output')
@@ -37,14 +41,14 @@
 </script>
 <div class="all-vars-output {type.toLocaleLowerCase()}">
   <div class="heading">
-    <button title={`Copy ${type} vars`}  on:click={copyClick} class="flex-grow">
-      <h2 class="mr-2">{_scss}{type}</h2>
+    <button title={`Copy ${headingLabel} vars`}  on:click={copyClick} class="flex-grow">
+      <h2 class="mr-2">{headingLabel}</h2>
       <div class="pt-4">
         <CopyIcon size="1x" />
       </div>
     </button>
     <div class="setting-control">
-      {#if type === "CSS"}
+      {#if isCss}
       <div>
         <SettingVarCssPrefix />
       </div>
@@ -52,14 +56,20 @@
         <SettingVarCss />
       </div>
       {/if}
-      {#if type === "Tailwind"}
+      {#if isTailwind}
       <SettingVarTailwind />
       {/if}
     </div>
   </div>
   <div class="vars-body">
     <div class="vars">
-      {#if type === "Tailwind"}
+      {#if isTheme}
+      <div class="muted">@theme &lbrace;</div>
+      <div id="all-vars-theme" class="copyTarget">
+        <slot/>
+      </div>
+      <div class="muted">&rbrace;</div>
+      {:else if isTailwind}
       <div class="muted">colors: &lbrace;</div>
       <div id="all-vars-tailwind" class="copyTarget">
         <slot/>
@@ -77,6 +87,7 @@
   </div>
 
 <style lang="postcss">
+  @reference "../../app.css";
   h2 {
     @apply inline-block my-2 text-xl font-semibold sm:text-2xl;
   }
@@ -87,7 +98,7 @@
     @apply flex;
   }
   .setting-control {
-    @apply mt-2 w-w-full text-right flex-grow flex;
+    @apply mt-2 w-full text-right flex-grow flex;
   }
   .vars-body {
     @apply text-left;

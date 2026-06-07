@@ -13,6 +13,7 @@ style="--color-primary: {colorPrimary}">
 	</div>
 </div>
 <style lang="postcss">
+	@reference "../../app.css";
 	.maker {
 		@apply max-w-prose mx-auto text-center bg-white/60 p-4 italic opacity-75 transition duration-200 ease-out hover:opacity-100
 		rounded-tr rounded-tl;

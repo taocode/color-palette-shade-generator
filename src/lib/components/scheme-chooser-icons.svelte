@@ -31,6 +31,7 @@
   {/each}
 </div>
 <style lang="postcss">
+@reference "../../app.css";
 .scheme-name {
   @apply absolute inset-0 max-w-max mx-auto py-1 px-3 mt-4 bg-white/70 text-black;
 }

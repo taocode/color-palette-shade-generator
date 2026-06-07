@@ -92,7 +92,7 @@
   @apply bg-primary;
 }
 .card {
-  @apply flex flex-col bg-white border-1 rounded;
+  @apply flex flex-col bg-white border-[1px] rounded;
 }
 .card-title {
   @apply mb-2;
@@ -107,14 +107,14 @@
   @apply inline-block py-1 md:px-2;
 }
 .icon-tailwind {
-  @apply align-bottom tracking-tighter inline-block pt-1 -mt-1 transform scale-60;
+  @apply align-bottom tracking-tighter inline-block pt-1 -mt-1 transform scale-[0.6];
 }
 .allvars .icon-tailwind {
   @apply mt-0;
 }
 .settings {
-  @apply max-w-3/4  mx-auto my-2 text-center flex flex-col align-end justify-center 
-  xs:(flex-row max-w-none gap-1)
+  @apply max-w-[75%] mx-auto my-2 text-center flex flex-col items-end justify-center
+  xs:flex-row xs:max-w-none xs:gap-1
   md:max-w-screen-lg;
   &.vars {
     @apply flex-col sm:flex-row;
@@ -209,7 +209,7 @@
   input[type="text"],
   input[type="number"],
   select {
-    @apply text-[1.4em] border-1 pl-1 tracking-tighter;
+    @apply text-[1.4em] border-[1px] pl-1 tracking-tighter;
     background-color: var(--color-background);
     color: var(--color-foreground);
     option {
@@ -229,7 +229,7 @@
 .color-patch .details {
   input,
   select {
-    @apply font-500;
+    @apply font-medium;
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
@@ -269,7 +269,7 @@
       &__tab {
         color: hsla(var(--scheme-hue-1), var(--scheme-saturation), var(--scheme-lightness), 1);
         border-bottom-color: hsla(var(--scheme-hue-1), var(--scheme-saturation), var(--scheme-lightness), 0.2);
-        @apply transition duration-400 ease;
+        @apply transition duration-[400ms] ease;
       }
       &__selected {
         color: hsla(var(--scheme-hue-2), var(--scheme-saturation), var(--scheme-lightness), 1);
@@ -307,7 +307,7 @@
   }
 }
 .CPSG {
-  @apply inline-flex justify-center place-items-center font-700 mr-[0.08ch];
+  @apply inline-flex justify-center place-items-center font-bold mr-[0.08ch];
   transition: background 400ms ease-out;
   box-shadow: 0 0 0.15em 1px var(--color-glow, #ffffffdd);
   &.C {

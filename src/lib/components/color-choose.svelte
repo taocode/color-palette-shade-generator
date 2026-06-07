@@ -72,6 +72,7 @@ function colorPicked({srcElement}) {
 </div>
 
 <style lang="postcss">
+	@reference "../../app.css";
 	label {
 		@apply block flex items-center justify-end w-full text-[0.75em];
 		span {

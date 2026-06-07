@@ -12,7 +12,10 @@ let hidePanels = true
 </script>
 
 
-<div class="max-w-prose bg-white/75 mx-auto px-3 pt-2 mt-16 mb-60"
+<div
+class="max-w-prose bg-white/75 mx-auto px-3 pt-2 mt-16 mb-60"
+role="button"
+tabindex="0"
 on:click={() => hidePanels = false}
 on:keydown={() => hidePanels = false}
 use:clickOutside={() => hidePanels = true}
@@ -42,7 +45,7 @@ style="
 									<ul>
 										<li>CSS variables: <code>--color-blue-500: hsla(240, 80%, 50%, 1);</code></li>
 										<li>SASS/SCSS variables: <code>$color-blue-500: hsl(240, 80%, 50%);</code></li>
-										<li>Tailwind/WindiCSS config (<code>tailwind.config.js</code>) variables with optional reference the CSS variables</li>
+										<li>Tailwind v4 theme tokens (<code>@theme &#123; --color-... &#125;</code>) plus legacy <code>tailwind.config.js</code> color object output</li>
 									</ul>
 								</li>
 								<li>Customizable options:
@@ -113,7 +116,7 @@ style="
 									<li>a tool to help identify harmonious accent colors based on a single color.</li>
 									<li>multi-shade variables ready for virtually any CSS powered platform.</li>
 									<li>HSL notation variables; although there are many color palette generators, <em>most are primarily hexadecimal color notation.</em></li>
-									<li>automated tailwind.config.js formatted variables for custom color shades.</li>
+									<li>automated Tailwind v4 <code>@theme</code> tokens (and legacy config output) for custom color shades.</li>
 									<li>to deepen my understanding and competency with Svelte and SvelteKit. I ended up deepening my appreciation. <em>It's so fast!</em> The latest updates to SvelteKit are smart and elegant, like Svelte.</li>
 								</ul>
 								<p>If you find this tool useful, helpful or whatnot, please pass it on and use it as you wish. It's a nerd's tool for those brave enough to <abbr title="(battle)">learn</abbr> <abbr title="(into submission)">CSS</abbr>.</p>
@@ -130,6 +133,7 @@ style="
 </div>
 
 <style lang="postcss">
+	@reference "../../app.css";
 	p {
 		@apply text-lg;
 	}

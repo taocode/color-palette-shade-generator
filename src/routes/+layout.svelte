@@ -3,7 +3,7 @@ import { darken, lighten, readableColor } from 'color2k'
 import { schemeHues, styleColors } from '$lib'
 import { hue, saturation, lightness, alpha, primaryColor, schemeIndex, schemeObj } from '$lib/stores'
 import DevSizeIndicator from '$lib/components/layout/dev-size-indicator.svelte'
-import 'virtual:windi.css'
+import '../app.css'
 import '../app.pcss'
 
 let styleVars = ''

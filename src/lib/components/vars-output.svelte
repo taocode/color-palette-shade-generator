@@ -2,7 +2,7 @@
   import { parseToHsla, readableColor, toHsla } from 'color2k'
   import { CopyIcon, PlusIcon } from 'svelte-feather-icons'
 
-  import { colorShadesDefault, hueName, notice, shadesAsCSS, shadesAsTailwind } from '$lib'
+  import { colorShadesDefault, hueName, notice, shadesAsCSS, shadesAsTailwind, shadesAsTheme } from '$lib'
   import { optTailwind, optColorNotation, optSass, cssVarPrefix } from '$lib/stores'
 
   import SettingVarTailwind from './setting-var-tailwind.svelte'
@@ -19,7 +19,11 @@
   $: _optTailwind = $optTailwind
   $: _cssVarPrefix = $cssVarPrefix
   $: _optSass = $optSass
-  $: _scss = type === 'CSS' && _optSass > 0 ? 'S' : ''
+  $: isTheme = type === 'Theme'
+  $: isTailwind = type === 'Tailwind'
+  $: isCss = type === 'CSS'
+  $: _scss = isCss && _optSass > 0 ? 'S' : ''
+  $: headingLabel = isTheme ? 'Tailwind v4 Theme' : `${_scss}${type}`
 
   function copyClick(event) {
     const varsOutput = event.srcElement.closest('.vars-output')
@@ -43,23 +47,29 @@
 </script>
 <div class="vars-output {type.toLocaleLowerCase()}">
   <div class="heading">
-    <button title={`Copy ${type} vars`} on:click={copyClick} class="inline-block">
-      <h2 class="mr-2">{_scss}{type}</h2>
+    <button title={`Copy ${headingLabel} vars`} on:click={copyClick} class="inline-block">
+      <h2 class="mr-2">{headingLabel}</h2>
       <div class="pt-4">
         <CopyIcon size="1x" />
       </div>
     </button>
     <div class="setting-control">
-      {#if type === 'CSS'}
+      {#if isCss}
       <SettingVarCss fixedColor={color} />
       {/if}
-      {#if type === 'Tailwind'}
+      {#if isTailwind}
       <SettingVarTailwind fixedColor={color} />
       {/if}
     </div>
   </div>
   <div class="vars">
-    {#if type === "Tailwind"}
+    {#if isTheme}
+    <div class="muted">@theme &lbrace;</div>
+    <div class="copyTarget">
+      {@html shadesAsTheme( name, placeholder, color, shades )}
+    </div>
+    <div class="muted">&rbrace;</div>
+    {:else if isTailwind}
     <div class="muted">colors: &lbrace;</div>
     <div class="copyTarget">
       <div class="pl-3">
@@ -80,6 +90,7 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../app.css";
   h2 {
     @apply inline-block my-2 text-xl font-semibold sm:text-2xl;
   }

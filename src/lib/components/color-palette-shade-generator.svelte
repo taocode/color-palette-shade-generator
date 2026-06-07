@@ -16,7 +16,7 @@ export const fanciful = name
 
 <div class="max-w-fit mx-auto">
   <div class="max-w-60 mx-auto grid grid-cols-2 gap-y-2
-  sm:(inline-flex max-w-none)">
+  sm:inline-flex sm:max-w-none">
     {@html fanciful}
   </div>
 </div>

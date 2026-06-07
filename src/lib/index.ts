@@ -286,6 +286,18 @@ export const shadesAsTailwind = (name,placeholder,masterColor,shades) => {
     return `${p}\n\t<div class="pl-3">'${varNum}': '${varValue}',</div>` 
   },`\n<div class="pl-3">\tDEFAULT: '${varValue}',</div>`)
 }
+export const shadesAsTheme = (name,placeholder,masterColor,shades) => {
+  const cssPrefix = get(cssVarPrefix)
+  const vOptCSS = get(optColorNotation)
+  if (!name || name === '') name = placeholder
+  const cssPre = cssPrefix ? `${cssPrefix}-` : ''
+  const tokenName = `${cssPre}${name}`
+  let varValue = cssColor(masterColor,vOptCSS)
+  return shades.reduce((p,c,i) => {
+    varValue = cssColor(c,vOptCSS)
+    return `${p}\n<div class="pl-3">--${tokenName}-${cssVarNum(i)}: ${varValue};</div>`
+  },`\n<div class="pl-3">--${tokenName}: ${varValue};</div>`)
+}
 export const colorShadesDefault = (color) => {
   const stepFactorLightness = (get(schemeIndex) === 1) ? get(factorLightness)/3 : get(factorLightness)
   return colorShades(color,get(steps),stepFactorLightness,get(factorSaturation))
@@ -318,15 +330,15 @@ export const htmlToElement = (html) => {
 let priorNote = false
 export const notice = (text) => {
   if (priorNote) priorNote.remove()
-  const note = htmlToElement(`<div class="absolute bottom-0 left-0 right-0 px-4 py-1 z-100"><div class="border-dark-300/50 border-6 bg-dark-700/80 text-light-100 transition duration-50 duration-300 ease-out opacity-90 opacity-0 mx-auto p-3 max-w-max">${text}</div></div>`)
+  const note = htmlToElement(`<div class="absolute bottom-0 left-0 right-0 px-4 py-1 z-[100]"><div class="border-dark-300/50 border-[6px] bg-dark-700/80 text-light-100 transition duration-[300ms] ease-out opacity-90 opacity-0 mx-auto p-3 max-w-max">${text}</div></div>`)
   note.classList.remove('opacity-90','duration-300')
   // addTo.prepend(note)
   setTimeout(function() {
     note.classList.remove('opacity-0')
   },50)
   setTimeout(function() {
-    note.classList.remove('opacity-90','duration-50')
-    note.classList.add('opacity-0','duration-300')
+    note.classList.remove('opacity-90')
+    note.classList.add('opacity-0','duration-[300ms]')
   },5000)
   setTimeout(function() {
     note.remove()

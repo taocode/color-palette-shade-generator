@@ -84,9 +84,14 @@ function copyClick(event,chosen) {
       size={name?.length || placeholder?.length || 6}
       class="varName"
       >
-    <div class="copy-wrap"
+    <div
+      class="copy-wrap"
+      role="button"
+      tabindex="0"
       on:mouseenter={() => showCopiers = true}
+      on:focus={() => showCopiers = true}
       on:mouseleave={() => showCopiers = false}
+      on:blur={() => showCopiers = false}
       >
       <CopyIcon size="1x"  />
       <div class="copy-controls use-dark-bg"
@@ -117,7 +122,7 @@ function copyClick(event,chosen) {
     <button class="ml-2 border border-transparent hover:border-current rounded px-1 "
     on:click={() => { hidden = ! hidden }}>{@html dots}</button>
   </div>
-  <div class="fixed hidden bg-dark-900 bg-opacity-80 inset-0 flex z-10" class:hidden>
+  <div class="fixed hidden bg-dark-900/80 inset-0 flex z-10" class:hidden>
     <div class="details relative"
       use:clickOutside={() => hidden = true}
       style="--color-background: {color}; 
@@ -159,6 +164,9 @@ function copyClick(event,chosen) {
           <VarsOutput type="CSS" {name} {placeholder} {color} {shades} />
         </div>
         <div class="tailwind">
+          <VarsOutput type="Theme" {name} {placeholder} {color} {shades} />
+        </div>
+        <div class="tailwind">
           <VarsOutput type="Tailwind" {name} {placeholder} {color} {shades} />
         </div>
       </div>
@@ -173,16 +181,17 @@ function copyClick(event,chosen) {
   {/each}
 </div>
 <style lang="postcss">
+  @reference "../../app.css";
   .name {
 		@apply px-3 py-1;
     --start-percent: 75%;
     background: var(--color-dark);
     color: var(--color-foreground); 
     background: linear-gradient(90deg, var(--color-dark) var(--start-percent), var(--color-light) 100%);
-    @screen xs {
+    @media (min-width: 400px) {
       --start-percent: 66%;
     }
-    @screen sm {
+    @media (min-width: 640px) {
       --start-percent: 40%;
     }
 	}
@@ -193,16 +202,16 @@ function copyClick(event,chosen) {
     @apply relative ml-2 mr-1 py-1 px-2;
   }
   .copy-controls {
-    @apply absolute top-6 -left-1 z-15 p-1 text-center opacity-100;
+    @apply absolute top-6 -left-1 z-[15] p-1 text-center opacity-100;
     &:not(.showing) {
-      @apply opacity-0 -z-1;
+      @apply opacity-0 -z-[1];
     }
     &:focus-within {
-      @apply opacity-100 z-15;
+      @apply opacity-100 z-[15];
     }
   }
   .close {
-    @apply flex absolute top-2 right-2 rounded-sm float-right border-1;
+    @apply flex absolute top-2 right-2 rounded-sm float-right border-[1px];
     color: var(--color-foreground);
     background-color: var(--color-background);
     border-color: var(--color-foreground);
@@ -211,13 +220,13 @@ function copyClick(event,chosen) {
     @apply text-xl p-1 pl-2 flex flex-col;
   }
   input {
-    @apply font-500 max-w-30 pl-2 border-1;
+    @apply font-medium max-w-30 pl-2 border-[1px];
     background-color: var(--color-background);
     color: var(--color-foreground);
     border-color: var(--color-light);
   }
   input::placeholder {
-    @apply font-100 italic text-sm;
+    @apply font-thin italic text-sm;
     color: var(--color-placeholder);
     filter: saturate(0.25);
   }
@@ -247,6 +256,6 @@ function copyClick(event,chosen) {
     color: var(--color-foreground);
   }
   .var-panels {
-    @apply md:(flex gap-6 flex-cols-2);
+    @apply md:grid md:grid-cols-2 md:gap-6;
   }
 </style>

@@ -18,7 +18,7 @@
 <div class="settings vars">
   {#if withLabel}
   <label for="varsOpt">
-    Tailwind Vars:
+    Legacy Tailwind Vars:
   </label>
   {/if}
   <select id="varsOpt"

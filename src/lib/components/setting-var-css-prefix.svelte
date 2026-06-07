@@ -35,6 +35,7 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../app.css";
   .dash-dash {
     @apply flex flex-col text-xl;
   }

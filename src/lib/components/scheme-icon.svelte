@@ -34,8 +34,9 @@
 </span>
 
 <style global lang="postcss">
+  @reference "../../app.css";
   .scheme-icon {
-    @apply inline-flex h-6 w-7 xs:(h-7 w-8) align-bottom;
+    @apply inline-flex h-6 w-7 xs:h-7 xs:w-8 align-bottom;
   }
   .hue-color {
     @apply w-full;
