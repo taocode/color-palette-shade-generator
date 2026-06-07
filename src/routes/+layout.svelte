@@ -4,7 +4,6 @@ import { schemeHues, styleColors } from '$lib'
 import { hue, saturation, lightness, alpha, primaryColor, schemeIndex, schemeObj } from '$lib/stores'
 import DevSizeIndicator from '$lib/components/layout/dev-size-indicator.svelte'
 import '../app.css'
-import '../app.pcss'
 
 let styleVars = ''
 let styleHues = ''

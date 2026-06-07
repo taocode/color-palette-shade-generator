@@ -92,3 +92,5 @@
   --scheme-color-2: hsla(var(--scheme-hue-2), var(--scheme-saturation), var(--scheme-lightness), 0);
   --scheme-color-3: hsla(var(--scheme-hue-3), var(--scheme-saturation), var(--scheme-lightness), 0);
 }
+
+@import "./app.pcss";
