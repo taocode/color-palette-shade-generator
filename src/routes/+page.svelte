@@ -390,6 +390,9 @@ style="
 		@apply py-1 px-3 flex align-middle place-items-center mx-auto my-2 xs:py-2 xs:px-4;
 		background-color: var(--color-btn-bg);
 		color: var(--color-btn-fg);
+		&:hover {
+			background-color:rgba(0,0,0,0.1);
+		}
 	}
 	.allvars {
 		@apply max-w-max mx-auto text-center mt-6 mb-2;

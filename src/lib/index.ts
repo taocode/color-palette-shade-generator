@@ -330,7 +330,7 @@ export const htmlToElement = (html) => {
 let priorNote = false
 export const notice = (text) => {
   if (priorNote) priorNote.remove()
-  const note = htmlToElement(`<div class="absolute bottom-0 left-0 right-0 px-4 py-1 z-[100]"><div class="border-dark-300/50 border-[6px] bg-dark-700/80 text-light-100 transition duration-[300ms] ease-out opacity-90 opacity-0 mx-auto p-3 max-w-max">${text}</div></div>`)
+  const note = htmlToElement(`<div class="absolute bottom-0 left-0 right-0 px-4 py-1 z-[100]"><div class="transition duration-[300ms] ease-out opacity-90 opacity-0 mx-auto p-3 max-w-max rounded-sm" style="background:rgb(55 65 81 / 0.9);color:rgb(243 244 246);border:6px solid rgb(107 114 128 / 0.5)">${text}</div></div>`)
   note.classList.remove('opacity-90','duration-300')
   // addTo.prepend(note)
   setTimeout(function() {
