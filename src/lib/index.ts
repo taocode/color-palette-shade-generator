@@ -229,7 +229,31 @@ export const schemeColors = ({hues,lightnesses,varName,names},primary) => {
 export const dots = '<span class="tracking-widest">•••</span>'
 
 
-export const cssVarNum = (n: number): string => (n<0) ? '' : (n) ? `${n}00` : '50'
+export const TAILWIND_SHADE_SCALE = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const
+
+/** Map shade index to Tailwind-style step names from 50 through 950. */
+export function getShadeScale(steps: number): number[] {
+  const full = TAILWIND_SHADE_SCALE
+  if (steps <= 0) return []
+  if (steps === 1) return [500]
+  if (steps === 10) return [50, 100, 200, 300, 400, 500, 600, 700, 800, 950]
+  if (steps === full.length) return [...full]
+
+  const scale: number[] = []
+  for (let i = 0; i < steps; i++) {
+    const idx = Math.round(i * (full.length - 1) / (steps - 1))
+    scale.push(full[idx])
+  }
+  scale[0] = 50
+  scale[scale.length - 1] = 950
+  return scale
+}
+
+export const cssVarNum = (index: number, steps = 10): string => {
+  if (index < 0) return ''
+  const scale = getShadeScale(steps)
+  return String(scale[index] ?? scale[scale.length - 1] ?? 500)
+}
 
 const cssColor = (color,optCSS) => {
   // console.log(`cssColor(${_optColorNotation},${color})`)
@@ -261,11 +285,11 @@ export const shadesAsCSS = (name,placeholder,masterColor,shades) => {
   let varValue = cssColor(masterColor,vOptCSS)
   return shades.reduce((p,c,i) => {
       varValue = cssColor(c,vOptCSS)
-      return `${p}\n<div class="pl-3">${varStart}${cssPre}${name}-${cssVarNum(i)}: ${varValue};</div>`
+      return `${p}\n<div class="pl-3">${varStart}${cssPre}${name}-${cssVarNum(i, shades.length)}: ${varValue};</div>`
     },`\n<div class="pl-3">${varStart}${cssPre}${name}: ${varValue};</div>`)
 }
-const tailwindColor = (name, color, cssPrefix, vOptCSS, vOptTailwind, n = -1) => {
-  const vn = n < 0 ? '' : '-' + cssVarNum(n)
+const tailwindColor = (name, color, cssPrefix, vOptCSS, vOptTailwind, n = -1, steps = 10) => {
+  const vn = n < 0 ? '' : '-' + cssVarNum(n, steps)
   const cssPre = cssPrefix ? `${cssPrefix}-` : ''
   const varName = `--${cssPre}${name}${vn}`
   if (vOptTailwind === 'varonly')
@@ -281,9 +305,8 @@ export const shadesAsTailwind = (name,placeholder,masterColor,shades) => {
   if (!name || name === '') name = placeholder
   let varValue = tailwindColor(name,masterColor,cssPrefix,vOptCSS,vOptTailwind)
   return shades.reduce((p,c,i) => {
-    varValue = tailwindColor(name,c,cssPrefix,vOptCSS,vOptTailwind,i)
-    const varNum = i<1 ? '50' : `${i}00`
-    return `${p}\n\t<div class="pl-3">'${varNum}': '${varValue}',</div>` 
+    varValue = tailwindColor(name,c,cssPrefix,vOptCSS,vOptTailwind,i, shades.length)
+    return `${p}\n\t<div class="pl-3">'${cssVarNum(i, shades.length)}': '${varValue}',</div>` 
   },`\n<div class="pl-3">\tDEFAULT: '${varValue}',</div>`)
 }
 export const shadesAsTheme = (name,placeholder,masterColor,shades) => {
@@ -295,7 +318,7 @@ export const shadesAsTheme = (name,placeholder,masterColor,shades) => {
   let varValue = cssColor(masterColor,vOptCSS)
   return shades.reduce((p,c,i) => {
     varValue = cssColor(c,vOptCSS)
-    return `${p}\n<div class="pl-3">--${tokenName}-${cssVarNum(i)}: ${varValue};</div>`
+    return `${p}\n<div class="pl-3">--${tokenName}-${cssVarNum(i, shades.length)}: ${varValue};</div>`
   },`\n<div class="pl-3">--${tokenName}: ${varValue};</div>`)
 }
 export const colorShadesDefault = (color) => {

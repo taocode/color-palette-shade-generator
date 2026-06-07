@@ -10,8 +10,9 @@
   export let color = 'black'
   export let name = ''
   export let shadeIndex = -1
+  export let shadeCount = 10
 
-  const varNum = cssVarNum(shadeIndex)
+  $: varNum = cssVarNum(shadeIndex, shadeCount)
   
   function copyClick(event) {
     const text = event.srcElement.innerText.trim()

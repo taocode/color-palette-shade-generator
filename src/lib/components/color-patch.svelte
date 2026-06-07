@@ -176,7 +176,7 @@ function copyClick(event,chosen) {
 <div class="shades">
   {#each shades as color, shadeIndex}
   <div>
-    <Swatch name={name || placeholder} {color} {shadeIndex} on:updateColor />
+    <Swatch name={name || placeholder} {color} {shadeIndex} shadeCount={shades.length} on:updateColor />
   </div>
   {/each}
 </div>
