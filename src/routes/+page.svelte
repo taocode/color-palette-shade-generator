@@ -3,7 +3,7 @@
 	import { EyeIcon, CopyIcon, CheckSquareIcon, SquareIcon } from 'svelte-feather-icons'
 	import { browser } from '$app/environment'
 	import { replaceState } from '$app/navigation'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import { onMount } from 'svelte'
 	import { slide } from 'svelte/transition'
 
@@ -38,8 +38,8 @@
 			const params = new URLSearchParams(state)
 			const query = params.toString()
 			const url = query ? `?${query}` : '/'
-			const current = `${$page.url.pathname}${$page.url.search}`
-			const next = query ? `${$page.url.pathname}?${query}` : $page.url.pathname
+			const current = `${page.url.pathname}${page.url.search}`
+			const next = query ? `${page.url.pathname}?${query}` : page.url.pathname
 			if (current === next) return
 			replaceState(url, {})
 		}, historyDebounceMS)
@@ -48,7 +48,7 @@
 	onMount(() => {
 		// console.log("onMount()",{browser})
 		if (browser) {
-			const searchParams = $page.url.searchParams
+			const searchParams = page.url.searchParams
 			if (searchParams.has('H')) hue.set(parseFloat(searchParams.get('H')))
 			if (searchParams.has('S')) saturation.set(0.01*parseFloat(searchParams.get('S')))
 			if (searchParams.has('L')) lightness.set(0.01*parseFloat(searchParams.get('L')))
@@ -206,7 +206,7 @@ const shadesTransitionOpts = {duration: 300}
 <svelte:head>
 	<title>Color Palette Shade Generator</title>
   <meta name="description" content="Use color theory to generate a color palette with multiple shades of color codes ready to paste into CSS, Tailwind.">
-	<link rel='canonical' href='{$page.url.protocol}//{$page.url.host}{$page.url.pathname}' />
+	<link rel='canonical' href='{page.url.protocol}//{page.url.host}{page.url.pathname}' />
 </svelte:head>
 
 <div class="scheme-{$schemeIndex} pt-3 pb-1 top-controls" class:show-sliders={showSliders} 
