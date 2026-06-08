@@ -2,6 +2,7 @@
 	import { darken, lighten, readableColor, toHex, parseToHsla, adjustHue } from 'color2k'
 	import { EyeIcon, CopyIcon, CheckSquareIcon, SquareIcon } from 'svelte-feather-icons'
 	import { browser } from '$app/environment'
+	import { replaceState } from '$app/navigation'
 	import { page } from '$app/stores'
 	import { onMount } from 'svelte'
 	import { slide } from 'svelte/transition'
@@ -32,12 +33,16 @@
 	let timer
 	const historyDebounceMS = 50
 	const debounceHistory = (state) => {
-    clearTimeout(timer)
+		clearTimeout(timer)
 		timer = setTimeout(() => {
 			const params = new URLSearchParams(state)
-			const strParams = (params.toString() !== '') ? `/?${params}` : '/'
-      history.replaceState(state,'',strParams)
-		}, historyDebounceMS);
+			const query = params.toString()
+			const url = query ? `?${query}` : '/'
+			const current = `${$page.url.pathname}${$page.url.search}`
+			const next = query ? `${$page.url.pathname}?${query}` : $page.url.pathname
+			if (current === next) return
+			replaceState(url, {})
+		}, historyDebounceMS)
 	}
 		
 	onMount(() => {
