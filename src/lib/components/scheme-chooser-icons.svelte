@@ -12,7 +12,7 @@
     <div class="flex flex-wrap gap-1 justify-center text-center xs:mx-3">
         {#each schemes as s, i}
           <button title={s.name}
-					class="border-4"
+					class="border-4 cursor-pointer"
 					style="border-color: {i === $schemeIndex ? '#FFFFFFCC' : '#33333399'};"
 					on:click={()=>schemeIndex.set(i)}>
             <SchemeIcon schemeIndex={i} color={$primaryColor} />

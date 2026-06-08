@@ -93,4 +93,260 @@
   --scheme-color-3: hsla(var(--scheme-hue-3), var(--scheme-saturation), var(--scheme-lightness), 0);
 }
 
-@import "./app.pcss";
+.btn {
+  @apply inline-block text-center align-middle cursor-pointer border p-2 rounded;
+}
+.btn-primary {
+  @apply bg-primary;
+}
+.card {
+  @apply flex flex-col bg-white border-[1px] rounded;
+}
+.card-title {
+  @apply mb-2;
+}
+.form-text {
+  @apply text-sm text-gray-600 mt-1 mb-4;
+}
+.nav {
+  @apply flex flex-col list-none md:flex-row;
+}
+.nav-link {
+  @apply inline-block py-1 md:px-2;
+}
+.icon-tailwind {
+  @apply align-bottom tracking-tighter inline-block pt-1 -mt-1 transform scale-[0.6];
+}
+.allvars .icon-tailwind {
+  @apply mt-0;
+}
+.settings {
+  @apply max-w-[75%] mx-auto my-2 text-center flex flex-col items-end justify-center
+  xs:flex-row xs:max-w-none xs:gap-1
+  md:max-w-screen-lg;
+  &.vars {
+    @apply flex-col sm:flex-row;
+    >div {
+      @apply px-3;
+    }
+  }
+}
+.top-controls {
+  .hsla-slider {
+    --size-thumb: 1.5em;
+    --size-track: 1.5em;
+
+    --thumb-height: var(--size-thumb);
+    --thumb-width: var(--size-thumb);
+    --thumb-color: hsl(var(--scheme-hue-180), 90%, 50%);
+    --thumb-radius: 100%;
+    --track-height: var(--size-track);
+    --track-border-width: 0;
+    --thumb-border-width: 0;
+    --track-shadow-focus-color: hsla(var(--scheme-hue-180), 99%, 70%, 99%);
+    --track-shadow-color: #fff9;
+    --track-shadow-size: 0;
+    --track-shadow-blur: 0.2em;
+    --track-shadow-border: 0.1em;
+    @apply max-w-[85%] mx-auto mb-6 text-[0.85em] sm:max-w-[60ch];
+    &.H {
+      @apply text-[1em] max-w-[95%] sm:max-w-[60ch];
+      --size-thumb: 1.75em;
+      --size-track: 1.75em;
+      --track-color: linear-gradient(
+        90deg,
+        hsl(0, 100%, 50%) 0%,
+        hsl(36, 100%, 50%) 10%,
+        hsl(72, 100%, 50%) 20%,
+        hsl(108, 100%, 50%) 30%,
+        hsl(144, 100%, 50%) 40%,
+        hsl(180, 100%, 50%) 50%,
+        hsl(216, 100%, 50%) 60%,
+        hsl(252, 100%, 50%) 70%,
+        hsl(288, 100%, 50%) 80%,
+        hsl(324, 100%, 50%) 90%,
+        hsl(0, 100%, 50%) 100%
+      );
+    }
+    &.S {
+     --track-color: linear-gradient(
+        90deg,
+        hsl(var(--scheme-hue-2, var(--scheme-hue-0)), 0%, 50%) 0%,
+        hsl(var(--scheme-hue-2, var(--scheme-hue-0)), 100%, 50%) 100%
+      )
+    }
+    &.L {
+      --track-color: linear-gradient(
+         90deg,
+         hsl(var(--scheme-hue-2, var(--scheme-hue-0)), 70%, 10%) 0%,
+         hsl(var(--scheme-hue-2, var(--scheme-hue-0)), 85%, 90%) 100%
+       )
+     }
+     &.A {
+      --track-color: linear-gradient(
+         90deg,
+         hsla(var(--scheme-hue-2, var(--scheme-hue-0)), 50%, 50%, 0) 0%,
+         hsla(var(--scheme-hue-2, var(--scheme-hue-0)), 50%, 50%, 1) 100%
+       )
+     }
+  }
+}
+.show-sliders {
+  .thumb-content .thumb {
+    @apply flex justify-center place-items-center;
+    &::after {
+      content: var(--prop);
+      color: var(--scheme-readable-180);
+      @apply text-[1.2em] font-semibold;
+    }
+  }
+}
+.vars-output .heading {
+  @apply flex;
+  button {
+    @apply flex cursor-pointer;
+  }
+  select {
+    @apply mt-2 flex-grow text-right;
+  }
+  .setting-control {
+    @apply flex-grow;
+  }
+}
+.top-controls {
+  input[type="text"],
+  input[type="number"],
+  select {
+    @apply text-[1.4em] border-[1px] pl-1 tracking-tighter;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    option {
+      @apply text-sm;
+    }
+  }
+  .vars-body {
+    @apply flex flex-col sm:flex-row text-left gap-6;
+    >div {
+      @apply mx-4
+    }
+  }
+  label {
+    @apply text-[0.8em] mt-2 mr-1;
+  }
+}
+.color-patch .details {
+  input,
+  select {
+    @apply font-medium;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+}
+.prose {
+  --color-link: var(--scheme-color);
+  a {
+    @apply transition duration-200 ease-out;
+    text-decoration-color: var(--color-link,inherit);
+    &:hover {
+      color: var(--color-link,inherit);
+    }
+  }
+  ul>li::before {
+    background-color: hsla(var(--scheme-hue), var(--scheme-saturation), var(--scheme-lightness), var(--scheme-alpha));
+  }
+}
+
+.tabs {
+  .panels .panel,
+  &.hidePanels .panels .selected .panel {
+    @apply hidden;
+  }
+
+ .svelte-tabs {
+   --scheme-lightness: 40%;
+    ul {
+      border-bottom: none;
+    }
+    li[role=tab] {
+      @apply text-[1.2em] font-semibold mx-3;
+    }
+    .selected .panel {
+      @apply block;
+    }
+    .svelte-tabs {
+      &__tab {
+        color: hsla(var(--scheme-hue-1), var(--scheme-saturation), var(--scheme-lightness), 1);
+        border-bottom-color: hsla(var(--scheme-hue-1), var(--scheme-saturation), var(--scheme-lightness), 0.2);
+        @apply transition duration-[400ms] ease-linear;
+      }
+      &__selected {
+        color: hsla(var(--scheme-hue-2), var(--scheme-saturation), var(--scheme-lightness), 1);
+        border-bottom-color: hsla(var(--scheme-hue-2), var(--scheme-saturation), var(--scheme-lightness), 1);
+      }
+    }
+  }
+  &.hidePanels .svelte-tabs .svelte-tabs__selected {
+    color: hsla(var(--scheme-hue-1), var(--scheme-saturation), var(--scheme-lightness), 1);
+    border-bottom-color: hsla(var(--scheme-hue-1), var(--scheme-saturation), var(--scheme-lightness), 0.2);
+  }
+}
+
+.scheme-0,
+.scheme-1 {
+  .tabs .svelte-tabs {
+    --scheme-hue-1: var(--scheme-hue);
+    --scheme-hue-2: var(--scheme-hue);
+    --scheme-lightness: 25%;
+    &__selected {
+      --scheme-lightness: 40%;
+    }
+  }
+  .tabs.hidePanels .svelte-tabs .svelte-tabs {
+    &__selected {
+      --scheme-lightness: 25%;
+    }
+  }
+}
+.scheme-2 {
+  .tabs {
+    .svelte-tabs {
+      --scheme-hue-2: var(--scheme-hue);
+    }
+  }
+}
+.CPSG {
+  @apply inline-flex justify-center place-items-center font-bold mr-[0.08ch];
+  transition: background 400ms ease-out;
+  box-shadow: 0 0 0.15em 1px var(--color-glow, #ffffffdd);
+  &.C {
+    background-color: var(--cpsg-0, blue);
+    color: var(--color-foreground, white);
+  }
+  &.P {
+    background-color: var(--cpsg-1, violet);
+    color: var(--color-foreground, white);
+  }
+  &.S {
+    background-color: var(--cpsg-2, yellow);
+    color: var(--color-foreground, black);
+  }
+  &.G {
+    background-color: var(--cpsg-3, lightgreen);
+    color: var(--color-foreground, black);
+  }
+}
+.scheme-2 {
+  .C { --color-foreground: var(--cpsg-fg-1); background-color: var(--cpsg-1); }
+  .P { --color-foreground: var(--cpsg-fg-1); background-color: var(--cpsg-1); }
+  .S { --color-foreground: var(--cpsg-fg-0); background-color: var(--cpsg-0); }
+  .G { --color-foreground: var(--cpsg-fg-0); background-color: var(--cpsg-0); }
+}
+.scheme-0, .scheme-1, .scheme-3, .scheme-4, .scheme-5, .scheme-6 {
+  .C { --color-foreground: var(--cpsg-fg-0); }
+  .P { --color-foreground: var(--cpsg-fg-1); }
+  .S { --color-foreground: var(--cpsg-fg-2); }
+  .G { --color-foreground: var(--cpsg-fg-3); }
+}
+.scheme-3, .scheme-4, .scheme-5 {
+  .G { --color-foreground: var(--cpsg-fg-0); background-color: var(--cpsg-0)}
+}

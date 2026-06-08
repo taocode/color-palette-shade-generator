@@ -32,6 +32,7 @@
   background: transparent;
   margin: calc(var(--thumb-height) / 2) 0;
   width: var(--track-width);
+  cursor: crosshair;
 
   &::-moz-focus-outer {
     border: 0;
@@ -57,7 +58,7 @@
   }
 
   &::-webkit-slider-runnable-track {
-    cursor: default;
+    cursor: crosshair;
     height: var(--track-height);
     transition: all .2s ease;
     width: var(--track-width);
@@ -75,7 +76,7 @@
     border: var(--thumb-border-width) solid var(--thumb-border-color);
     border-radius: var(--thumb-radius);
     box-sizing: border-box;
-    cursor: default;
+    cursor: pointer;
     height: var(--thumb-height);
     width: var(--thumb-width);
     -webkit-appearance: none;
@@ -85,7 +86,7 @@
 
   &::-moz-range-track {
     box-shadow: var(--track-shadow-size) var(--track-shadow-size) var(--track-shadow-blur) var(--track-shadow-border) var(--track-shadow-color);
-    cursor: default;
+    cursor: crosshair;
     height: var(--track-height);
     transition: all .2s ease;
     width: var(--track-width);
@@ -102,13 +103,13 @@
     border: var(--thumb-border-width) solid var(--thumb-border-color);
     border-radius: var(--thumb-radius);
     box-sizing: border-box;
-    cursor: default;
+    cursor: pointer;
     height: var(--thumb-height);
     width: var(--thumb-width);
   }
 
   &::-ms-track {
-    cursor: default;
+    cursor: crosshair;
     height: var(--track-height);
     transition: all .2s ease;
     width: var(--track-width);
@@ -139,17 +140,29 @@
     border: var(--thumb-border-width) solid var(--thumb-border-color);
     border-radius: var(--thumb-radius);
     box-sizing: border-box;
-    cursor: default;
+    cursor: pointer;
     height: var(--thumb-height);
     width: var(--thumb-width);
     margin-top: calc(var(--track-height) / 4);
   }
 
+  &:active {
+    &::-webkit-slider-thumb,
+    &::-moz-range-thumb,
+    &::-ms-thumb {
+      cursor: grabbing;
+    }
+  }
+
   &:disabled {
+    cursor: not-allowed;
+
     &::-webkit-slider-thumb,
     &::-moz-range-thumb,
     &::-ms-thumb,
     &::-webkit-slider-runnable-track,
+    &::-moz-range-track,
+    &::-ms-track,
     &::-ms-fill-lower,
     &::-ms-fill-upper {
       cursor: not-allowed;

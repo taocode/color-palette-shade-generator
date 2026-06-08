@@ -13,7 +13,7 @@
 	let style = `--prop: '${prop}';`
 
 	let propName = propNames[prop]
-	import './slider.pcss'
+	import './slider.css'
 
 </script>
 

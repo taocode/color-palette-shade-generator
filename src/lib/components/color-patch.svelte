@@ -100,14 +100,14 @@ function copyClick(event,chosen) {
         <button
           on:click={(event)=>copyClick(event,'css')}
           title="Copy CSS variables"
-          class="m-1 inline-flex text-xs py-1 px-2 border w-12 text-center justify-center rounded"
+          class="m-1 inline-flex text-xs py-1 px-2 border w-12 text-center justify-center rounded cursor-pointer"
           >
           <span class="align-bottom tracking-tighter">CSS</span>
         </button>
         <button
           on:click={(event)=>copyClick(event,'tailwind')}
           title="Copy Tailwind variables"
-          class="m-1 inline-flex text-xs py-1 px-2 border w-12 text-center justify-center rounded"
+          class="m-1 inline-flex text-xs py-1 px-2 border w-12 text-center justify-center rounded cursor-pointer"
           >
           <span class="icon-tailwind"><TailwindIcon /></span>
         </button>

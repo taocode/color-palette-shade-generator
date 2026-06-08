@@ -94,7 +94,7 @@
     @apply inline-block my-2 text-xl font-semibold sm:text-2xl;
   }
   button {
-    @apply flex mr-4;
+    @apply flex mr-4 cursor-pointer;
   }
   .heading {
     @apply flex;
