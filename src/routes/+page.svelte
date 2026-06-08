@@ -16,7 +16,7 @@
 	import SettingVarCss from '$lib/components/setting-var-css.svelte'
 	import GradientDisplay from '$lib/components/gradient-display.svelte'
 
-	import { colorShadesDefault, hueName, getSchemeColorShade, notice, placeholder, schemes, schemeColors, updateHSLA, shadesAsCSS, shadesAsTailwind, shadesAsTheme, htmlToElement, generatedBy } from '$lib'
+	import { colorShadesDefault, hueName, getSchemeColorShade, getPanelButtonColor, notice, placeholder, schemes, schemeColors, updateHSLA, shadesAsCSS, shadesAsTailwind, shadesAsTheme, htmlToElement, generatedBy } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, 
 		colorNames, schemeObj, schemeIndex, 
 		steps, factorLightness, factorSaturation, 
@@ -69,6 +69,8 @@
 	let readable = readableColor("white")
 	let allColors = []
 	let buttonColor = adjustHue($primaryColor,120)
+	let leftButtonColor = buttonColor
+	let rightButtonColor = buttonColor
 	let shadesCSS = ''
 	let shadesTailwind = ''
 	let shadesTheme = ''
@@ -114,6 +116,8 @@
 			debounceHistory(state)
 		}
 		buttonColor = adjustHue($primaryColor,120)
+		leftButtonColor = getPanelButtonColor('left', $schemeIndex, $primaryColor)
+		rightButtonColor = getPanelButtonColor('right', $schemeIndex, $primaryColor)
 		shadesCSS = allColors.reduce((p,c,i) =>
 			p + shadesAsCSS($colorNames[i], placeholder(i,c.color),c.color,
 			colorShadesDefault(c.color)),'')
@@ -224,6 +228,7 @@ style="
 		class="show-toggles"
 		role="button"
 		tabindex="0"
+		style="--color-btn-bg: {leftButtonColor}; --color-btn-fg: {readableColor(leftButtonColor)};"
 		use:clickOutside={()=>outputTogglers=false}
 		on:mouseenter={()=>outputTogglers=true}
 		on:focus={()=>outputTogglers=true}
@@ -269,6 +274,7 @@ style="
 			class="show-toggles"
 			role="button"
 			tabindex="0"
+			style="--color-btn-bg: {rightButtonColor}; --color-btn-fg: {readableColor(rightButtonColor)};"
 			on:mouseenter={()=>showCopiers = true}
 			on:focus={()=>showCopiers = true}
 			use:clickOutside={()=>showCopiers = false}>

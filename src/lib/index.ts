@@ -141,22 +141,68 @@ export const schemeHues = () => {
   return [primaryHue,...schemeHs]
 }
 
+/** Resolved palette colors used by gradient display and CSS vars (--scheme-color-N). */
+export const getSchemeDisplayColors = (schemeIdx: number, primary: string): string[] => {
+  const currentScheme = schemes[schemeIdx]
+  const _sCs = schemeColors(currentScheme, primary)
+  const colors = _sCs.map((v, i) => getSchemeColorShade(schemeIdx, primary, i, _sCs))
+  if (schemeIdx === 0) {
+    colors[0] = darken(primary, 0.3)
+    colors[1] = lighten(primary, 0.3)
+  } else if (schemeIdx === 1) {
+    colors[0] = darken(primary, 0.05)
+    colors[1] = darken(primary, 0.4)
+    colors[2] = lighten(primary, 0.01)
+    colors[3] = lighten(primary, 0.3)
+  }
+  return colors
+}
+
+const PANEL_ZONE_LEFT_INDEX: Record<number, number> = {
+  0: 0,
+  1: 1,
+  2: 0,
+  3: 1,
+  4: 1,
+  5: 1,
+  6: 0,
+}
+
+export const getPanelZoneColorIndex = (
+  schemeIdx: number,
+  zone: 'left' | 'right',
+  colorCount: number
+): number => {
+  if (zone === 'right') return colorCount - 1
+  return PANEL_ZONE_LEFT_INDEX[schemeIdx] ?? 0
+}
+
+/** Button color contrasting with the local scheme color under a panel zone. */
+export const getPanelButtonColor = (
+  zone: 'left' | 'right',
+  schemeIdx: number,
+  primary: string
+): string => {
+  const colors = getSchemeDisplayColors(schemeIdx, primary)
+  const idx = getPanelZoneColorIndex(schemeIdx, zone, colors.length)
+  const localBg = colors[idx] ?? primary
+
+  // Dark/Light: pair by lightness — light button on dark side, dark button on light side
+  if (schemeIdx === 1) {
+    const localL = parseToHsla(localBg)[2]
+    return colors.reduce((best, c) =>
+      Math.abs(parseToHsla(c)[2] - localL) > Math.abs(parseToHsla(best)[2] - localL) ? c : best
+    )
+  }
+
+  return adjustHue(localBg, 120)
+}
+
 export const styleColors = () => {
-  const currentScheme = get(schemeObj)
   const currentSchemeIndex = get(schemeIndex)
   const pColor = get(primaryColor)
-  const _sCs = schemeColors(currentScheme,pColor)
-  const colors = _sCs.map((v,i)=>getSchemeColorShade(currentSchemeIndex, pColor, i, _sCs))
-  if (currentSchemeIndex === 0) {
-    colors[0] = darken(pColor,0.3)
-    colors[1] = lighten(pColor,0.3)
-  } else if (currentSchemeIndex === 1) {
-    colors[0] = darken(pColor,0.05)
-    colors[1] = darken(pColor,0.4)
-    colors[2] = lighten(pColor,0.01)
-    colors[3] = lighten(pColor,0.3)
-  }
-  return colors.reduce((p,c,i) => `${p}\n--scheme-color-${i}: ${c};`,'')  
+  const colors = getSchemeDisplayColors(currentSchemeIndex, pColor)
+  return colors.reduce((p, c, i) => `${p}\n--scheme-color-${i}: ${c};`, '')
 }
 
 export const schemes = [
