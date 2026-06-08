@@ -391,7 +391,7 @@ style="
 		background-color: var(--color-btn-bg);
 		color: var(--color-btn-fg);
 		&:hover {
-			background-color:rgba(0,0,0,0.1);
+			background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), var(--color-btn-bg);
 		}
 	}
 	.allvars {

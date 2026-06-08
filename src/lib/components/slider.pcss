@@ -1,26 +1,3 @@
-@define-mixin shadow $size, $blur, $border, $color {
-  box-shadow: $size $size $blur $border $color;
-}
-
-@define-mixin track {
-  cursor: default;
-  height: var(--track-height);
-  transition: all .2s ease;
-  width: var(--track-width);
-  border-radius: 100%;
-}
-
-@define-mixin thumb {
-  @mixin shadow var(--thumb-shadow-size), var(--thumb-shadow-blur), var(--track-shadow-border), var(--thumb-shadow-color);
-  background: var(--thumb-color);
-  border: var(--thumb-border-width) solid var(--thumb-border-color);
-  border-radius: var(--thumb-radius);
-  box-sizing: border-box;
-  cursor: default;
-  height: var(--thumb-height);
-  width: var(--thumb-width);
-}
-
 [type='range'] {
   --track-color: #eceff1;
   --thumb-color: #607d8b;
@@ -63,13 +40,13 @@
   &:focus {
     outline: 0;
     &::-webkit-slider-runnable-track {
-      @mixin shadow var(--track-shadow-size), var(--track-shadow-blur), var(--track-shadow-border), var(--track-shadow-focus-color);
+      box-shadow: var(--track-shadow-size) var(--track-shadow-size) var(--track-shadow-blur) var(--track-shadow-border) var(--track-shadow-focus-color);
     }
     &::-ms-track {
-      @mixin shadow var(--track-shadow-size), var(--track-shadow-blur), var(--track-shadow-border), var(--track-shadow-focus-color);
+      box-shadow: var(--track-shadow-size) var(--track-shadow-size) var(--track-shadow-blur) var(--track-shadow-border) var(--track-shadow-focus-color);
     }
     &::-moz-range-track {
-      @mixin shadow var(--track-shadow-size), var(--track-shadow-blur), var(--track-shadow-border), var(--track-shadow-focus-color);
+      box-shadow: var(--track-shadow-size) var(--track-shadow-size) var(--track-shadow-blur) var(--track-shadow-border) var(--track-shadow-focus-color);
     }
     &::-ms-fill-lower {
       background: var(--track-color);
@@ -80,8 +57,12 @@
   }
 
   &::-webkit-slider-runnable-track {
-    @mixin track;
-    @mixin shadow var(--track-shadow-size), var(--track-shadow-blur), var(--track-shadow-border), var(--track-shadow-color);
+    cursor: default;
+    height: var(--track-height);
+    transition: all .2s ease;
+    width: var(--track-width);
+    border-radius: 100%;
+    box-shadow: var(--track-shadow-size) var(--track-shadow-size) var(--track-shadow-blur) var(--track-shadow-border) var(--track-shadow-color);
     height: calc(var(--track-height) / 2);
     background: var(--track-color);
     border: var(--track-border-width) solid var(--track-border-color);
@@ -89,16 +70,26 @@
   }
 
   &::-webkit-slider-thumb {
-    @mixin thumb;
+    box-shadow: var(--thumb-shadow-size) var(--thumb-shadow-size) var(--thumb-shadow-blur) var(--track-shadow-border) var(--thumb-shadow-color);
+    background: var(--thumb-color);
+    border: var(--thumb-border-width) solid var(--thumb-border-color);
+    border-radius: var(--thumb-radius);
+    box-sizing: border-box;
+    cursor: default;
+    height: var(--thumb-height);
+    width: var(--thumb-width);
     -webkit-appearance: none;
     margin-top: calc( (-1*var(--track-border-width) * 2) + var(--track-height) - var(--thumb-height));
-    /* margin-top: (math.div((-$track-border-width * 2 + $track-height), 2) - math.div($thumb-height, 2)); */
     margin-top: calc( var(--track-height) / 4 + var(--thumb-height) / -2 );
   }
 
   &::-moz-range-track {
-    @mixin shadow var(--track-shadow-size), var(--track-shadow-blur), var(--track-shadow-border), var(--track-shadow-color);
-    @mixin track;
+    box-shadow: var(--track-shadow-size) var(--track-shadow-size) var(--track-shadow-blur) var(--track-shadow-border) var(--track-shadow-color);
+    cursor: default;
+    height: var(--track-height);
+    transition: all .2s ease;
+    width: var(--track-width);
+    border-radius: 100%;
     background: var(--track-color);
     border: var(--track-border-width) solid var(--track-border-color);
     border-radius: var(--track-radius);
@@ -106,11 +97,22 @@
   }
 
   &::-moz-range-thumb {
-    @mixin thumb;
+    box-shadow: var(--thumb-shadow-size) var(--thumb-shadow-size) var(--thumb-shadow-blur) var(--track-shadow-border) var(--thumb-shadow-color);
+    background: var(--thumb-color);
+    border: var(--thumb-border-width) solid var(--thumb-border-color);
+    border-radius: var(--thumb-radius);
+    box-sizing: border-box;
+    cursor: default;
+    height: var(--thumb-height);
+    width: var(--thumb-width);
   }
 
   &::-ms-track {
-    @mixin track;
+    cursor: default;
+    height: var(--track-height);
+    transition: all .2s ease;
+    width: var(--track-width);
+    border-radius: 100%;
     background: transparent;
     border-color: transparent;
     border-width: calc(var(--thumb-height) / 2) 0;
@@ -118,21 +120,28 @@
   }
 
   &::-ms-fill-lower {
-    @mixin shadow var(--track-shadow-size), var(--track-shadow-blur), var(--track-shadow-border), var(--track-shadow-color);
+    box-shadow: var(--track-shadow-size) var(--track-shadow-size) var(--track-shadow-blur) var(--track-shadow-border) var(--track-shadow-color);
     background: var(--ie-bottom-track-color);
     border: var(--track-border-width) solid var(--track-border-color);
     border-radius: (var(--track-radius) * 2);
   }
 
   &::-ms-fill-upper {
-    @mixin shadow var(--track-shadow-size), var(--track-shadow-blur), var(--track-shadow-border), var(--track-shadow-color);
+    box-shadow: var(--track-shadow-size) var(--track-shadow-size) var(--track-shadow-blur) var(--track-shadow-border) var(--track-shadow-color);
     background: var(--track-color);
     border: var(--track-border-width) solid var(--track-border-color);
     border-radius: (var(--track-radius) * 2);
   }
 
   &::-ms-thumb {
-    @mixin thumb;
+    box-shadow: var(--thumb-shadow-size) var(--thumb-shadow-size) var(--thumb-shadow-blur) var(--track-shadow-border) var(--thumb-shadow-color);
+    background: var(--thumb-color);
+    border: var(--thumb-border-width) solid var(--thumb-border-color);
+    border-radius: var(--thumb-radius);
+    box-sizing: border-box;
+    cursor: default;
+    height: var(--thumb-height);
+    width: var(--thumb-width);
     margin-top: calc(var(--track-height) / 4);
   }
 
