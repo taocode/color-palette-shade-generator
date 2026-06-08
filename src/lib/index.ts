@@ -1,4 +1,5 @@
 import { adjustHue, darken, lighten, parseToHsla, parseToRgba, saturate, toHex, toRgba } from 'color2k'
+import { converter, parse } from 'culori'
 
 import { get } from 'svelte/store'
 import { colorNames, cssVarPrefix, factorLightness, factorSaturation, hue, optColorNotation, optSass, optTailwind, primaryColor, schemeIndex, schemeObj, steps } from './stores'
@@ -39,8 +40,39 @@ export const placeholder = (i, phColor) => {
           ? (get(colorNames)[0] || hName) + '-'+ scheme.names[i-1] 
           : hName
 }
+const toOklch = converter('oklch')
+
+/** Format a color as Tailwind v4-style oklch(L% C H). */
+export const formatOklchCss = (color, includeAlpha = false) => {
+  const parsed = parse(color)
+  if (!parsed) return color
+  const oklch = toOklch(parsed)
+  if (!oklch) return color
+
+  const l = oklch.l ?? 0
+  const c = oklch.c ?? 0
+  const h = oklch.h
+  const alpha = oklch.alpha ?? 1
+  const lightness = `${(l * 100).toFixed(1)}%`
+  const chroma = c.toFixed(3)
+  const hue = c < 0.0001 || h === undefined || Number.isNaN(h) ? 'none' : h.toFixed(3)
+
+  if (includeAlpha && alpha < 1) {
+    return `oklch(${lightness} ${chroma} ${hue} / ${parseFloat(alpha.toFixed(2))})`
+  }
+  return `oklch(${lightness} ${chroma} ${hue})`
+}
+
 export const cssSchemes = [
   {
+    id: 'OKLCH',
+    description: 'Oklab Lightness Chroma Hue (Tailwind v4)',
+    sample: 'oklch(62.3% 0.214 259.815)',
+  }, {
+    id: 'OKLCHA',
+    description: 'Oklab Lightness Chroma Hue Alpha',
+    sample: 'oklch(62.3% 0.214 259.815 / 0.9)',
+  }, {
     id: 'HSLA',
     description: 'Hue Saturation Lightness Alpha',
     sample: 'hsla(240, 75%, 50%, 0.9)',
@@ -302,8 +334,11 @@ export const cssVarNum = (index: number, steps = 10): string => {
 }
 
 const cssColor = (color,optCSS) => {
-  // console.log(`cssColor(${_optColorNotation},${color})`)
-  if (optCSS === 'RGBA') {
+  if (optCSS === 'OKLCH') {
+    return formatOklchCss(color, false)
+  } else if (optCSS === 'OKLCHA') {
+    return formatOklchCss(color, true)
+  } else if (optCSS === 'RGBA') {
     return toRgba(color)
   } else if (optCSS === 'HexA') {
     return toHex(color)
@@ -318,7 +353,6 @@ const cssColor = (color,optCSS) => {
   }
   const hsla = parseToHsla(color)
   return `hsla(${parseFloat(hsla[0].toFixed(1))}, ${parseFloat((100*hsla[1]).toFixed(1))}%, ${parseFloat((100*hsla[2]).toFixed(1))}%, ${parseFloat(hsla[3].toFixed(2))})`
-  // return toHsla(color)
 }
 
 export const shadesAsCSS = (name,placeholder,masterColor,shades) => {
@@ -334,36 +368,35 @@ export const shadesAsCSS = (name,placeholder,masterColor,shades) => {
       return `${p}\n<div class="pl-3">${varStart}${cssPre}${name}-${cssVarNum(i, shades.length)}: ${varValue};</div>`
     },`\n<div class="pl-3">${varStart}${cssPre}${name}: ${varValue};</div>`)
 }
-const tailwindColor = (name, color, cssPrefix, vOptCSS, vOptTailwind, n = -1, steps = 10) => {
+const tailwindColor = (name, color, cssPrefix, vOptTailwind, n = -1, steps = 10) => {
   const vn = n < 0 ? '' : '-' + cssVarNum(n, steps)
   const cssPre = cssPrefix ? `${cssPrefix}-` : ''
   const varName = `--${cssPre}${name}${vn}`
+  const hex = cssColor(color, 'Hex')
   if (vOptTailwind === 'varonly')
     return `var(${varName})`
   else if (vOptTailwind === 'novar') 
-    return `${cssColor(color,vOptCSS)}`
-  return `var(${varName}, ${cssColor(color,vOptCSS)})`
+    return hex
+  return `var(${varName}, ${hex})`
 }
 export const shadesAsTailwind = (name,placeholder,masterColor,shades) => {
   const cssPrefix = get(cssVarPrefix)
-  const vOptCSS = get(optColorNotation)
   const vOptTailwind = get(optTailwind)
   if (!name || name === '') name = placeholder
-  let varValue = tailwindColor(name,masterColor,cssPrefix,vOptCSS,vOptTailwind)
+  let varValue = tailwindColor(name,masterColor,cssPrefix,vOptTailwind)
   return shades.reduce((p,c,i) => {
-    varValue = tailwindColor(name,c,cssPrefix,vOptCSS,vOptTailwind,i, shades.length)
+    varValue = tailwindColor(name,c,cssPrefix,vOptTailwind,i, shades.length)
     return `${p}\n\t<div class="pl-3">'${cssVarNum(i, shades.length)}': '${varValue}',</div>` 
   },`\n<div class="pl-3">\tDEFAULT: '${varValue}',</div>`)
 }
 export const shadesAsTheme = (name,placeholder,masterColor,shades) => {
   const cssPrefix = get(cssVarPrefix)
-  const vOptCSS = get(optColorNotation)
   if (!name || name === '') name = placeholder
   const cssPre = cssPrefix ? `${cssPrefix}-` : ''
   const tokenName = `${cssPre}${name}`
-  let varValue = cssColor(masterColor,vOptCSS)
+  let varValue = cssColor(masterColor, 'OKLCH')
   return shades.reduce((p,c,i) => {
-    varValue = cssColor(c,vOptCSS)
+    varValue = cssColor(c, 'OKLCH')
     return `${p}\n<div class="pl-3">--${tokenName}-${cssVarNum(i, shades.length)}: ${varValue};</div>`
   },`\n<div class="pl-3">--${tokenName}: ${varValue};</div>`)
 }

@@ -23,7 +23,8 @@
   $: isTailwind = type === 'Tailwind'
   $: isCss = type === 'CSS'
   $: _scss = isCss && _optSass > 0 ? 'S' : ''
-  $: headingLabel = isTheme ? 'Tailwind v4 Theme' : `${_scss}${type}`
+  $: headingLabel = isTheme ? 'Tailwind v4 Theme' : isTailwind ? 'Legacy Tailwind' : `${_scss}${type}`
+  $: formatHint = isTheme ? 'oklch (Tailwind v4)' : isTailwind ? 'hex (Tailwind v3)' : ''
 
   function copyClick(event) {
     const varsOutput = event.srcElement.closest('.vars-output')
@@ -56,9 +57,10 @@
     <div class="setting-control">
       {#if isCss}
       <SettingVarCss fixedColor={color} />
-      {/if}
-      {#if isTailwind}
+      {:else if isTailwind}
       <SettingVarTailwind fixedColor={color} />
+      {:else if formatHint}
+      <span class="format-hint muted">{formatHint}</span>
       {/if}
     </div>
   </div>
@@ -99,5 +101,8 @@
   }
   .muted {
     @apply opacity-50 italic;
+  }
+  .format-hint {
+    @apply mt-2 text-xs;
   }
 </style>

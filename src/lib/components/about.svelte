@@ -43,9 +43,10 @@ style="
 							<ol class="vars">
 								<li>Variable outputs are easily copied via provided buttons
 									<ul>
-										<li>CSS variables: <code>--color-blue-500: hsla(240, 80%, 50%, 1);</code></li>
-										<li>SASS/SCSS variables: <code>$color-blue-500: hsl(240, 80%, 50%);</code></li>
-										<li>Tailwind v4 theme tokens (<code>@theme &#123; --color-... &#125;</code>) plus legacy <code>tailwind.config.js</code> color object output</li>
+										<li>CSS variables (notation picker, default OKLCH): <code>--color-blue-500: oklch(62.3% 0.214 259.815);</code></li>
+										<li>SASS/SCSS variables: <code>$color-blue-500: oklch(62.3% 0.214 259.815);</code></li>
+										<li>Tailwind v4 <code>@theme</code> tokens (always oklch): <code>--color-blue-500: oklch(62.3% 0.214 259.815);</code></li>
+										<li>Legacy Tailwind v3 <code>tailwind.config.js</code> colors (always hex): <code>'500': '#3b82f6'</code></li>
 									</ul>
 								</li>
 								<li>Customizable options:
@@ -76,7 +77,7 @@ style="
 										<li><span class="qp">c[0-3]</span>=custom color names</li>
 									</ul>
 								</li>
-								<li>HSLA based, produces your chosen color notations for web:
+								<li>HSL-based shade generation; export uses canonical formats per target (oklch for CSS/Theme, hex for legacy Tailwind). Color notation picker for CSS output:
 									 <ul>
 										{#each cssSchemes as {id, name, description, sample}, i}
 										<li><span class="name">{name || id}</span>: <span>{description}</span> - <em class="whitespace-nowrap text-[0.85em] font-mono">{sample}</em></li>
@@ -116,7 +117,7 @@ style="
 									<li>a tool to help identify harmonious accent colors based on a single color.</li>
 									<li>multi-shade variables ready for virtually any CSS powered platform.</li>
 									<li>HSL notation variables; although there are many color palette generators, <em>most are primarily hexadecimal color notation.</em></li>
-									<li>automated Tailwind v4 <code>@theme</code> tokens (and legacy config output) for custom color shades.</li>
+									<li>automated Tailwind v4 <code>@theme</code> tokens (oklch) and legacy v3 config output (hex) for custom color shades.</li>
 									<li>to deepen my understanding and competency with Svelte and SvelteKit. I ended up deepening my appreciation. <em>It's so fast!</em> The latest updates to SvelteKit are smart and elegant, like Svelte.</li>
 								</ul>
 								<p>If you find this tool useful, helpful or whatnot, please pass it on and use it as you wish. It's a nerd's tool for those brave enough to <abbr title="(battle)">learn</abbr> <abbr title="(into submission)">CSS</abbr>.</p>

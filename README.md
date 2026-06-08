@@ -8,16 +8,18 @@ Creates CSS and Tailwind-ready variables with copy buttons that you can paste di
 ## Features
 
 1. Variable outputs are easily copied via provided buttons
-   - CSS variables: `--color-blue-500: hsla(240, 80%, 50%, 1)`
-   - Tailwind v4 `@theme` tokens (for CSS-first Tailwind)
-   - Legacy Tailwind config (`tailwind.config.js`) color object variables with optional CSS variable references
+   - CSS variables (notation picker, default OKLCH): `--color-blue-500: oklch(62.3% 0.214 259.815)`
+   - Tailwind v4 `@theme` tokens (always oklch)
+   - Legacy Tailwind v3 config (`tailwind.config.js`) color object (always hex), with optional CSS variable references
 1. Customizable options:
    - Variable name, *default:* name based on hue `--color-varname`
    - Variable name prefix, *default:* `--color-varname`
    - %L shift per step, *default:* `7.5%; dark/light: 1/3%L`
    - %S shift per step, *default:* `0%`
    - Number of steps, *default:* `10`
-1. HSLA based, produces your chosen color notations for web:
+1. HSL-based shade generation; CSS output uses your chosen color notation (default OKLCH):
+   - OKLCH: Oklab Lightness Chroma Hue (Tailwind v4) - `oklch(62.3% 0.214 259.815)`
+   - OKLCHA: Oklab with alpha - `oklch(62.3% 0.214 259.815 / 0.9)`
    - HSLA: Hue Saturation Lightness Alpha - `hsla(240, 75%, 50%, 0.9)`
    - RGBA: Red Green Blue Alpha - `rgba(32, 32, 223, 0.9)`
    - #HexA: Hexadecimal with Alpha - `#2020dfe6`

@@ -13,7 +13,7 @@ export const defaults = {
   factorSaturation: 0,
   cssVarPrefix: 'color',
   optTailwind: 'novar',
-  optColorNotation: 'HSLA',
+  optColorNotation: 'OKLCH',
   optSass: 0,
   colorNames: []
 }
