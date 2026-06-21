@@ -219,11 +219,10 @@ export const getPanelZoneColorIndex = (
 export const getPanelButtonColor = (
   zone: 'left' | 'right',
   schemeIdx: number,
-  primary: string
+  colors: string[]
 ): string => {
-  const colors = getSchemeDisplayColors(schemeIdx, primary)
   const idx = getPanelZoneColorIndex(schemeIdx, zone, colors.length)
-  const localBg = colors[idx] ?? primary
+  const localBg = colors[idx] ?? colors[0]
 
   // Dark/Light: pair by lightness — light button on dark side, dark button on light side
   if (schemeIdx === 1) {
@@ -348,6 +347,39 @@ export const cssVarNum = (index: number, steps = TAILWIND_V4_STEP_COUNT): string
   return String(scale[index] ?? scale[scale.length - 1] ?? 500)
 }
 
+/** Shade array index for the middle / 500 step (base color position). */
+export function getDefaultShadeIndex(stepCount: number): number {
+  if (stepCount <= 0) return 0
+  const scale = getShadeScale(stepCount)
+  const idx500 = scale.indexOf(500)
+  if (idx500 >= 0) return idx500
+  return Math.floor((stepCount - 1) / 2)
+}
+
+export function clampShadeIndex(index: number | undefined | null, stepCount: number): number {
+  if (stepCount <= 0) return 0
+  if (index == null || Number.isNaN(index)) return getDefaultShadeIndex(stepCount)
+  return Math.max(0, Math.min(stepCount - 1, Math.floor(index)))
+}
+
+export function resolveDefaultShadeIndex(
+  indices: number[],
+  colorIndex: number,
+  stepCount: number
+): number {
+  return clampShadeIndex(indices[colorIndex], stepCount)
+}
+
+export function masterColorFromShades(
+  shades: string[],
+  defaultIndex: number,
+  fallbackColor: string
+): string {
+  if (!shades?.length) return fallbackColor
+  const i = clampShadeIndex(defaultIndex, shades.length)
+  return shades[i] ?? fallbackColor
+}
+
 const cssColor = (color,optCSS) => {
   if (optCSS === 'OKLCH') {
     return formatOklchCss(color, false)
@@ -418,6 +450,20 @@ export const shadesAsTheme = (name,placeholder,masterColor,shades) => {
 export const colorShadesDefault = (color) => {
   const stepFactorLightness = (get(schemeIndex) === 1) ? get(factorLightness)/3 : get(factorLightness)
   return colorShades(color,get(steps),stepFactorLightness,get(factorSaturation))
+}
+
+/** Per-slot colors at each scheme color's selected default shade (CPSG, panel buttons). */
+export const getSchemeDefaultShadeColors = (
+  schemeIdx: number,
+  primary: string,
+  defaultIndices: (number | undefined | null)[]
+): string[] => {
+  const schemeCols = schemeColors(schemes[schemeIdx], primary)
+  return schemeCols.map((v, i) => {
+    const shades = colorShadesDefault(v.color)
+    const defaultIdx = resolveDefaultShadeIndex(defaultIndices, i, shades.length)
+    return masterColorFromShades(shades, defaultIdx, v.color)
+  })
 }
 /** Full Tailwind v4 scale (50–950); used for @theme and legacy Tailwind exports. */
 export const colorShadesForTailwind = (color) => {

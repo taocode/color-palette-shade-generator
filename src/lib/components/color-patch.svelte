@@ -8,8 +8,8 @@ import Swatch from './swatch.svelte'
 import VarsOutput from './vars-output.svelte'
 // import 
 
-import { dots, hueName, notice, colorShadesDefault, colorShadesForTailwind } from '$lib'
-import { colorNames, optColorNotation, optTailwind, cssVarPrefix, steps, factorLightness, factorSaturation } from '$lib/stores'
+import { dots, hueName, notice, colorShadesDefault, colorShadesForTailwind, cssVarNum, resolveDefaultShadeIndex, masterColorFromShades } from '$lib'
+import { colorNames, defaultShadeIndices, optColorNotation, optTailwind, cssVarPrefix, steps, factorLightness, factorSaturation } from '$lib/stores'
 import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
 
 export let color = 'black'
@@ -21,6 +21,16 @@ export let placeholder = hueName(primaryHue)
 
 export let shades = colorShadesDefault(color)
 $: tailwindShades = colorShadesForTailwind(color)
+$: defaultShadeIndex = resolveDefaultShadeIndex($defaultShadeIndices, schemeIndex, shades.length)
+$: masterColor = masterColorFromShades(shades, defaultShadeIndex, color)
+$: twDefaultShadeIndex = resolveDefaultShadeIndex($defaultShadeIndices, schemeIndex, tailwindShades.length)
+$: twMasterColor = masterColorFromShades(tailwindShades, twDefaultShadeIndex, color)
+
+function setDefaultShadeIndex(index) {
+  const next = new Array(10).fill(undefined).map((_, i) => $defaultShadeIndices[i])
+  next[schemeIndex] = index
+  defaultShadeIndices.set(next)
+}
 
 let hidden = true
 
@@ -85,6 +95,18 @@ function copyClick(event,chosen) {
       size={name?.length || placeholder?.length || 6}
       class="varName"
       >
+    <label class="sr-only" for="defaultShade{schemeIndex}">Default shade</label>
+    <select
+      id="defaultShade{schemeIndex}"
+      class="default-shade-select"
+      value={defaultShadeIndex}
+      on:change={(e) => setDefaultShadeIndex(parseInt(e.currentTarget.value, 10))}
+      title="Default shade for naked variable output"
+    >
+      {#each shades as _, shadeIdx}
+        <option value={shadeIdx}>{cssVarNum(shadeIdx, shades.length)}</option>
+      {/each}
+    </select>
     <div
       class="copy-wrap"
       role="button"
@@ -162,13 +184,13 @@ function copyClick(event,chosen) {
       </div>
       <div class="var-panels">
         <div class="css">
-          <VarsOutput type="CSS" {name} {placeholder} {color} {shades} />
+          <VarsOutput type="CSS" {name} {placeholder} color={masterColor} {shades} />
         </div>
         <div class="tailwind">
-          <VarsOutput type="Theme" {name} {placeholder} {color} shades={tailwindShades} />
+          <VarsOutput type="Theme" {name} {placeholder} color={twMasterColor} shades={tailwindShades} />
         </div>
         <div class="tailwind">
-          <VarsOutput type="Tailwind" {name} {placeholder} {color} shades={tailwindShades} />
+          <VarsOutput type="Tailwind" {name} {placeholder} color={twMasterColor} shades={tailwindShades} />
         </div>
       </div>
     </div>
@@ -176,8 +198,16 @@ function copyClick(event,chosen) {
 </div>
 <div class="shades">
   {#each shades as color, shadeIndex}
-  <div>
-    <Swatch name={name || placeholder} {color} {shadeIndex} shadeCount={shades.length} on:updateColor />
+  <div class:is-default-shade={shadeIndex === defaultShadeIndex}>
+    <Swatch
+      name={name || placeholder}
+      {color}
+      {shadeIndex}
+      shadeCount={shades.length}
+      isDefault={shadeIndex === defaultShadeIndex}
+      on:setDefault={() => setDefaultShadeIndex(shadeIndex)}
+      on:updateColor
+    />
   </div>
   {/each}
 </div>
@@ -234,10 +264,23 @@ function copyClick(event,chosen) {
   .varName {
     @apply py-0 leading-0 max-w-20 focus:max-w-none;
   }
+  .default-shade-select {
+    @apply ml-1 py-0 px-1 text-sm font-mono border-[1px] max-w-16;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    border-color: var(--color-light);
+  }
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+    clip: rect(0, 0, 0, 0);
+  }
   .shades {
 		@apply flex text-center;
     >div {
       @apply min-w-8 w-full min-h-6 flex justify-center items-center;
+      &.is-default-shade {
+        @apply relative z-10;
+      }
     }
 	}
   .details {

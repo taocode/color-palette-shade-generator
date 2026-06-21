@@ -75,6 +75,7 @@ style="
 										<li><span class="qp">tw</span>=tailwind variable option</li>
 										<li><span class="qp">sass</span>=SCSS/SASS variable option</li>
 										<li><span class="qp">c[0-3]</span>=custom color names</li>
+										<li><span class="qp">d[0-3]</span>=default shade index per color (0-based; default is middle / 500)</li>
 									</ul>
 								</li>
 								<li>HSL-based shade generation; export uses canonical formats per target (oklch for CSS/Theme, hex for legacy Tailwind). Color notation picker for CSS output:

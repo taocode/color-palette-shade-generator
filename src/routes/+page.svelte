@@ -1,5 +1,5 @@
 <script>
-	import { darken, lighten, readableColor, toHex, parseToHsla, adjustHue } from 'color2k'
+	import { readableColor, toHex, parseToHsla, adjustHue } from 'color2k'
 	import { EyeIcon, CopyIcon, CheckSquareIcon, SquareIcon } from 'svelte-feather-icons'
 	import { browser } from '$app/environment'
 	import { replaceState } from '$app/navigation'
@@ -17,9 +17,9 @@
 	import SettingVarCss from '$lib/components/setting-var-css.svelte'
 	import GradientDisplay from '$lib/components/gradient-display.svelte'
 
-	import { colorShadesDefault, colorShadesForTailwind, hueName, getSchemeColorShade, getPanelButtonColor, notice, placeholder, schemes, schemeColors, updateHSLA, shadesAsCSS, shadesAsTailwind, shadesAsTheme, htmlToElement, generatedBy } from '$lib'
+	import { colorShadesDefault, colorShadesForTailwind, hueName, getPanelButtonColor, getSchemeDefaultShadeColors, notice, placeholder, schemes, schemeColors, updateHSLA, shadesAsCSS, shadesAsTailwind, shadesAsTheme, htmlToElement, generatedBy, resolveDefaultShadeIndex, masterColorFromShades, getDefaultShadeIndex } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, 
-		colorNames, schemeObj, schemeIndex, 
+		colorNames, defaultShadeIndices, schemeObj, schemeIndex, 
 		steps, factorLightness, factorSaturation, 
 		cssVarPrefix, optColorNotation, optTailwind, defaults, optSass } from '$lib/stores'
 	import { clickOutside } from 'svelte-use-click-outside'
@@ -66,6 +66,11 @@
 				.map((c,i) => searchParams.has(c+i) ? searchParams.get(c+i) : '')
 			// console.log('onMount(colorNamesSearchParams)',{colorNamesSP,searchParams})
 			colorNames.set(colorNamesSP)
+
+			const defaultShadesSP = new Array(10).fill(undefined).map((_, i) =>
+				searchParams.has(`d${i}`) ? parseInt(searchParams.get(`d${i}`) ?? '', 10) : undefined
+			)
+			defaultShadeIndices.set(defaultShadesSP)
 			// console.log('start color', {searchParams}, $page.url)
 			allColors = schemeColors($schemeObj,$primaryColor)
 		}
@@ -90,6 +95,7 @@
 		$optSass
 		$steps
 		$schemeIndex
+		$defaultShadeIndices
 		
 		readable = readableColor($primaryColor)
 		allColors = schemeColors($schemeObj,$primaryColor)
@@ -115,31 +121,49 @@
 					state[`c${i}`] = name
 				}
 			})
+			const defaultShadeIdx = getDefaultShadeIndex($steps)
+			allColors.forEach((_, i) => {
+				const idx = $defaultShadeIndices[i]
+				if (idx != null && idx !== defaultShadeIdx) {
+					state[`d${i}`] = String(idx)
+				}
+			})
 			// console.log('colornames:',{$colorNames,state})
 			// console.log(params.toString(),{params})
 			
 			debounceHistory(state)
 		}
 		buttonColor = adjustHue($primaryColor,120)
-		leftButtonColor = getPanelButtonColor('left', $schemeIndex, $primaryColor)
-		rightButtonColor = getPanelButtonColor('right', $schemeIndex, $primaryColor)
-		shadesCSS = allColors.reduce((p,c,i) =>
-			p + shadesAsCSS($colorNames[i], placeholder(i,c.color),c.color,
-			colorShadesDefault(c.color)),'')
+		const defaultShadeColors = getSchemeDefaultShadeColors($schemeIndex, $primaryColor, $defaultShadeIndices)
+		leftButtonColor = getPanelButtonColor('left', $schemeIndex, defaultShadeColors)
+		rightButtonColor = getPanelButtonColor('right', $schemeIndex, defaultShadeColors)
+		shadesCSS = allColors.reduce((p,c,i) => {
+			const shades = colorShadesDefault(c.color)
+			const defaultIdx = resolveDefaultShadeIndex($defaultShadeIndices, i, shades.length)
+			const master = masterColorFromShades(shades, defaultIdx, c.color)
+			return p + shadesAsCSS($colorNames[i], placeholder(i,c.color), master, shades)
+		},'')
 
-		shadesTailwind = allColors.reduce((p,c,i) =>
-			`${p}\n<div class="pl-2">'` + 
+		shadesTailwind = allColors.reduce((p,c,i) => {
+			const twShades = colorShadesForTailwind(c.color)
+			const defaultIdx = resolveDefaultShadeIndex($defaultShadeIndices, i, twShades.length)
+			const master = masterColorFromShades(twShades, defaultIdx, c.color)
+			return `${p}\n<div class="pl-2">'` + 
 			($colorNames[i] || placeholder(i,c.color)) + 
 			`': {` + 
-			shadesAsTailwind($colorNames[i], placeholder(i,c.color),c.color,
-					colorShadesForTailwind(c.color)) + "\n},</div>",'')
-		shadesTheme = allColors.reduce((p,c,i) =>
-			p + shadesAsTheme(
+			shadesAsTailwind($colorNames[i], placeholder(i,c.color), master, twShades) + "\n},</div>"
+		},'')
+		shadesTheme = allColors.reduce((p,c,i) => {
+			const twShades = colorShadesForTailwind(c.color)
+			const defaultIdx = resolveDefaultShadeIndex($defaultShadeIndices, i, twShades.length)
+			const master = masterColorFromShades(twShades, defaultIdx, c.color)
+			return p + shadesAsTheme(
 				$colorNames[i],
 				placeholder(i,c.color),
-				c.color,
-				colorShadesForTailwind(c.color)
-			),'')
+				master,
+				twShades
+			)
+		},'')
 	}
 	let showCode = false
 	let showSettings = false
@@ -175,27 +199,10 @@ $: _si = $schemeIndex
 $: _pc = $primaryColor
 
 let cpsgColors = ['']
-let cpsgReadables = ['']
 $: {
-  const _sCs = schemeColors(schemes[_si],_pc)
-  cpsgColors = _sCs.map((v,i)=>getSchemeColorShade(_si, _pc, i, _sCs))
-  if (_si === 0) {
-    cpsgColors[0] = darken(_pc,0.3)
-		cpsgColors[1] = darken(_pc,0.1)
-		cpsgColors[2] = lighten(_pc,0.1)
-    cpsgColors[3] = lighten(_pc,0.3)
-  } else if (_si === 1) {
-    cpsgColors[0] = darken(_pc,0.4)
-    cpsgColors[2] = darken(_pc,0.1)
-    cpsgColors[1] = lighten(_pc,0.1)
-    cpsgColors[3] = lighten(_pc,0.3)
-  } else if (_si === 2) {
-		cpsgColors = cpsgColors.map((v,i)=>i<1?darken(v,0.2):lighten(v,0.2))
-	} else {
-		cpsgColors = cpsgColors.map((v,i)=>i<1?darken(v,0.2):v)
-	}
-  cpsgStyle = cpsgColors.reduce((p,c,i) => `${p}\n--cpsg-${i}: ${c};`,'') 
-							+	cpsgColors.reduce((p,c,i) => `${p}\n--cpsg-fg-${i}: ${readableColor(c)};`,'')
+  cpsgColors = getSchemeDefaultShadeColors(_si, _pc, $defaultShadeIndices)
+  cpsgStyle = cpsgColors.reduce((p, c, i) => `${p}\n--cpsg-${i}: ${c};`, '')
+    + cpsgColors.reduce((p, c, i) => `${p}\n--cpsg-fg-${i}: ${readableColor(c)};`, '')
 }
 const togglerTransitionOpts = {duration: 200}
 const codeTransitionOpts = {duration: 500}

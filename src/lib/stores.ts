@@ -1,5 +1,5 @@
 import { hsla } from "color2k"
-import { derived, writable } from "svelte/store"
+import { derived, writable, type Readable } from "svelte/store"
 import { schemes } from '$lib'
 
 export const defaults = {
@@ -15,7 +15,8 @@ export const defaults = {
   optTailwind: 'novar',
   optColorNotation: 'OKLCH',
   optSass: 0,
-  colorNames: []
+  colorNames: [],
+  defaultShadeIndices: [] as number[]
 }
 export const steps = writable(defaults.steps)
 export const factorLightness = writable(defaults.factorLightness)
@@ -28,14 +29,13 @@ export const hue = writable(defaults.hue)
 export const saturation = writable(defaults.saturation)
 export const lightness = writable(defaults.lightness)
 export const alpha = writable(defaults.alpha)
-export const primaryColor: String = derived([hue,saturation,lightness,alpha], 
-  ([$H,$S,$L,$A], set) => {
-    set(hsla($H,$S,$L,$A))
-    // console.log('derived primary: ',$H,$S,$L,$A)
-  }
+export const primaryColor: Readable<string> = derived(
+  [hue, saturation, lightness, alpha],
+  ([$H, $S, $L, $A]) => hsla($H, $S, $L, $A)
 )
 
 export const colorNames = writable(defaults.colorNames)
+export const defaultShadeIndices = writable<number[]>(defaults.defaultShadeIndices)
 export const cssVarPrefix = writable(defaults.cssVarPrefix)
 
 export const optColorNotation = writable(defaults.optColorNotation)
