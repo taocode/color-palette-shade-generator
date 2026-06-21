@@ -8,7 +8,7 @@ import Swatch from './swatch.svelte'
 import VarsOutput from './vars-output.svelte'
 // import 
 
-import { dots, hueName, notice, colorShadesDefault } from '$lib'
+import { dots, hueName, notice, colorShadesDefault, colorShadesForTailwind } from '$lib'
 import { colorNames, optColorNotation, optTailwind, cssVarPrefix, steps, factorLightness, factorSaturation } from '$lib/stores'
 import SettingVarCssPrefix from './setting-var-css-prefix.svelte'
 
@@ -20,6 +20,7 @@ let primaryHue = parseToHsla(color)[0].toFixed()
 export let placeholder = hueName(primaryHue)
 
 export let shades = colorShadesDefault(color)
+$: tailwindShades = colorShadesForTailwind(color)
 
 let hidden = true
 
@@ -164,10 +165,10 @@ function copyClick(event,chosen) {
           <VarsOutput type="CSS" {name} {placeholder} {color} {shades} />
         </div>
         <div class="tailwind">
-          <VarsOutput type="Theme" {name} {placeholder} {color} {shades} />
+          <VarsOutput type="Theme" {name} {placeholder} {color} shades={tailwindShades} />
         </div>
         <div class="tailwind">
-          <VarsOutput type="Tailwind" {name} {placeholder} {color} {shades} />
+          <VarsOutput type="Tailwind" {name} {placeholder} {color} shades={tailwindShades} />
         </div>
       </div>
     </div>

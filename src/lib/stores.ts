@@ -8,7 +8,7 @@ export const defaults = {
   lightness: 0.50,
   alpha: 1,
   schemeIndex: 3,
-  steps: 10,
+  steps: 11,
   factorLightness: 0.075,
   factorSaturation: 0,
   cssVarPrefix: 'color',

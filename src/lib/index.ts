@@ -196,8 +196,14 @@ const PANEL_ZONE_LEFT_INDEX: Record<number, number> = {
   2: 0,
   3: 1,
   4: 1,
-  5: 1,
-  6: 0,
+  5: 2, // triadic: visibility → tertiary
+  6: 2, // tetradic: visibility → tertiary
+}
+
+/** Override default right-zone index (colorCount - 1) per scheme. */
+const PANEL_ZONE_RIGHT_INDEX: Record<number, number> = {
+  5: 1, // triadic: copy → secondary
+  6: 1, // tetradic: copy → secondary
 }
 
 export const getPanelZoneColorIndex = (
@@ -205,7 +211,7 @@ export const getPanelZoneColorIndex = (
   zone: 'left' | 'right',
   colorCount: number
 ): number => {
-  if (zone === 'right') return colorCount - 1
+  if (zone === 'right') return PANEL_ZONE_RIGHT_INDEX[schemeIdx] ?? colorCount - 1
   return PANEL_ZONE_LEFT_INDEX[schemeIdx] ?? 0
 }
 
@@ -225,6 +231,11 @@ export const getPanelButtonColor = (
     return colors.reduce((best, c) =>
       Math.abs(parseToHsla(c)[2] - localL) > Math.abs(parseToHsla(best)[2] - localL) ? c : best
     )
+  }
+
+  // Triadic / tetradic: use scheme secondary & tertiary directly on their gradient zones
+  if (schemeIdx === 5 || schemeIdx === 6) {
+    return localBg
   }
 
   return adjustHue(localBg, 120)
@@ -308,14 +319,14 @@ export const dots = '<span class="tracking-widest">•••</span>'
 
 
 export const TAILWIND_SHADE_SCALE = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const
+export const TAILWIND_V4_STEP_COUNT = TAILWIND_SHADE_SCALE.length
 
 /** Map shade index to Tailwind-style step names from 50 through 950. */
 export function getShadeScale(steps: number): number[] {
   const full = TAILWIND_SHADE_SCALE
   if (steps <= 0) return []
   if (steps === 1) return [500]
-  if (steps === 10) return [50, 100, 200, 300, 400, 500, 600, 700, 800, 950]
-  if (steps === full.length) return [...full]
+  if (steps >= full.length) return [...full]
 
   const scale: number[] = []
   for (let i = 0; i < steps; i++) {
@@ -323,11 +334,15 @@ export function getShadeScale(steps: number): number[] {
     scale.push(full[idx])
   }
   scale[0] = 50
-  scale[scale.length - 1] = 950
+  scale[scale.length - 1] = full[full.length - 1]
+  // Never emit 950 without 900 (Tailwind v4 expects both).
+  if (scale[scale.length - 1] === 950 && !scale.includes(900) && scale.length >= 2) {
+    scale[scale.length - 2] = 900
+  }
   return scale
 }
 
-export const cssVarNum = (index: number, steps = 10): string => {
+export const cssVarNum = (index: number, steps = TAILWIND_V4_STEP_COUNT): string => {
   if (index < 0) return ''
   const scale = getShadeScale(steps)
   return String(scale[index] ?? scale[scale.length - 1] ?? 500)
@@ -385,8 +400,8 @@ export const shadesAsTailwind = (name,placeholder,masterColor,shades) => {
   if (!name || name === '') name = placeholder
   let varValue = tailwindColor(name,masterColor,cssPrefix,vOptTailwind)
   return shades.reduce((p,c,i) => {
-    varValue = tailwindColor(name,c,cssPrefix,vOptTailwind,i, shades.length)
-    return `${p}\n\t<div class="pl-3">'${cssVarNum(i, shades.length)}': '${varValue}',</div>` 
+    varValue = tailwindColor(name,c,cssPrefix,vOptTailwind,i, TAILWIND_V4_STEP_COUNT)
+    return `${p}\n\t<div class="pl-3">'${cssVarNum(i, TAILWIND_V4_STEP_COUNT)}': '${varValue}',</div>` 
   },`\n<div class="pl-3">\tDEFAULT: '${varValue}',</div>`)
 }
 export const shadesAsTheme = (name,placeholder,masterColor,shades) => {
@@ -397,12 +412,17 @@ export const shadesAsTheme = (name,placeholder,masterColor,shades) => {
   let varValue = cssColor(masterColor, 'OKLCH')
   return shades.reduce((p,c,i) => {
     varValue = cssColor(c, 'OKLCH')
-    return `${p}\n<div class="pl-3">--${tokenName}-${cssVarNum(i, shades.length)}: ${varValue};</div>`
+    return `${p}\n<div class="pl-3">--${tokenName}-${cssVarNum(i, TAILWIND_V4_STEP_COUNT)}: ${varValue};</div>`
   },`\n<div class="pl-3">--${tokenName}: ${varValue};</div>`)
 }
 export const colorShadesDefault = (color) => {
   const stepFactorLightness = (get(schemeIndex) === 1) ? get(factorLightness)/3 : get(factorLightness)
   return colorShades(color,get(steps),stepFactorLightness,get(factorSaturation))
+}
+/** Full Tailwind v4 scale (50–950); used for @theme and legacy Tailwind exports. */
+export const colorShadesForTailwind = (color) => {
+  const stepFactorLightness = (get(schemeIndex) === 1) ? get(factorLightness)/3 : get(factorLightness)
+  return colorShades(color, TAILWIND_V4_STEP_COUNT, stepFactorLightness, get(factorSaturation))
 }
 export const colorShades = (color,steps,stepFactorLightness,stepFactorSaturation) => {
   const arr = [color]

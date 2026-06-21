@@ -17,7 +17,7 @@
 	import SettingVarCss from '$lib/components/setting-var-css.svelte'
 	import GradientDisplay from '$lib/components/gradient-display.svelte'
 
-	import { colorShadesDefault, hueName, getSchemeColorShade, getPanelButtonColor, notice, placeholder, schemes, schemeColors, updateHSLA, shadesAsCSS, shadesAsTailwind, shadesAsTheme, htmlToElement, generatedBy } from '$lib'
+	import { colorShadesDefault, colorShadesForTailwind, hueName, getSchemeColorShade, getPanelButtonColor, notice, placeholder, schemes, schemeColors, updateHSLA, shadesAsCSS, shadesAsTailwind, shadesAsTheme, htmlToElement, generatedBy } from '$lib'
 	import { hue, saturation, lightness, alpha, primaryColor, 
 		colorNames, schemeObj, schemeIndex, 
 		steps, factorLightness, factorSaturation, 
@@ -132,13 +132,13 @@
 			($colorNames[i] || placeholder(i,c.color)) + 
 			`': {` + 
 			shadesAsTailwind($colorNames[i], placeholder(i,c.color),c.color,
-					colorShadesDefault(c.color)) + "\n},</div>",'')
+					colorShadesForTailwind(c.color)) + "\n},</div>",'')
 		shadesTheme = allColors.reduce((p,c,i) =>
 			p + shadesAsTheme(
 				$colorNames[i],
 				placeholder(i,c.color),
 				c.color,
-				colorShadesDefault(c.color)
+				colorShadesForTailwind(c.color)
 			),'')
 	}
 	let showCode = false
@@ -209,10 +209,12 @@ const shadesTransitionOpts = {duration: 300}
 	<link rel='canonical' href='{page.url.protocol}//{page.url.host}{page.url.pathname}' />
 </svelte:head>
 
+<div class="relative min-h-screen">
+<GradientDisplay />
+
 <div class="scheme-{$schemeIndex} pt-3 pb-1 top-controls" class:show-sliders={showSliders} 
 style="
 	color: {readable}; 
-	background-color: {$primaryColor};
 	--color-glow: {toHex(readable)+'99'};
 	--color-btn-bg: {buttonColor};
 	--color-btn-fg: {readableColor(buttonColor)};
@@ -357,10 +359,7 @@ style="
 
 {#if showCode}
 <div class="flow-root top-controls"
-style="
-	color: {readable}; 
-	background-color: {$primaryColor};
-	"
+style="color: {readable};"
 	>
 	<div class="allvars"
 	>
@@ -386,10 +385,10 @@ style="
 <div class="separator"></div>
 {/if}
 
-<div class="relative flow-root min-h-screen">
+<div class="relative flow-root">
 	<About />
-	<GradientDisplay />
 	<MakersMark />
+</div>
 </div>
 
 <style lang="postcss">

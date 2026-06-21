@@ -56,7 +56,7 @@ style="
 										<li>Variable name prefix, <em>default:</em> <code><span class="font-extralight">--</span>color<span class="font-extralight">-varname</span></code></li>
 										<li><abbr title="Luminosity">%L</abbr> shift per step, <em>default:</em> <code>7.5%</code>; <em>dark/light:</em> <code>%L/3</code> <em class="font-mono text-sm">(7.5%/3=2.5%)</em></li>
 										<li><abbr title="Saturation">%S</abbr> shift per step, <em>default:</em> <code>0%</code></li>
-										<li>Number of steps, <em>default:</em> <code class="italic">10</code></li>
+										<li>Number of steps, <em>default:</em> <code class="italic">11</code> <span class="text-sm">(Tailwind v4: 50–950)</span></li>
 										<li>Sass/SCSS style variables, <em>default:</em> <code class="italic">0</code></li>
 									</ul>
 								</li>
