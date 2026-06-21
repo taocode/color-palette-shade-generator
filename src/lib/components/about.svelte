@@ -13,7 +13,7 @@ let hidePanels = true
 
 
 <div
-class="max-w-prose bg-white/75 mx-auto px-3 pt-2 mt-16 mb-60"
+class="max-w-prose bg-white/75 mx-auto px-3 pt-2 my-16"
 role="button"
 tabindex="0"
 on:click={() => hidePanels = false}

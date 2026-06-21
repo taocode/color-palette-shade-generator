@@ -32,6 +32,6 @@ style="--color-primary: {colorPrimary}">
 		@apply whitespace-nowrap;
 	}
 	.placer {
-		@apply absolute bottom-0 left-0 right-0;
+		@apply w-full;
 	}
 </style>

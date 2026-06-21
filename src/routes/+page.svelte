@@ -209,9 +209,10 @@ const shadesTransitionOpts = {duration: 300}
 	<link rel='canonical' href='{page.url.protocol}//{page.url.host}{page.url.pathname}' />
 </svelte:head>
 
-<div class="relative min-h-screen">
+<div class="relative min-h-screen flex flex-col">
 <GradientDisplay />
 
+<div class="flex-1">
 <div class="scheme-{$schemeIndex} pt-3 pb-1 top-controls" class:show-sliders={showSliders} 
 style="
 	color: {readable}; 
@@ -387,8 +388,10 @@ style="color: {readable};"
 
 <div class="relative flow-root">
 	<About />
-	<MakersMark />
 </div>
+</div>
+
+<MakersMark />
 </div>
 
 <style lang="postcss">
