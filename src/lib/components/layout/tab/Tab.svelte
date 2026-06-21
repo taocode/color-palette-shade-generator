@@ -52,7 +52,7 @@
   tabindex={0}
   class:svelte-tabs__selected={isSelected}
   class="svelte-tabs__tab"
-  on:click={() => selectTab(tab)}
-  on:keydown={() => selectTab(tab)}>
+  onclick={() => selectTab(tab)}
+  onkeydown={() => selectTab(tab)}>
 	<slot></slot>
 </li>

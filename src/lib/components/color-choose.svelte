@@ -14,8 +14,8 @@ $: saturation.set( sP/100 )
 $: lightness.set( lP/100 )
 $: alpha.set(a)
 
-function colorPicked({srcElement}) {
-	updateHSLA(srcElement.value,true)
+function colorPicked(event) {
+	updateHSLA(event.currentTarget.value, true)
 }
 </script>
 
@@ -27,7 +27,7 @@ function colorPicked({srcElement}) {
 				type="color" 
 				colorpick-eyedropper-active="true"
 				value={toHex($primaryColor).substring(0,7)}
-				on:change={colorPicked}
+				onchange={colorPicked}
 				class="block w-3/4 h-8 mx-auto xs:w-20"
 			>
 		</div>

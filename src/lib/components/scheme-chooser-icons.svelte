@@ -14,7 +14,7 @@
           <button title={s.name}
 					class="border-4 cursor-pointer"
 					style="border-color: {i === $schemeIndex ? '#FFFFFFCC' : '#33333399'};"
-					on:click={()=>schemeIndex.set(i)}>
+					onclick={()=>schemeIndex.set(i)}>
             <SchemeIcon schemeIndex={i} color={$primaryColor} />
 					</button>
         {/each}

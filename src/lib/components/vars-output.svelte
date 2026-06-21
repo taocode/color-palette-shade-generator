@@ -48,7 +48,7 @@
 </script>
 <div class="vars-output {type.toLocaleLowerCase()}">
   <div class="heading">
-    <button title={`Copy ${headingLabel} vars`} on:click={copyClick} class="inline-block">
+    <button title={`Copy ${headingLabel} vars`} onclick={copyClick} class="inline-block">
       <h2 class="mr-2">{headingLabel}</h2>
       <div class="pt-4">
         <CopyIcon size="1x" />

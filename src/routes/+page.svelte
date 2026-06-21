@@ -84,10 +84,6 @@
 	let shadesCSS = ''
 	let shadesTailwind = ''
 	let shadesTheme = ''
-	function updateColor(event) {
-		console.log('updateColor(event)',event.detail,{event})
-		updateHSLA( event.detail )
-	}
 
 	$: {
 		$cssVarPrefix
@@ -245,36 +241,36 @@ style="
 		tabindex="0"
 		style="--color-btn-bg: {leftButtonColor}; --color-btn-fg: {readableColor(leftButtonColor)};"
 		use:clickOutside={()=>outputTogglers=false}
-		on:mouseenter={()=>outputTogglers=true}
-		on:focus={()=>outputTogglers=true}
+		onmouseenter={()=>outputTogglers=true}
+		onfocus={()=>outputTogglers=true}
 		>
 			<button class="primary-toggle"
 			title="Show/Hide Panels"
-			on:click={()=>outputTogglers=true}>
+			onclick={()=>outputTogglers=true}>
 				<EyeIcon size={iconEyeSize} />
 			</button>
 			{#if outputTogglers}
 			<div class="toggles-wrap outputTogglers" transition:slide={togglerTransitionOpts}>
 				<div class="show-toggler">
-					<button on:click={()=> showSliders = ! showSliders}>
+					<button onclick={()=> showSliders = ! showSliders}>
 						<span class="inline-block mr-1">{#if showSliders}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
 						SLA Sliders
 					</button>
 				</div>
 				<div class="show-toggler">
-					<button on:click={()=> showSettings = ! showSettings}>
+					<button onclick={()=> showSettings = ! showSettings}>
 						<span class="inline-block mr-1">{#if showSettings}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
 						Settings
 					</button>
 				</div>
 				<div class="show-toggler">
-					<button on:click={()=> showShades = ! showShades}>
+					<button onclick={()=> showShades = ! showShades}>
 						<span class="inline-block mr-1">{#if showShades}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
 						Shades
 					</button>
 				</div>
 				<div class="show-toggler">
-					<button on:click={()=> showCode = ! showCode}>
+					<button onclick={()=> showCode = ! showCode}>
 						<span class="inline-block mr-1">{#if showCode}<CheckSquareIcon size={iconSquareSize} />{:else}<SquareIcon size={iconSquareSize} />{/if}</span>
 						Code
 					</button>
@@ -290,12 +286,12 @@ style="
 			role="button"
 			tabindex="0"
 			style="--color-btn-bg: {rightButtonColor}; --color-btn-fg: {readableColor(rightButtonColor)};"
-			on:mouseenter={()=>showCopiers = true}
-			on:focus={()=>showCopiers = true}
+			onmouseenter={()=>showCopiers = true}
+			onfocus={()=>showCopiers = true}
 			use:clickOutside={()=>showCopiers = false}>
 			<button class="primary-toggle"
 			title="Show/Hide Copiers"
-			on:click={()=>showCopiers = true}>
+			onclick={()=>showCopiers = true}>
 				<CopyIcon size={iconEyeSize} />
 			</button>
 			{#if showCopiers}
@@ -303,17 +299,17 @@ style="
 				<div class="show-toggler">
 					<div>
 						<button title="Copy CSS Vars"
-							on:click={() => copyVars('css') }
+							onclick={() => copyVars('css') }
 							>
 								{$optSass>0?'S':''}CSS
 						</button>
 						<button title="Copy Tailwind v4 Theme"
-							on:click={() => copyVars('theme') }
+							onclick={() => copyVars('theme') }
 							>
 								TW4
 							</button>
 						<button title="Copy Legacy Tailwind Vars"
-							on:click={() => copyVars('tailwind') }
+							onclick={() => copyVars('tailwind') }
 							>
 								<span class="icon-tailwind">
 									<Tailwind />
@@ -358,8 +354,7 @@ style="
 			((name && $colorNames[0]) ? $colorNames[0] : hueName(parseToHsla(color)[0])) +
 			((!name) ? '' : `-${name}`)}
 		{description} schemeIndex={i}
-		shades={colorShadesDefault(color)}
-		on:updateColor={updateColor} />
+		shades={colorShadesDefault(color)} />
 	{/each}
 </div>
 <div class="separator"></div>

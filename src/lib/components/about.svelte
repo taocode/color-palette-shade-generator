@@ -16,8 +16,8 @@ let hidePanels = true
 class="max-w-prose bg-white/75 mx-auto px-3 pt-2 my-16"
 role="button"
 tabindex="0"
-on:click={() => hidePanels = false}
-on:keydown={() => hidePanels = false}
+onclick={() => hidePanels = false}
+onkeydown={() => hidePanels = false}
 use:clickOutside={() => hidePanels = true}
 style="
 --color-primary: {$primaryColor};
@@ -96,7 +96,7 @@ style="
 								<li>
 									<SchemeIcon schemeIndex={i} color={$primaryColor} />
 									<button class="name"
-									on:click={()=>schemeIndex.set(i)}>{s.name}</button>
+									onclick={()=>schemeIndex.set(i)}>{s.name}</button>
 									<em>
 									{#if s.hues}
 									({1+(s.hues.length)} color{#if s.hues.length > 0}s{/if}){:else if s.lightnesses}

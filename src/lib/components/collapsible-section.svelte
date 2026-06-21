@@ -7,7 +7,7 @@
 <h3>
   {heading}
   <button class="collapsetoggle"
-  on:click={()=>collapsed = ! collapsed}>
+  onclick={()=>collapsed = ! collapsed}>
     {#if collapsed}
     <PlusSquareIcon />
     {:else}

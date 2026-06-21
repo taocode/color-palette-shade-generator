@@ -100,7 +100,7 @@ function copyClick(event,chosen) {
       id="defaultShade{schemeIndex}"
       class="default-shade-select"
       value={defaultShadeIndex}
-      on:change={(e) => setDefaultShadeIndex(parseInt(e.currentTarget.value, 10))}
+      onchange={(e) => setDefaultShadeIndex(parseInt(e.currentTarget.value, 10))}
       title="Default shade for naked variable output"
     >
       {#each shades as _, shadeIdx}
@@ -111,24 +111,24 @@ function copyClick(event,chosen) {
       class="copy-wrap"
       role="button"
       tabindex="0"
-      on:mouseenter={() => showCopiers = true}
-      on:focus={() => showCopiers = true}
-      on:mouseleave={() => showCopiers = false}
-      on:blur={() => showCopiers = false}
+      onmouseenter={() => showCopiers = true}
+      onfocus={() => showCopiers = true}
+      onmouseleave={() => showCopiers = false}
+      onblur={() => showCopiers = false}
       >
       <CopyIcon size="1x"  />
       <div class="copy-controls use-dark-bg"
         class:showing={showCopiers}
         >
         <button
-          on:click={(event)=>copyClick(event,'css')}
+          onclick={(event)=>copyClick(event,'css')}
           title="Copy CSS variables"
           class="m-1 inline-flex text-xs py-1 px-2 border w-12 text-center justify-center rounded cursor-pointer"
           >
           <span class="align-bottom tracking-tighter">CSS</span>
         </button>
         <button
-          on:click={(event)=>copyClick(event,'tailwind')}
+          onclick={(event)=>copyClick(event,'tailwind')}
           title="Copy Tailwind variables"
           class="m-1 inline-flex text-xs py-1 px-2 border w-12 text-center justify-center rounded cursor-pointer"
           >
@@ -143,7 +143,7 @@ function copyClick(event,chosen) {
     </em>
     {/if}
     <button class="ml-2 border border-transparent hover:border-current rounded px-1 "
-    on:click={() => { hidden = ! hidden }}>{@html dots}</button>
+    onclick={() => { hidden = ! hidden }}>{@html dots}</button>
   </div>
   <div class="fixed hidden bg-dark-900/80 inset-0 flex z-10" class:hidden>
     <div class="details relative"
@@ -152,7 +152,7 @@ function copyClick(event,chosen) {
         --color-foreground: {readableColor(color)};
         --color-desaturated: {lighten(desaturate(color,0.3),0.15)};"
       >
-      <button title="close" class="close" on:click={() => hidden = true}
+      <button title="close" class="close" onclick={() => hidden = true}
         style="
         --color-foreground: var(--color-light);
         --color-background: var(--color-dark);
@@ -205,8 +205,7 @@ function copyClick(event,chosen) {
       {shadeIndex}
       shadeCount={shades.length}
       isDefault={shadeIndex === defaultShadeIndex}
-      on:setDefault={() => setDefaultShadeIndex(shadeIndex)}
-      on:updateColor
+      onSetDefault={() => setDefaultShadeIndex(shadeIndex)}
     />
   </div>
   {/each}

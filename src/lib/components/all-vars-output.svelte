@@ -42,7 +42,7 @@
 </script>
 <div class="all-vars-output {type.toLocaleLowerCase()}">
   <div class="heading">
-    <button title={`Copy ${headingLabel} vars`}  on:click={copyClick} class="flex-grow">
+    <button title={`Copy ${headingLabel} vars`}  onclick={copyClick} class="flex-grow">
       <h2 class="mr-2">{headingLabel}</h2>
       <div class="pt-4">
         <CopyIcon size="1x" />

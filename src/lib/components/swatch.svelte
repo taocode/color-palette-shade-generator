@@ -1,20 +1,18 @@
 <script>
   import { readableColor, toRgba, toHex, toHsla } from 'color2k'
-  import { createEventDispatcher } from 'svelte'
 
   import { CopyIcon } from 'svelte-feather-icons'
   import { clickOutside } from 'svelte-use-click-outside'
 
   import { cssVarPrefix } from '$lib/stores'
   import { cssVarNum, notice, updateHSLA } from '$lib'
-
-  const dispatch = createEventDispatcher()
   
   export let color = 'black'
   export let name = ''
   export let shadeIndex = -1
   export let shadeCount = 10
   export let isDefault = false
+  export let onSetDefault = () => {}
 
   $: varNum = cssVarNum(shadeIndex, shadeCount)
   
@@ -43,7 +41,7 @@
   <div>
     <button class="detail-trigger"
     class:is-default={isDefault}
-    on:click={() => { hidden = false }}
+    onclick={() => { hidden = false }}
     tabindex={1}>
     <span>{varNum}</span>
   </button>
@@ -53,11 +51,11 @@
       use:clickOutside={() => hidden = true}
       style="background-color: {color}; color: {readableColor(color)}"
       ><div class="variable-name">{variableName}</div>
-        <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mt-1 mx-1 pointer-events-none" size="1x" /> {toHsla(color)}</button>
-        <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mt-1 mx-1 pointer-events-none" size="1x" /> {toRgba(color)}</button>
-        <button class="btn-copy btn" on:click={copyClick}><CopyIcon class="mt-1 mx-1 pointer-events-none" size="1x" /> {toHex(color)}</button>
-        <button class="btn my-2" on:click={() => { dispatch('setDefault'); hidden = true; }}>Set Default</button>
-        <button class="btn my-2 " on:click={() => {updateHSLA(color,true); hidden=true;}}><span class="text-lg inline-block -mt-1 mx-1">φ</span> Make Primary</button>
+        <button class="btn-copy btn" onclick={copyClick}><CopyIcon class="mt-1 mx-1 pointer-events-none" size="1x" /> {toHsla(color)}</button>
+        <button class="btn-copy btn" onclick={copyClick}><CopyIcon class="mt-1 mx-1 pointer-events-none" size="1x" /> {toRgba(color)}</button>
+        <button class="btn-copy btn" onclick={copyClick}><CopyIcon class="mt-1 mx-1 pointer-events-none" size="1x" /> {toHex(color)}</button>
+        <button class="btn my-2" onclick={() => { onSetDefault(); hidden = true; }}>Set Default</button>
+        <button class="btn my-2 " onclick={() => {updateHSLA(color,true); hidden=true;}}><span class="text-lg inline-block -mt-1 mx-1">φ</span> Make Primary</button>
       </div>
     </div>
   </div>
@@ -85,7 +83,7 @@
     xs:scale-x-90
     sm:scale-x-100;
     &.is-default {
-      @apply ring-2 ring-offset-1 ring-offset-transparent ring-current;
+      @apply ring-2 ring-offset-1 ring-offset-transparent ring-white/85;
     }
   }
   .variable-name {

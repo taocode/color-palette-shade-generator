@@ -95,6 +95,6 @@
   }
 </script>
 
-<div class="svelte-tabs" on:keydown={handleKeyDown} role="tablist" tabindex="0">
+<div class="svelte-tabs" onkeydown={handleKeyDown} role="tablist" tabindex="0">
   <slot></slot>
 </div>
